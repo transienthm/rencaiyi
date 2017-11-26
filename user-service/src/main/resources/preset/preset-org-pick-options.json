@@ -1,0 +1,173 @@
+{
+  "JOB_TITLE": [
+    {
+      "optionValue": "开发工程师",
+      "optionIndex": 0,
+      "isDefault": 1
+    },
+    {
+      "optionValue": "测试工程师",
+      "optionIndex": 1,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "售前工程师",
+      "optionIndex": 2,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "实施工程师",
+      "optionIndex": 3,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "技术经理",
+      "optionIndex": 4,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "技术总监",
+      "optionIndex": 5,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "CTO",
+      "optionIndex": 6,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "产品经理",
+      "optionIndex": 7,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "产品总监",
+      "optionIndex": 8,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "视觉设计师",
+      "optionIndex": 9,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "交互设计师",
+      "optionIndex": 10,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "设计总监",
+      "optionIndex": 11,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "数据分析师",
+      "optionIndex": 12,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "运营",
+      "optionIndex": 13,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "编辑",
+      "optionIndex": 14,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "运营总监",
+      "optionIndex": 15,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "COO",
+      "optionIndex": 16,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "市场推广",
+      "optionIndex": 17,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "市场策划",
+      "optionIndex": 18,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "商务拓展",
+      "optionIndex": 19,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "市场总监",
+      "optionIndex": 20,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "销售专员",
+      "optionIndex": 21,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "销售总监",
+      "optionIndex": 22,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "HR",
+      "optionIndex": 23,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "HRD",
+      "optionIndex": 24,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "行政",
+      "optionIndex": 25,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "会计",
+      "optionIndex": 26,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "出纳",
+      "optionIndex": 27,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "CMO",
+      "optionIndex": 28,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "CEO",
+      "optionIndex": 29,
+      "isDefault": 0
+    }
+  ],
+
+  "JOB_LEVEL": [
+    {
+      "optionValue": "无",
+      "optionIndex": 0,
+      "isDefault": 1
+    },
+    {
+      "optionValue": "初级",
+      "optionIndex": 1,
+      "isDefault": 0
+    },
+    {
+      "optionValue": "高级",
+      "optionIndex": 2,
+      "isDefault": 0
+    }
+  ]
+}
+

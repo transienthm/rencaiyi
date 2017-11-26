@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.ProjectTeamMemberMapper">
+
+    <insert id="batchInsertProjectTeamMember"
+            parameterType="java.util.List">
+        <selectKey keyProperty="projectTeamMemberId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO project_team_member
+        (org_id,
+        project_team_id,
+        user_id,
+        created_user_id,
+        created_time,
+        last_modified_user_id,
+        last_modified_time)
+        VALUES
+        <foreach collection="list" item="projectTeamMember" index="index"
+                 separator=",">
+            (#{projectTeamMember.orgId},
+            #{projectTeamMember.projectTeamId},
+            #{projectTeamMember.userId},
+            #{projectTeamMember.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{projectTeamMember.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        </foreach>
+    </insert>
+
+    <update id="batchDeleteProjectTeamMember" parameterType="java.util.List">
+        <foreach collection="list" item="projectTeamMember" index="index"
+                 open="" separator=";" close="">
+            UPDATE project_team_member
+            <set>
+                is_deleted = 1,
+                last_modified_user_id = #{projectTeamMember.lastModifiedUserId},
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+            </set>
+            WHERE
+            org_id = #{projectTeamMember.orgId}
+            AND user_id = #{projectTeamMember.userId}
+            AND project_team_id = #{projectTeamMember.projectTeamId}
+        </foreach>
+    </update>
+
+    <select id="getProjectTeamMember" parameterType="map" resultType="ProjectTeamMember">
+        SELECT
+            *
+        FROM
+            project_team_member
+        WHERE
+            org_id = #{orgId}
+            AND project_team_id = #{projectTeamId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listProjectTeamMembersByOrgIdAndUserId" parameterType="map" resultType="ProjectTeamMember">
+        SELECT
+            *
+        FROM
+            project_team_member
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listUserIdsByOrgIdAndProjectTeamId" parameterType="map" resultType="java.lang.Long">
+        SELECT
+            user_id
+        FROM
+            project_team_member
+        WHERE
+            org_id = #{orgId}
+            AND project_team_id = #{projectTeamId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listProjectTeamMemberInfoByUserId" parameterType="map" resultType="ProjectTeam">
+        select A.project_team_id, B.team_id, B.project_team_name
+        from project_team_member A
+        join project_team B on A.project_team_id = B.project_team_id
+        where
+        A.org_id = #{orgId}
+        AND B.org_id = #{orgId}
+        AND A.is_deleted = 0
+        AND B.is_deleted = 0
+        AND A.user_id = #{userId}
+    </select>
+
+</mapper>

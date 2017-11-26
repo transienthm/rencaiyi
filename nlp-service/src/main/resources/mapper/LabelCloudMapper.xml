@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.nlp.server.dao.labelcloud.LabelCloudMapper">
+
+    <select id="getAllSurveyResponses" resultType="SurveyResponseModel">
+        SELECT
+            *
+        FROM
+            survey_response
+        ORDER BY survey_response_id ASC
+    </select>
+
+    <select id="getMaxSurveyResponseId" resultType="Long">
+        SELECT
+            MAX(survey_response_id)
+        FROM
+            survey_response
+    </select>
+
+    <select id="getIsDeleted" resultType="Integer">
+        SELECT
+            is_deleted
+        FROM
+            label_cloud
+        WHERE
+            cloud_id = 1
+    </select>
+
+    <select id="getCurrentCloudVersion" resultType="Long">
+        SELECT
+            cloud_version
+        FROM
+            label_cloud
+        WHERE
+            cloud_id = 1
+    </select>
+
+    <update id="updateCloudVersion" parameterType="Long">
+        UPDATE
+            label_cloud
+        <set>
+            cloud_version = #{cloudVersion},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            cloud_id = 1
+    </update>
+
+    <insert id="insertLabelCloud" parameterType="LabelCloudModel">
+        INSERT INTO label_cloud
+        (
+            org_id,
+            survey_activity_id,
+            survey_item_id,
+            cloud_version,
+            label_cloud,
+            created_time,
+            last_modified_time,
+            is_deleted
+        )
+        VALUES
+        (
+            #{orgId},
+            #{surveyActivityId},
+            #{surveyItemId},
+            <choose>
+                <when test="cloudVersion == null">
+                    0,
+                </when>
+                <otherwise>
+                    #{cloudVersion},
+                </otherwise>
+            </choose>
+            #{labelCloud},
+            <choose>
+                <when test="createdTime == null">
+                    ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+                </when>
+                <otherwise>
+                    #{createdTime},
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="lastModifiedTime == null">
+                    ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+                </when>
+                <otherwise>
+                    #{lastModifiedTime},
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="isDeleted == null">
+                    0
+                </when>
+                <otherwise>
+                    #{isDeleted}
+                </otherwise>
+            </choose>
+        )
+        <selectKey keyProperty="cloudId" resultType="Long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="batchInsertLabelClouds" useGeneratedKeys="true" parameterType="list">
+        INSERT INTO label_cloud
+        (
+            org_id,
+            survey_activity_id,
+            survey_item_id,
+            cloud_version,
+            label_cloud,
+            created_time,
+            last_modified_time,
+            is_deleted
+        )
+        VALUES
+        <foreach collection="list" item="labelCloud" index="index" separator=",">
+            (
+                #{labelCloud.orgId},
+                #{labelCloud.surveyActivityId},
+                #{labelCloud.surveyItemId},
+                <choose>
+                    <when test="labelCloud.cloudVersion == null">
+                        0,
+                    </when>
+                    <otherwise>
+                        #{labelCloud.cloudVersion},
+                    </otherwise>
+                </choose>
+                #{labelCloud.labelCloud},
+                <choose>
+                    <when test="labelCloud.createdTime == null">
+                        ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+                    </when>
+                    <otherwise>
+                        #{labelCloud.createdTime},
+                    </otherwise>
+                </choose>
+                <choose>
+                    <when test="labelCloud.lastModifiedTime == null">
+                        ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+                    </when>
+                    <otherwise>
+                        #{labelCloud.lastModifiedTime},
+                    </otherwise>
+                </choose>
+                <choose>
+                    <when test="labelCloud.isDeleted == null">
+                        0
+                    </when>
+                    <otherwise>
+                        #{labelCloud.isDeleted}
+                    </otherwise>
+                </choose>
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateLabelCloud" parameterType="map">
+        UPDATE
+            label_cloud
+        <set>
+            <if test="orgId != null">cloud_id = #{orgId},</if>
+            <if test="surveyActivityId != null">survey_activity_id = #{surveyActivityId},</if>
+            <if test="surveyItemId != null">survey_item_id = #{surveyItemId},</if>
+            <if test="cloudVersion != null">cloud_version = #{cloudVersion},</if>
+            label_cloud = #{labelCloud},
+            <choose>
+                <when test="lastModifiedTime == null">
+                    last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+                </when>
+                <otherwise>
+                    last_modified_time = #{lastModifiedTime},
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="isDeleted == null">
+                    is_deleted = 0
+                </when>
+                <otherwise>
+                    is_deleted = #{isDeleted}
+                </otherwise>
+            </choose>
+        </set>
+        WHERE
+            cloud_id = #{cloudId}
+    </update>
+
+    <update id="batchUpdateLabelClouds" parameterType="map">
+        <foreach collection="list" item="labelCloud" index="index" separator=";">
+            UPDATE
+                label_cloud
+            <set>
+                <if test="labelCloud.orgId != null">cloud_id = #{labelCloud.orgId},</if>
+                <if test="labelCloud.surveyActivityId != null">survey_activity_id = #{labelCloud.surveyActivityId},</if>
+                <if test="labelCloud.surveyItemId != null">survey_item_id = #{labelCloud.surveyItemId},</if>
+                <if test="labelCloud.cloudVersion != null">cloud_version = #{labelCloud.cloudVersion},</if>
+                label_cloud = #{labelCloud.labelCloud},
+                <choose>
+                    <when test="labelCloud.lastModifiedTime == null">
+                        last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+                    </when>
+                    <otherwise>
+                        last_modified_time = #{labelCloud.lastModifiedTime},
+                    </otherwise>
+                </choose>
+                <choose>
+                    <when test="labelCloud.isDeleted == null">
+                        is_deleted = 0
+                    </when>
+                    <otherwise>
+                        is_deleted = #{labelCloud.isDeleted}
+                    </otherwise>
+                </choose>
+            </set>
+            WHERE
+                cloud_id = #{labelCloud.cloudId}
+        </foreach>
+    </update>
+
+    <select id="findLabelCloud" parameterType="map" resultType="LabelCloudModel">
+        SELECT
+            *
+        FROM
+            label_cloud
+        WHERE
+            org_id = #{orgId}
+            AND survey_activity_id = #{surveyActivityId}
+            AND survey_item_id = #{surveyItemId}
+            AND cloud_version =
+                (
+                    SELECT
+                        cloud_version
+                    FROM
+                        label_cloud
+                    WHERE
+                        cloud_id = 1
+                )
+            AND is_deleted = 0
+    </select>
+
+    <select id="listLabelCloudsByActivityId" parameterType="map" resultType="LabelCloudModel">
+        SELECT
+            *
+        FROM
+            label_cloud
+        WHERE
+            org_id = #{orgId}
+            AND survey_activity_id = #{surveyActivityId}
+            AND cloud_version =
+                (
+                    SELECT
+                        cloud_version
+                    FROM
+                        label_cloud
+                    WHERE
+                        cloud_id = 1
+                )
+            AND is_deleted = 0
+        ORDER BY created_time ASC
+    </select>
+
+    <select id="listLabelCloudsBySurveyItemIds" parameterType="map" resultType="LabelCloudModel">
+        SELECT
+            *
+        FROM
+            label_cloud
+        WHERE
+            org_id = #{orgId}
+            AND survey_item_id IN
+                <foreach collection="surveyItemIds" item="surveyItemId" index="index" open="(" separator="," close=")">
+                    #{surveyItemId}
+                </foreach>
+            AND cloud_version =
+                (
+                    SELECT
+                        cloud_version
+                    FROM
+                        label_cloud
+                    WHERE
+                        cloud_id = 1
+                )
+            AND is_deleted = 0
+        ORDER BY created_time ASC
+    </select>
+
+    <select id="listLabelCloudsByActivityIdAndSurveyItemIds" parameterType="map" resultType="LabelCloudModel">
+        SELECT
+            *
+        FROM
+            label_cloud
+        WHERE
+            org_id = #{orgId}
+            AND survey_activity_id = #{surveyActivityId}
+            AND survey_item_id IN
+                <foreach collection="surveyItemIds" item="surveyItemId" index="index" open="(" separator="," close=")">
+                    #{surveyItemId}
+                </foreach>
+            AND cloud_version =
+                (
+                    SELECT
+                        cloud_version
+                    FROM
+                        label_cloud
+                    WHERE
+                        cloud_id = 1
+                )
+            AND is_deleted = 0
+        ORDER BY created_time ASC
+    </select>
+
+</mapper>

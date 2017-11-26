@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.OrgPickOptionMapper">
+
+    <insert id="batchInsertOrgPickOption"
+            parameterType="java.util.List">
+        INSERT INTO org_pick_option
+            (org_id,
+            config_type,
+            option_value,
+            option_index,
+            is_default,
+            is_deprecated,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+        <foreach collection="list" item="orgPickOption" index="index"
+                 separator=",">
+            (#{orgPickOption.orgId},
+            #{orgPickOption.configType},
+            #{orgPickOption.optionValue},
+            #{orgPickOption.optionIndex},
+            #{orgPickOption.isDefault},
+            0,
+            #{orgPickOption.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{orgPickOption.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        </foreach>
+    </insert>
+
+    <select id="listOrgPickOptionByConfigType"
+            parameterType="java.util.Map"
+            resultType="OrgPickOption">
+        SELECT
+            *
+        FROM
+            org_pick_option
+        WHERE
+            org_id = #{orgId}
+            AND config_type = #{configType}
+            AND is_deleted = 0
+        ORDER BY
+            option_index ASC
+        <if test="forUpdate == 1">
+            FOR UPDATE
+        </if>
+    </select>
+
+    <select id="listOrgPickOptionByOrgIdAndOrgPickOptionIds"
+            parameterType="java.util.Map"
+            resultType="OrgPickOption">
+        SELECT
+            *
+        FROM
+            org_pick_option
+        WHERE
+            org_pick_option_id IN
+                <foreach collection="orgPickOptionIds" item="id" index="index"
+                open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+        ORDER BY
+            option_index ASC
+    </select>
+
+    <update id="batchUpdateOrgPickOptionByPrimaryKeySelective"
+            parameterType="java.util.List">
+        <foreach collection="list" item="option" index="index"
+                 open="" separator=";" close="">
+            UPDATE
+                org_pick_option
+            <set>
+                <if test="null != option.optionValue">
+                    option_value = #{option.optionValue},
+                </if>
+                <if test="null != option.optionIndex">
+                    option_index = #{option.optionIndex},
+                </if>
+                <if test="null != option.isDefault">
+                    is_default = #{option.isDefault},
+                </if>
+                <if test="null != option.isDeprecated">
+                    is_deprecated = #{option.isDeprecated},
+                </if>
+                last_modified_user_id = #{option.lastModifiedUserId},
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+                <if test="null != option.isDeleted">
+                    , is_deleted = #{option.isDeleted}
+                </if>
+            </set>
+            WHERE
+                org_pick_option_id = #{option.orgPickOptionId}
+                AND org_id = #{option.orgId}
+                AND is_deprecated = 0
+                AND is_deleted = 0
+        </foreach>
+    </update>
+
+    <!--<update id="batchDeleteOrgPickOptionByConfigType"-->
+            <!--parameterType="map">-->
+      <!--UPDATE-->
+        <!--org_pick_option-->
+      <!--SET-->
+        <!--last_modified_user_id = #{lastModifiedUserId},-->
+        <!--is_deleted = 1-->
+      <!--WHERE-->
+        <!--org_id = #{orgId}-->
+        <!--AND config_type = #{configType}-->
+        <!--AND is_deleted = 0-->
+    <!--</update>-->
+
+</mapper>

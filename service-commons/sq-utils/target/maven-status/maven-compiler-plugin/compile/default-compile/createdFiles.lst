@@ -1,0 +1,17 @@
+hr/wozai/service/servicecommons/utils/emailtemplate/EmailTemplateApi.class
+hr/wozai/service/servicecommons/utils/codec/EncodeSerializer.class
+hr/wozai/service/servicecommons/utils/codec/DecodeDeserializer.class
+hr/wozai/service/servicecommons/utils/validator/StringLengthConstraint.class
+hr/wozai/service/servicecommons/utils/codec/DecodeDeserializer$LongDeserializer.class
+hr/wozai/service/servicecommons/utils/logging/LogAround.class
+hr/wozai/service/servicecommons/utils/persistence/StringListHandler.class
+hr/wozai/service/servicecommons/utils/validator/BindingResultMonitor.class
+hr/wozai/service/servicecommons/utils/codec/EncryptUtils.class
+hr/wozai/service/servicecommons/utils/bean/BeanHelper.class
+hr/wozai/service/servicecommons/utils/codec/DecodeDeserializer$IntegerDeserializer.class
+hr/wozai/service/servicecommons/utils/logging/LoggingAspect$LogPoint.class
+hr/wozai/service/servicecommons/utils/logging/LoggingAspect.class
+hr/wozai/service/servicecommons/utils/persistence/FastJSONHandler.class
+hr/wozai/service/servicecommons/utils/uuid/UUIDGenerator.class
+hr/wozai/service/servicecommons/utils/validator/StringLengthValidator.class
+hr/wozai/service/servicecommons/utils/codec/EncryptConstants.class

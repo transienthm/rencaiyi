@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config></context:annotation-config>
+    <context:component-scan base-package="hr.wozai.service.nlp"></context:component-scan>
+
+    <import resource="classpath:lda/lda-options.xml" />
+    <import resource="classpath:task/scheduled-task.xml" />
+    <import resource="classpath:database/datasource.xml" />
+    <import resource="classpath:spring/spring-security-config.xml" />
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:application/application.properties</value>
+                <value>classpath:zookeeper.properties</value>
+                <value>classpath:thrift/thrift.properties</value>
+                <value>classpath:database/database.properties</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>

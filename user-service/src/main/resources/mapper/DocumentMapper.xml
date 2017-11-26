@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.document.DocumentMapper">
+
+    <insert id="insertDocument"
+            parameterType="document">
+        INSERT INTO document
+            (org_id,
+            scenario,
+            document_key,
+            document_name,
+            document_type,
+            md5_hash,
+            description,
+            document_size,
+            storage_status,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{scenario},
+            #{documentKey},
+            #{documentName},
+            #{documentType},
+            #{md5Hash},
+            #{description},
+            #{documentSize},
+            #{storageStatus},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="documentId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findDocumentByPrimaryKey"
+            parameterType="map"
+            resultType="Document">
+        SELECT
+            *
+        FROM
+            document
+        WHERE
+            document_id = #{documentId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listDocumentByOrgIdForOnboarding"
+            parameterType="long"
+            resultType="Document">
+        SELECT
+            *
+        FROM
+            document
+        WHERE
+            org_id = #{orgId}
+            AND scenario = 1
+            -- uploaded to S3 already
+            AND storage_status = 2
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateDocumentByPrimaryKeySelective"
+            parameterType="Document">
+        UPDATE document
+        <set>
+            <if test="null != documentName">
+                document_name = #{documentName},
+            </if>
+            <if test="null != description">
+                description = #{description},
+            </if>
+            <if test="null != storageStatus">
+                storage_status = #{storageStatus},
+            </if>
+            <if test="null != isDeleted">
+                is_deleted = #{isDeleted},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            document_id = #{documentId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+</mapper>

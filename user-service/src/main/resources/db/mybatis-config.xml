@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mapper.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="false" />
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+
+    <typeAliases>
+        <typeAlias alias="Org" type="hr.wozai.service.user.server.model.userorg.Org" />
+        <typeAlias alias="OrgMember" type="hr.wozai.service.user.server.model.userorg.OrgMember"/>
+        <typeAlias alias="UserAccount" type="hr.wozai.service.user.server.model.userorg.UserAccount" />
+        <typeAlias alias="AccessToken" type="hr.wozai.service.user.server.model.token.AccessToken" />
+        <typeAlias alias="RefreshToken" type="hr.wozai.service.user.server.model.token.RefreshToken" />
+        <typeAlias alias="Team" type="hr.wozai.service.user.server.model.userorg.Team" />
+        <typeAlias alias="TeamMember" type="hr.wozai.service.user.server.model.userorg.TeamMember" />
+        <typeAlias alias="Role" type="hr.wozai.service.user.server.model.securitymodel.Role" />
+        <typeAlias alias="UserRole" type="hr.wozai.service.user.server.model.securitymodel.UserRole" />
+        <typeAlias alias="Permission" type="hr.wozai.service.user.server.model.securitymodel.Permission" />
+        <typeAlias alias="RolePermission" type="hr.wozai.service.user.server.model.securitymodel.RolePermission" />
+        <typeAlias alias="UserPermission" type="hr.wozai.service.user.server.model.securitymodel.UserPermission" />
+        <typeAlias alias="ReportLine" type="hr.wozai.service.user.server.model.userorg.ReportLine" />
+        <typeAlias alias="Objective" type="hr.wozai.service.user.server.model.okr.Objective" />
+        <typeAlias alias="KeyResult" type="hr.wozai.service.user.server.model.okr.KeyResult" />
+        <typeAlias alias="ObjectivePeriod" type="hr.wozai.service.user.server.model.okr.ObjectivePeriod" />
+        <typeAlias alias="Director" type="hr.wozai.service.user.server.model.okr.Director" />
+        <typeAlias alias="UuidInfo" type="hr.wozai.service.user.server.model.token.UuidInfo" />
+        <typeAlias alias="TeamMemberInfo" type="hr.wozai.service.user.server.model.userorg.TeamMemberInfo" />
+        <typeAlias alias="ContentIndex" type="hr.wozai.service.user.server.model.common.ContentIndex" />
+        <typeAlias alias="RecentUsedObject" type="hr.wozai.service.user.server.model.common.RecentUsedObject" />
+        <typeAlias alias="RemindSetting" type="hr.wozai.service.user.server.model.common.RemindSetting" />
+        <typeAlias alias="OkrComment" type="hr.wozai.service.user.server.model.okr.OkrComment" />
+        <typeAlias alias="OkrUpdateLog" type="hr.wozai.service.user.server.model.okr.OkrUpdateLog" />
+        <typeAlias alias="OkrRemindSetting" type="hr.wozai.service.user.server.model.okr.OkrRemindSetting" />
+        <typeAlias alias="Navigation" type="hr.wozai.service.user.server.model.navigation.Navigation" />
+        <typeAlias alias="ProjectTeam" type="hr.wozai.service.user.server.model.userorg.ProjectTeam" />
+        <typeAlias alias="ProjectTeamMember" type="hr.wozai.service.user.server.model.userorg.ProjectTeamMember" />
+        <typeAlias alias="SurveyItem" type="hr.wozai.service.user.server.model.survey.SurveyItem" />
+        <typeAlias alias="SurveyActivity" type="hr.wozai.service.user.server.model.survey.SurveyActivity" />
+        <typeAlias alias="SurveyConfig" type="hr.wozai.service.user.server.model.survey.SurveyConfig" />
+        <typeAlias alias="SurveyResponse" type="hr.wozai.service.user.server.model.survey.SurveyResponse" />
+        <typeAlias alias="ConvrScheduleChart" type="hr.wozai.service.user.server.model.conversation.ConvrScheduleChart" />
+
+        <!--separator-->
+        <typeAlias alias="ProfileField" type="hr.wozai.service.user.server.model.userorg.ProfileField"/>
+        <typeAlias alias="PickOption" type="hr.wozai.service.user.server.model.userorg.PickOption"/>
+        <typeAlias alias="OrgPickOption" type="hr.wozai.service.user.server.model.userorg.OrgPickOption"/>
+        <typeAlias alias="ProfileTemplate" type="hr.wozai.service.user.server.model.userorg.ProfileTemplate"/>
+        <typeAlias alias="OnboardingTemplate" type="hr.wozai.service.user.server.model.onboarding.OnboardingTemplate"/>
+        <typeAlias alias="OnboardingDocument" type="hr.wozai.service.user.server.model.onboarding.OnboardingDocument"/>
+        <typeAlias alias="MetaUserProfile" type="hr.wozai.service.user.server.model.userorg.MetaUserProfile"/>
+
+        <!--&lt;!&ndash;TODO: delete&ndash;&gt;-->
+        <!--<typeAlias alias="OldCoreUserProfile" type="hr.wozai.service.user.server.model.userorg.OldCoreUserProfile"/>-->
+        <!--<typeAlias alias="UserProfile" type="hr.wozai.service.user.server.model.userorg.UserProfile"/>-->
+
+        <typeAlias alias="CoreUserProfile" type="hr.wozai.service.user.server.model.userorg.CoreUserProfile"/>
+        <typeAlias alias="BasicUserProfile" type="hr.wozai.service.user.server.model.userorg.BasicUserProfile"/>
+        <typeAlias alias="UserProfileConfig" type="hr.wozai.service.user.server.model.userorg.UserProfileConfig"/>
+        <typeAlias alias="UniqueFieldValue" type="hr.wozai.service.user.server.model.userorg.UniqueFieldValue"/>
+        <typeAlias alias="AddressRegion" type="hr.wozai.service.user.server.model.userorg.AddressRegion"/>
+        <typeAlias alias="UserEmployment" type="hr.wozai.service.user.server.model.userorg.UserEmployment"/>
+        <typeAlias alias="JobTransfer" type="hr.wozai.service.user.server.model.userorg.JobTransfer"/>
+        <typeAlias alias="StatusUpdate" type="hr.wozai.service.user.server.model.userorg.StatusUpdate"/>
+        <typeAlias alias="UserSysNotification" type="hr.wozai.service.user.server.model.userorg.UserSysNotification"/>
+
+        <!--separator-->
+        <typeAlias alias="Document" type="hr.wozai.service.user.server.model.document.Document"/>
+
+        <typeAlias alias="ConvrSchedule" type="hr.wozai.service.user.server.model.conversation.ConvrSchedule"/>
+        <typeAlias alias="ConvrRecord" type="hr.wozai.service.user.server.model.conversation.ConvrRecord"/>
+        <typeAlias alias="ConvrScheduleForChart" type="hr.wozai.service.user.server.model.conversation.ConvrSchedulePartInfoChart" />
+        <typeAlias alias="ConvrScheduleChart" type="hr.wozai.service.user.server.model.conversation.ConvrScheduleChart" />
+        <typeAlias alias="ConvrSourceUserInfo" type="hr.wozai.service.user.server.model.conversation.ConvrSourceUserInfo" />
+
+    </typeAliases>
+
+
+    <typeHandlers>
+        <typeHandler javaType="com.alibaba.fastjson.JSONObject"
+                     handler="hr.wozai.service.servicecommons.utils.persistence.FastJSONHandler"/>
+        <typeHandler javaType="java.util.List"
+                     handler="hr.wozai.service.servicecommons.utils.persistence.StringListHandler"/>
+    </typeHandlers>
+
+    <mappers>
+        <mapper resource="mapper/UserAccountMapper.xml" />
+        <mapper resource="mapper/OrgMapper.xml" />
+        <mapper resource="mapper/OrgMemberMapper.xml" />
+        <mapper resource="mapper/AccessTokenMapper.xml" />
+        <mapper resource="mapper/RefreshTokenMapper.xml" />
+        <mapper resource="mapper/TeamMapper.xml" />
+        <mapper resource="mapper/TeamMemberMapper.xml" />
+        <mapper resource="mapper/RoleMapper.xml" />
+        <mapper resource="mapper/UserRoleMapper.xml" />
+        <mapper resource="mapper/PermissionMapper.xml" />
+        <mapper resource="mapper/RolePermissionMapper.xml" />
+        <mapper resource="mapper/UserPermissionMapper.xml" />
+        <mapper resource="mapper/ReportLineMapper.xml" />
+        <mapper resource="mapper/ObjectiveMapper.xml" />
+        <mapper resource="mapper/KeyResultMapper.xml" />
+        <mapper resource="mapper/ObjectivePeriodMapper.xml" />
+        <mapper resource="mapper/DirectorMapper.xml" />
+        <mapper resource="mapper/UuidInfoMapper.xml" />
+        <mapper resource="mapper/ContentIndexMapper.xml" />
+        <mapper resource="mapper/RecentUsedObjectMapper.xml" />
+        <mapper resource="mapper/RemindSettingMapper.xml" />
+        <mapper resource="mapper/OkrCommentMapper.xml" />
+        <mapper resource="mapper/OkrUpdateLogMapper.xml" />
+        <mapper resource="mapper/OkrRemindSettingMapper.xml" />
+        <mapper resource="mapper/NavigationMapper.xml" />
+        <mapper resource="mapper/ProjectTeamMapper.xml" />
+        <mapper resource="mapper/ProjectTeamMemberMapper.xml" />
+        <mapper resource="mapper/SurveyItemMapper.xml" />
+        <mapper resource="mapper/SurveyActivityMapper.xml" />
+        <mapper resource="mapper/SurveyConfigMapper.xml" />
+        <mapper resource="mapper/SurveyResponseMapper.xml" />
+        <!--separator-->
+        <mapper resource="mapper/ProfileFieldMapper.xml"/>
+        <mapper resource="mapper/PickOptionMapper.xml"/>
+        <mapper resource="mapper/OrgPickOptionMapper.xml"/>
+        <mapper resource="mapper/ProfileTemplateMapper.xml"/>
+        <mapper resource="mapper/OnboardingTemplateMapper.xml"/>
+        <mapper resource="mapper/OnboardingDocumentMapper.xml"/>
+        <mapper resource="mapper/MetaUserProfileMapper.xml"/>
+        <mapper resource="mapper/UniqueFieldValueMapper.xml"/>
+
+        <!--&lt;!&ndash;TODO: delete&ndash;&gt;-->
+        <!--<mapper resource="mapper/OldCoreUserProfileMapper.xml"/>-->
+        <!--<mapper resource="mapper/UserProfileMapper.xml"/>-->
+
+        <mapper resource="mapper/CoreUserProfileMapper.xml"/>
+        <mapper resource="mapper/BasicUserProfileMapper.xml"/>
+        <mapper resource="mapper/UserProfileConfigMapper.xml"/>
+        <mapper resource="mapper/AddressRegionMapper.xml"/>
+        <mapper resource="mapper/UserEmploymentMapper.xml"/>
+        <mapper resource="mapper/JobTransferMapper.xml"/>
+        <mapper resource="mapper/StatusUpdateMapper.xml"/>
+        <mapper resource="mapper/UserSysNotificationMapper.xml"/>
+
+        <mapper resource="mapper/ConvrScheduleMapper.xml"/>
+        <mapper resource="mapper/ConvrRecordMapper.xml"/>
+        <mapper resource="mapper/ConvrScheduleTaskMapper.xml" />
+        <mapper resource="mapper/ConvrScheduleChartMapper.xml" />
+
+        <!--separator-->
+        <mapper resource="mapper/DocumentMapper.xml"/>
+    </mappers>
+
+</configuration>

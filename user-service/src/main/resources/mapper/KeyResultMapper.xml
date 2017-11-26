@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.okr.KeyResultMapper">
+
+    <insert id="insertKeyResult"
+            parameterType="KeyResult">
+        <selectKey keyProperty="keyResultId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO key_result
+            (org_id,
+            content,
+            objective_id,
+            priority,
+            progress_metric_type,
+            starting_amount,
+            goal_amount,
+            current_amount,
+            unit,
+            deadline,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+            (#{orgId},
+            #{content},
+            #{objectiveId},
+            #{priority},
+            #{progressMetricType},
+            #{startingAmount},
+            #{goalAmount},
+            #{currentAmount},
+            #{unit},
+            #{deadline},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{lastModifiedUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+    </insert>
+
+    <select id="findKeyResult" parameterType="map" resultType="KeyResult">
+        SELECT
+            *
+        FROM
+            key_result
+        WHERE
+            key_result_id = #{keyResultId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listKeyResultByObjectiveId" parameterType="map" resultType="KeyResult">
+        SELECT
+            *
+        FROM
+            key_result
+        WHERE
+            org_id = #{orgId}
+            AND objective_id = #{objectiveId}
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateKeyResult"
+            parameterType="KeyResult">
+        UPDATE key_result
+        <set>
+            <if test="null != content">
+                content = #{content},
+            </if>
+            <if test="null != priority">
+                priority = #{priority},
+            </if>
+            <if test="null != progressMetricType">
+                progress_metric_type = #{progressMetricType},
+            </if>
+            <if test="null != startingAmount">
+                starting_amount = #{startingAmount},
+            </if>
+            <if test="null != goalAmount">
+                goal_amount = #{goalAmount},
+            </if>
+            <if test="null != currentAmount">
+                current_amount = #{currentAmount},
+            </if>
+            <if test="null != unit">
+                unit = #{unit},
+            </if>
+            <if test="null != deadline">
+                deadline = #{deadline},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            key_result_id = #{keyResultId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="deleteKeyResult" parameterType="map">
+        UPDATE key_result
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        key_result_id = #{keyResultId}
+        AND org_id = #{orgId}
+    </update>
+
+    <update id="deleteKeyResultByObjectiveId" parameterType="map">
+        UPDATE key_result
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND objective_id = #{objectiveId}
+    </update>
+
+    <select id="listSimpleKeyResultsByObjectiveIds" parameterType="map" resultType="KeyResult">
+        SELECT
+            objective_id,priority,starting_amount,goal_amount,current_amount
+        FROM
+            key_result
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+            AND objective_id IN
+            <foreach item="item" index="index" collection="objectiveIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </select>
+
+    <select id="listKeyResultsByStartAndEndDeadline" parameterType="map" resultType="KeyResult">
+        SELECT
+            *
+        FROM
+            key_result
+        WHERE
+            org_id = #{orgId}
+            AND <![CDATA[ deadline >= #{startDeadline} ]]>
+            AND <![CDATA[ deadline < #{endDeadline} ]]>
+            AND is_deleted = 0
+    </select>
+
+</mapper>

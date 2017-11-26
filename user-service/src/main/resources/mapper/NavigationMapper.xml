@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.navigation.NavigationMapper">
+
+    <insert id="insertNavigation"
+            parameterType="Navigation">
+        <selectKey keyProperty="navigationId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO navigation
+            (org_id,
+            user_id,
+            navi_org_id,
+            navi_user_id,
+            navi_module,
+            navi_step,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+            (#{orgId},
+            #{userId},
+            #{naviOrgId},
+            #{naviUserId},
+            #{naviModule},
+            #{naviStep},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+    </insert>
+
+    <update id="updateNavigation" parameterType="Navigation">
+        UPDATE navigation
+            <set>
+                <if test="null != naviModule">
+                    navi_module = #{naviModule},
+                </if>
+                <if test="null != naviStep">
+                    navi_step = #{naviStep},
+                </if>
+                <if test="null != isDeleted">
+                    is_deleted = #{isDeleted},
+                </if>
+                last_modified_user_id = #{lastModifiedUserId},
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+            </set>
+        WHERE
+            navi_org_id = #{naviOrgId}
+            AND navi_user_id = #{naviUserId}
+            AND is_deleted = 0
+    </update>
+
+    <select id="findNavigationByOrgIdAndUserId" parameterType="map" resultType="Navigation">
+        SELECT
+            *
+        FROM
+            navigation
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="findNavigationByNaviOrgIdAndNaviUserId" parameterType="map" resultType="Navigation">
+        SELECT
+            *
+        FROM
+            navigation
+        WHERE
+            navi_org_id = #{naviOrgId}
+            AND navi_user_id = #{naviUserId}
+            AND is_deleted = 0
+    </select>
+
+</mapper>

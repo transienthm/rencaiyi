@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.ReportLineMapper">
+
+    <insert id="batchInsertReportLines"
+            parameterType="java.util.List">
+        <selectKey keyProperty="reportLineId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO report_line
+            (org_id,
+            user_id,
+            report_user_id,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+        <foreach collection="list" item="reportLine" index="index"
+                 separator=",">
+            (#{reportLine.orgId},
+            #{reportLine.userId},
+            #{reportLine.reportUserId},
+            #{reportLine.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{reportLine.lastModifiedUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        </foreach>
+
+    </insert>
+
+    <select id="getReportLineByUserId" parameterType="map" resultType="ReportLine">
+        SELECT
+            *
+        FROM
+            report_line
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listReportLinesByUserIds" parameterType="map" resultType="ReportLine">
+        SELECT
+            *
+        FROM
+            report_line
+        WHERE
+            org_id = #{orgId}
+            AND user_id IN
+            <foreach item="item" index="index" collection="userIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND is_deleted = 0
+    </select>
+
+    <select id="listReporteesByUserId" parameterType="map" resultType="java.lang.Long">
+        SELECT
+            user_id
+        FROM
+            report_line
+        WHERE
+            org_id = #{orgId}
+            AND report_user_id = #{reportUserId}
+            AND is_deleted = 0
+        <if test="forUpdate == 1">
+            FOR UPDATE
+        </if>
+    </select>
+
+    <update id="batchUpdateReportLines" parameterType="map">
+        UPDATE report_line
+        <set>
+            report_user_id = #{newReportUserId},
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+            AND user_id IN
+        <foreach item="item" index="index" collection="userIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+    
+    <update id="batchDeleteReportLines" parameterType="map">
+        UPDATE report_line
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND user_id IN
+            <foreach item="item" index="index" collection="userIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </update>
+
+</mapper>

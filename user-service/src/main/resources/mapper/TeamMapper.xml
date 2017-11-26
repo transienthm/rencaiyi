@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.TeamMapper">
+
+    <insert id="insertTeam"
+            parameterType="Team">
+        INSERT INTO team
+            (org_id,
+            team_name,
+            parent_team_id,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend)
+        VALUES
+            (#{orgId},
+            #{teamName},
+            #{parentTeamId},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{extend})
+        <selectKey keyProperty="teamId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getTeamByPrimaryKeyAndOrgId" parameterType="map" resultType="Team">
+        SELECT
+            *
+        FROM
+            team
+        WHERE
+            team_id = #{teamId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listTeamByOrgIdAndTeamIds" parameterType="map" resultType="Team">
+        SELECT
+            *
+        FROM
+            team
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+            AND team_id IN
+            <foreach item="item" index="index" collection="teamIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </select>
+
+    <select id="getTeamByTeamNameAndOrgId" parameterType="map" resultType="Team">
+        SELECT
+            *
+        FROM
+            team
+        WHERE
+            org_id = #{orgId}
+            AND team_name = #{teamName}
+            AND is_deleted = 0
+        <if test="forUpdate == 1">
+            FOR UPDATE
+        </if>
+    </select>
+
+    <select id="listNextLevelTeams" parameterType="map" resultType="Team">
+        SELECT
+            *
+        FROM
+            team
+        WHERE
+            org_id = #{orgId}
+            AND parent_team_id = #{parentTeamId}
+            AND is_deleted = 0
+        <if test="forUpdate == 1">
+            FOR UPDATE
+        </if>
+    </select>
+
+    <select id="listAllTeams" parameterType="java.lang.Long" resultType="Team">
+        SELECT
+            *
+        FROM
+            team
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateByPrimaryKey"
+            parameterType="Team">
+        UPDATE team
+        <set>
+            <if test="null != teamName">
+                team_name = #{teamName},
+            </if>
+            <if test="null != parentTeamId">
+                parent_team_id = #{parentTeamId},
+            </if>
+            <if test="null != extend">
+                extend = #{extend},
+            </if>
+            <if test="null !=isDeleted">
+                is_deleted = #{isDeleted},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            team_id = #{teamId}
+            AND org_id = #{orgId}
+    </update>
+
+    <update id="batchUpdateParentTeamId" parameterType="map">
+        UPDATE team
+        <set>
+            parent_team_id = #{parentTeamId},
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        org_id = #{orgId}
+        AND team_id IN
+        <foreach item="item" index="index" collection="teamIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="deleteByPrimaryKeyAndOrgId"
+            parameterType="map">
+        UPDATE team
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        team_id = #{teamId}
+        AND org_id = #{orgId}
+    </update>
+
+</mapper>

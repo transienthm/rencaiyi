@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="userProfileFacadeProxy" name="userProfileFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.userorg.facade.UserProfileFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/userprofile/test"></property>
+        <property name="port" value="8301"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="orgFacadeProxy" name="orgFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.userorg.facade.OrgFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/org/test"></property>
+        <property name="port" value="8244"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="messageCenterFacadeProxy" name="messageCenterFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.thirdparty.client.facade.MessageCenterFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/message/test"></property>
+        <property name="port" value="8105"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="commonToolFacadeProxy" name="commonToolFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.common.facade.CommonToolFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/commontool/test"></property>
+        <property name="port" value="8145"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+</beans>

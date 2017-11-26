@@ -1,0 +1,53 @@
+// Copyright (C) 2015 Wozai
+// All rights reserved
+
+package hr.wozai.service.user.server.aspect;
+
+import hr.wozai.service.servicecommons.commons.exceptions.ServiceStatusException;
+import hr.wozai.service.servicecommons.commons.utils.TimeUtils;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
+/**
+ * @Author: lepujiu
+ * @Version: 1.0
+ * @Created: 2016-05-25
+ */
+@Aspect
+@Component
+public class MonitorAspect {
+
+  /**
+   * @param joinPoint
+   * @return
+   */
+  public Object monitorAround(ProceedingJoinPoint joinPoint) throws Throwable {
+
+    long entryTime = TimeUtils.getNowTimestmapInMillis();
+
+    // before
+    Signature signature = joinPoint.getSignature();
+    String methodPrefix = signature.getName();
+    RpcMonitor rpcMonitor = RpcMonitor.getInstance();
+
+    // proceed
+    Object ret = null;
+    try {
+      ret = joinPoint.proceed();
+    } catch (Throwable throwable) {
+      rpcMonitor.add(methodPrefix + ".fail", 1);
+      throw throwable;
+    }
+
+    // after
+    rpcMonitor.add(methodPrefix + ".success", TimeUtils.getNowTimestmapInMillis() - entryTime);
+
+    return ret;
+  }
+}
+

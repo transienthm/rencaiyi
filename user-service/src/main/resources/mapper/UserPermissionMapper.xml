@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.UserPermissionMapper">
+
+    <insert id="batchInsertUserPermission"
+            parameterType="java.util.List">
+        <selectKey keyProperty="user_permission_id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO user_permission
+            (org_id,
+            user_id, 
+            permission_id, 
+            status,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend) 
+        VALUES
+        <foreach collection="list" item="userPermission" index="index"
+                 separator=",">
+            (#{userPermission.orgId},
+            #{userPermission.userId},
+            #{userPermission.permissionId},
+            #{userPermission.status},
+            #{userPermission.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{userPermission.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{userPermission.extend})
+        </foreach>
+    </insert>
+
+    <update id="deleteUserPermissoinByPrimaryKey" parameterType="map">
+        update user_permission
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        where
+            user_permission_id = #{userPermissionId}
+            AND org_id = #{orgId}
+    </update>
+
+    <update id="batchDeleteUserPermissionsByPrimaryKey" parameterType="map">
+        update user_permission
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        where
+            org_id = #{orgId}
+            AND user_permission_id IN
+            <foreach item="item" index="index" collection="userPermissionIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </update>
+
+    <select id="getUserPermissionByUserIds" resultType="UserPermission">
+        select * from user_permission
+        where
+            org_id = #{orgId}
+            AND user_id IN
+            <foreach item="item" index="index" collection="userIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND is_deleted = 0
+    </select>
+
+</mapper>

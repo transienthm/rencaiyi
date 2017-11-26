@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.feed.server.dao.RewardMedalMapper">
+
+    <insert id="insertRewardMedal" parameterType="RewardMedal">
+        INSERT INTO reward_medal
+        (
+          org_id,
+          medal_icon,
+          medal_name,
+          medal_type,
+          description,
+          created_user_id,
+          created_time,
+          last_modified_user_id,
+          last_modified_time,
+          is_deleted
+        )
+        VALUES
+        (
+          #{orgId},
+          #{medalIcon},
+          #{medalName},
+          #{medalType},
+          #{description},
+          #{createdUserId},
+          ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+          #{createdUserId},
+          ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+          0
+        )
+        <selectKey keyProperty="rewardMedalId" resultType="Long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!--    <insert id="batchInsertTeamMember"
+            parameterType="java.util.List">
+        <selectKey keyProperty="teamMemberId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO team_member
+        (user_id,
+        team_id,
+        org_id,
+        created_user_id,
+        created_time,
+        last_modified_user_id,
+        last_modified_time)
+        VALUES
+        <foreach collection="list" item="teamMember" index="index"
+                 separator=",">
+            (#{teamMember.userId},
+            #{teamMember.teamId},
+            #{teamMember.orgId},
+            #{teamMember.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{teamMember.lastModifiedUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        </foreach>
+    </insert>-->
+
+    <insert id="batchInsertRewardMedal" parameterType="java.util.List">
+      <selectKey keyProperty="rewardMedalId" resultType="long" order="AFTER">
+          SELECT LAST_INSERT_ID()
+      </selectKey>
+        INSERT INTO reward_medal
+        (
+        org_id,
+        medal_icon,
+        medal_name,
+        medal_type,
+        description,
+        created_user_id,
+        created_time,
+        last_modified_user_id,
+        last_modified_time,
+        is_deleted
+        )
+        VALUES
+          <foreach collection="list" item="rewardMedal" index="index"
+                   separator=",">
+              (
+                #{rewardMedal.orgId},
+                #{rewardMedal.medalIcon},
+                #{rewardMedal.medalName},
+                #{rewardMedal.medalType},
+                #{rewardMedal.description},
+                #{rewardMedal.createdUserId},
+                ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+                #{rewardMedal.createdUserId},
+                ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+                0
+              )
+          </foreach>
+    </insert>
+
+
+    <update id="updateRewardMedal"
+            parameterType="RewardMedal">
+        UPDATE
+          reward_medal
+        <set>
+            <if test="medalIcon != null"> medal_icon = #{medalIcon}, </if>
+            <if test="medalName != null"> medal_name = #{medalName}, </if>
+            <if test="description != null"> description = #{description}, </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        reward_medal_id = #{rewardMedalId}
+        AND org_id = #{orgId}
+        AND is_deleted = 0
+    </update>
+
+    <!--   <update id="batchUpdateOrgPickOptionByPrimaryKeySelective"
+            parameterType="java.util.List">
+        <foreach collection="list" item="option" index="index"
+                 open="" separator=";" close="">
+            UPDATE
+                org_pick_option
+            <set>
+                <if test="null != option.optionValue">
+                    option_value = #{option.optionValue},
+                </if>
+                <if test="null != option.optionIndex">
+                    option_index = #{option.optionIndex},
+                </if>
+                <if test="null != option.isDefault">
+                    is_default = #{option.isDefault},
+                </if>
+                <if test="null != option.isDeprecated">
+                    is_deprecated = #{option.isDeprecated},
+                </if>
+                last_modified_user_id = #{option.lastModifiedUserId},
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+                <if test="null != option.isDeleted">
+                    , is_deleted = #{option.isDeleted}
+                </if>
+            </set>
+            WHERE
+                org_pick_option_id = #{option.orgPickOptionId}
+                AND org_id = #{option.orgId}
+                AND is_deprecated = 0
+                AND is_deleted = 0
+        </foreach>
+    </update>-->
+
+    <update id="batchUpdateRewardMedal" parameterType="map">
+        <foreach collection="list" item="rewardMedal" index="index"
+            open="" separator=";" close="">
+            UPDATE reward_medal
+            <set>
+                <if test="rewardMedal.medalIcon != null"> medal_icon = #{rewardMedal.medalIcon}, </if>
+                <if test="rewardMedal.medalName != null"> medal_name = #{rewardMedal.medalName}, </if>
+                <if test="rewardMedal.description != null"> description = #{rewardMedal.description}, </if>
+                last_modified_user_id = #{rewardMedal.lastModifiedUserId},
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+            </set>
+            WHERE
+            org_id = #{rewardMedal.orgId}
+            AND reward_medal_id = #{rewardMedal.rewardMedalId}
+            AND is_deleted = 0
+        </foreach>
+    </update>
+
+    <update id="batchDeleteRewardMedal" parameterType="map">
+        <foreach collection="list" item="rewardMedal" index="index"
+                 open="" separator=";" close="">
+            UPDATE reward_medal
+            <set>
+                is_deleted = 1,
+                last_modified_user_id = #{rewardMedal.lastModifiedUserId},
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+            </set>
+            WHERE
+            org_id = #{rewardMedal.orgId}
+            AND reward_medal_id = #{rewardMedal.rewardMedalId}
+            AND is_deleted = 0
+        </foreach>
+    </update>
+
+    <select id="findRewardMedal"
+            parameterType="map"
+            resultType="RewardMedal">
+      SELECT
+          *
+      FROM
+          reward_medal
+      WHERE
+          reward_medal_id = #{rewardMedalId}
+          AND org_id = #{orgId}
+          AND is_deleted = 0
+  </select>
+    
+    <update id="deleteRewardMedal" parameterType="map">
+        UPDATE
+          reward_medal
+        SET 
+          is_deleted = 1
+        WHERE 
+          reward_medal_id = ${rewardMedalId}
+          AND org_id = #{orgId}
+    </update>
+
+    <update id="deleteRewardMedalByOrgId" parameterType="map">
+        UPDATE
+          reward_medal
+        SET
+          is_deleted = 1
+        WHERE
+          org_id = #{orgId}
+    </update>
+
+    <select id="listRewardMedalByOrgId" parameterType="map" resultType="RewardMedal">
+        SELECT
+          *
+        FROM
+          reward_medal
+        WHERE
+        org_id = #{orgId}
+        AND is_deleted = 0
+    </select>
+
+    <select id="listRewardMedalByRewardMedalIds"
+            parameterType="map"
+            resultType="RewardMedal">
+        SELECT
+        *
+        FROM
+          reward_medal
+        WHERE
+        org_id = #{orgId}
+        AND
+        reward_medal_id in
+        <foreach item="item" index="index" collection="rewardMedalIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND is_deleted = 0
+    </select>
+</mapper>

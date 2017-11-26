@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.thirdparty.server.dao.EmailVerificationMapper">
+
+    <insert id="insert"
+            parameterType="EmailVerification">
+        insert into email_verification
+            (email_address,
+            identifier,
+            verification_code,
+            entry_point,
+            create_time,
+            expire_time,
+            verify_time,
+            verification_status,
+            extend)
+        values
+            (#{emailAddress},
+            #{identifier},
+            #{verificationCode},
+            #{entryPoint},
+            #{createTime},
+            #{expireTime},
+            #{verifyTime},
+            #{verificationStatus},
+            #{extend})
+    </insert>
+
+    <select id="findByEmailAddressAndVerificationCode"
+            resultType="EmailVerification">
+        select
+            *
+        from
+            email_verification
+        where
+            email_address = #{emailAddress}
+            and verification_code = #{verificationCode}
+    </select>
+
+    <select id="findByIdentifierAndVerificationCode"
+            resultType="EmailVerification">
+        select
+            *
+        from
+            email_verification
+        where
+            identifier = #{identifier}
+            and verification_code = #{verificationCode}
+    </select>
+
+    <select id="findByEmailAddress"
+            resultType="EmailVerification">
+        select
+            *
+        from
+            email_verification
+        where
+            email_address = #{emailAddress}
+    </select>
+
+    <update id="updateByPrimaryKeySelective"
+            parameterType="EmailVerification">
+        update email_verification
+        <set>
+            <if test="null != emailAddress">
+                email_address = #{emailAddress},
+            </if>
+            <if test="null != entryPoint">
+                entry_point = #{entryPoint},
+            </if>
+            <if test="null != createTime">
+                create_time = #{createTime},
+            </if>
+            <if test="null != expireTime">
+                expire_time = #{expireTime},
+            </if>
+            <if test="null != verifyTime">
+                verify_time = #{verifyTime},
+            </if>
+            <if test="null != verificationStatus">
+                verification_status = #{verificationStatus},
+            </if>
+            <if test="null != extend">
+                extend = extend
+            </if>
+        </set>
+        where
+            email_verification_id = #{emailVerificationId}
+    </update>
+
+</mapper>

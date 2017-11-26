@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.feed.server.dao.RewardQuotaSettingMapper">
+    <insert id="insertRewardQuotaSetting" parameterType="RewardQuotaSetting">
+        INSERT INTO reward_quota_setting
+        (
+        org_id,
+        personal_quota,
+        team_quota,
+        created_user_id,
+        created_time,
+        last_modified_user_id,
+        last_modified_time,
+        is_deleted
+        )
+        VALUES
+        (
+        #{orgId},
+        #{personalQuota},
+        #{teamQuota},
+        #{createdUserId},
+        ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+        #{lastModifiedUserId},
+        ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+        0
+        )
+        <selectKey keyProperty="rewardQuotaSettingId" resultType="Long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="updateRewardQuotaSetting"
+            parameterType="map">
+        UPDATE
+          reward_quota_setting
+        <set>
+            <if test="personalQuota != null"> personal_quota = #{personalQuota}, </if>
+            <if test="teamQuota != null"> team_quota = #{teamQuota}, </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        reward_quota_setting_id = #{rewardQuotaSettingId}
+        AND org_id = #{orgId}
+        AND is_deleted = 0
+    </update>
+
+    <select id="findRewardQuotaSetting" parameterType="map" resultType="RewardQuotaSetting">
+        SELECT
+          *
+        FROM
+          reward_quota_setting
+        WHERE
+          reward_quota_setting_id = #{rewardQuotaSettingId}
+          AND org_id = #{orgId}
+          AND is_deleted = 0
+    </select>
+
+    <select id="listRewardQuotaSettingByOrgId" parameterType="map" resultType="RewardQuotaSetting">
+        SELECT
+          *
+        FROM
+          reward_quota_setting
+        WHERE
+          org_id = #{orgId}
+          AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT 1
+    </select>
+    
+    <update id="deleteRewardQuotaSetting" parameterType="RewardQuotaSetting">
+        UPDATE
+          reward_quota_setting
+        SET
+          is_deleted = 1
+        WHERE
+          org_id = #{orgId}
+    </update>
+</mapper>

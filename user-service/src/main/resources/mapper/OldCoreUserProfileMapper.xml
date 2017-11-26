@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.OldCoreUserProfileMapper">
+
+    <insert id="insertCoreUserProfile"
+            parameterType="OldCoreUserProfile">
+        INSERT INTO core_user_profile
+            (org_id,
+            user_id,
+            profile_template_id,
+            user_status,
+            email_address,
+            mobile_phone,
+            full_name,
+            avatar_url,
+            gender,
+            job_title,
+            enroll_date,
+            extension,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{userId},
+            #{profileTemplateId},
+            #{userStatus},
+            #{emailAddress},
+            #{mobilePhone},
+            #{fullName},
+            #{avatarUrl},
+            #{gender},
+            #{jobTitle},
+            #{enrollDate},
+            #{extension},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="coreUserProfileId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <select id="findCoreUserProfileByOrgIdAndUserId"
+            parameterType="map"
+            resultType="OldCoreUserProfile">
+        SELECT
+            *
+        FROM
+            core_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listCoreUserProfileByOrgIdAndUserId"
+            parameterType="map"
+            resultType="OldCoreUserProfile">
+        SELECT
+            *
+        FROM
+            core_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id IN
+                <foreach collection="userIds" item="userId" index="index"
+                         open="(" separator="," close=")">
+                    #{userId}
+                </foreach>
+            AND is_deleted = 0
+    </select>
+
+    <select id="listCoreUserProfileByCreatedUserId"
+            parameterType="map"
+            resultType="OldCoreUserProfile">
+        SELECT
+            *
+        FROM
+            core_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND created_user_id = #{createdUserId}
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="listCoreUserProfileByOrgIdOrderByCreatedTimeDesc"
+            parameterType="map"
+            resultType="OldCoreUserProfile">
+        SELECT
+            *
+        FROM
+            core_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countCoreUserProfileByOrgId"
+            parameterType="long"
+            resultType="int">
+        SELECT
+            count(1)
+        FROM
+            core_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateCoreUserProfileByOrgIdAndUserId"
+            parameterType="OldCoreUserProfile">
+        UPDATE core_user_profile
+        <set>
+            <if test="null != profileTemplateId">
+                profile_template_id = #{profileTemplateId},
+            </if>
+            <if test="null != userStatus">
+                user_status = #{userStatus},
+            </if>
+            <if test="null != emailAddress">
+                email_address = #{emailAddress},
+            </if>
+            <if test="null != mobilePhone">
+                mobile_phone = #{mobilePhone},
+            </if>
+            <if test="null != fullName">
+                full_name = #{fullName},
+            </if>
+            <if test="null != avatarUrl">
+                avatar_url = #{avatarUrl},
+            </if>
+            <if test="null != gender">
+                gender = #{gender},
+            </if>
+            <if test="null != jobTitle">
+                job_title = #{jobTitle},
+            </if>
+            <if test="null != enrollDate">
+                enroll_date = #{enrollDate},
+            </if>
+            <if test="null != extension">
+                extension = #{extension},
+            </if>
+            <if test="null != isDeleted">
+                is_deleted = #{isDeleted},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+    </update>
+
+</mapper>

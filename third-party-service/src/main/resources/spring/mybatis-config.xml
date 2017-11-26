@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mapper.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="false" />
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+
+    <typeAliases>
+        <typeAlias alias="CaptchaVerification" type="hr.wozai.service.thirdparty.server.model.CaptchaVerification" />
+        <typeAlias alias="EmailVerification" type="hr.wozai.service.thirdparty.server.model.EmailVerification" />
+        <typeAlias alias="SmsVerification" type="hr.wozai.service.thirdparty.server.model.SmsVerification" />
+        <typeAlias alias="HistoryLog" type="hr.wozai.service.thirdparty.server.model.HistoryLog" />
+        <typeAlias alias="TrustedMobilePhone" type="hr.wozai.service.thirdparty.server.model.TrustedMobilePhone" />
+        <typeAlias alias="Message" type="hr.wozai.service.thirdparty.server.model.message.Message" />
+        <typeAlias alias="MessageLog" type="hr.wozai.service.thirdparty.server.model.message.MessageLog" />
+    </typeAliases>
+
+    <typeHandlers>
+        <typeHandler javaType="com.alibaba.fastjson.JSONObject"
+                     handler="hr.wozai.service.servicecommons.utils.persistence.FastJSONHandler" />
+        <typeHandler javaType="java.util.List"
+                     handler="hr.wozai.service.servicecommons.utils.persistence.StringListHandler" />
+    </typeHandlers>
+
+	<mappers>
+        <mapper resource="mapper/CaptchaVerificationMapper.xml" />
+        <mapper resource="mapper/EmailVerificationMapper.xml" />
+        <mapper resource="mapper/SmsVerificationMapper.xml" />
+        <mapper resource="mapper/MessageMapper.xml" />
+        <mapper resource="mapper/MessageLogMapper.xml" />
+        <mapper resource="mapper/HistoryLogMapper.xml" />
+        <mapper resource="mapper/TrustedMobilePhoneMapper.xml" />
+    </mappers>
+
+</configuration>

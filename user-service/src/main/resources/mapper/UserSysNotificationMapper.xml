@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.UserSysNotificationMapper">
+
+    <insert id="insertUserSysNotification"
+            parameterType="UserSysNotification">
+        INSERT INTO user_sys_notification
+            (org_id,
+            object_id,
+            object_type,
+            notify_user_id,
+            logical_index,
+            need_email,
+            need_message_center,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{objectId},
+            #{objectType},
+            #{notifyUserId},
+            #{logicalIndex},
+            #{needEmail},
+            #{needMessageCenter},
+            -- created by our salesman
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="userSysNotificationId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="listUserSysNotificationByOrgIdAndObjectIdAndObjectTypeOrderByLogicalIndex"
+            parameterType="map"
+            resultType="UserSysNotification">
+        SELECT
+            *
+        FROM
+            user_sys_notification
+        WHERE
+            org_id = #{orgId}
+            AND object_id = #{objectId}
+            AND object_type = #{objectType}
+            AND is_deleted = 0
+        ORDER BY
+            logical_index DESC
+    </select>
+
+    <select id="listUserIdByOrgIdAndObjectIdAndObjectTypeOrderByLogicalIndex"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            notify_user_id
+        FROM
+            user_sys_notification
+        WHERE
+            org_id = #{orgId}
+            AND object_id = #{objectId}
+            AND object_type = #{objectType}
+            AND is_deleted = 0
+        ORDER BY
+            logical_index DESC
+    </select>
+
+
+</mapper>

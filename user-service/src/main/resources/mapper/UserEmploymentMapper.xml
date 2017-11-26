@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.UserEmploymentMapper">
+
+    <insert id="insertUserEmployment"
+            parameterType="UserEmployment">
+        INSERT INTO user_employment
+            (org_id,
+            user_id,
+            user_status,
+            onboarding_status,
+            contract_type,
+            employment_status,
+            internship_enroll_date,
+            internship_resign_date,
+            parttime_enroll_date,
+            parttime_resign_date,
+            fulltime_enroll_date,
+            fulltime_resign_date,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{userId},
+            #{userStatus},
+            #{onboardingStatus},
+            #{contractType},
+            #{employmentStatus},
+            #{internshipEnrollDate},
+            #{internshipResignDate},
+            #{parttimeEnrollDate},
+            #{parttimeResignDate},
+            #{fulltimeEnrollDate},
+            #{fulltimeResignDate},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="userEmploymentId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findUserEmploymentByOrgIdAndUserId"
+            parameterType="map"
+            resultType="UserEmployment">
+        SELECT
+            *
+        FROM
+            user_employment
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listUserEmploymentByOrgIdAndUserId"
+            parameterType="map"
+            resultType="UserEmployment">
+        SELECT
+            *
+        FROM
+            user_employment
+        WHERE
+            org_id = #{orgId}
+            AND user_id IN
+            <foreach collection="userIds" item="userId" index="index"
+                     open="(" separator="," close=")">
+                #{userId}
+            </foreach>
+        AND is_deleted = 0
+    </select>
+
+    <select id="listUserIdByOrgIdAndOnboardingStatus"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            DISTINCT user_id
+        FROM
+            user_employment
+        WHERE
+            org_id = #{orgId}
+            AND onboarding_status = #{onboardingStatus}
+            AND is_deleted = 0
+        ORDER BY
+            created_time DESC
+        LIMIT
+            #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="listUserIdByOrgIdAndOnboardingHasApproved"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            user_id
+        FROM
+        (
+            SELECT
+                user_id,
+                (
+                  CASE contract_type
+                  WHEN 1 THEN internship_enroll_date
+                  WHEN 2 THEN parttime_enroll_date
+                  WHEN 3 THEN fulltime_enroll_date
+                  END
+                ) AS enroll_date,
+                onboarding_status
+            FROM
+                user_employment
+            WHERE
+                org_id = #{orgId}
+                AND
+                <choose>
+                    <when test="hasApproved == 1">
+                        onboarding_status = 3
+                    </when>
+                    <otherwise>
+                        onboarding_status != 3
+                    </otherwise>
+                </choose>
+                AND is_deleted = 0
+        ) t
+        ORDER BY
+            t.onboarding_status DESC, t.enroll_date DESC
+        LIMIT
+            #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countUserIdByOrgIdAndOnboardingHasApproved"
+            parameterType="map"
+            resultType="int">
+        SELECT
+            COUNT(DISTINCT user_id)
+        FROM
+            user_employment
+        WHERE
+            org_id = #{orgId}
+            AND
+            <choose>
+                <when test="hasApproved == 1">
+                    onboarding_status = 3
+                </when>
+                <otherwise>
+                    onboarding_status != 3
+                </otherwise>
+            </choose>
+            AND is_deleted = 0
+    </select>
+
+    <select id="listUserIdByOrgIdAndLimitOrderByEnrollDateDesc"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            t.user_id
+        FROM
+        (
+            SELECT
+                user_id,
+                (CASE contract_type
+                  WHEN 1 THEN internship_enroll_date
+                  WHEN 2 THEN parttime_enroll_date
+                  WHEN 3 THEN fulltime_enroll_date
+                  END
+                ) AS enroll_date
+            FROM
+                user_employment
+            WHERE
+                org_id = #{orgId}
+                AND user_status = 3
+                AND onboarding_status = 3
+                AND is_deleted = 0
+        ) t
+        ORDER BY
+            t.enroll_date DESC
+        LIMIT
+            #{listSize}
+    </select>
+
+    <select id="listUserIdByOrgIdAndLimitOrderByComingAnniversaryGapAsc"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            t.user_id
+        FROM
+        (
+            SELECT
+                user_id,
+                (CASE contract_type
+                  WHEN 1 THEN internship_enroll_date
+                  WHEN 2 THEN parttime_enroll_date
+                  WHEN 3 THEN fulltime_enroll_date
+                  END
+                ) AS enroll_date
+            FROM
+                user_employment
+            WHERE
+                org_id = #{orgId}
+                AND user_status = 3
+                AND onboarding_status = 3
+                AND is_deleted = 0
+        ) t
+        WHERE
+            (to_days(now()) - to_days(from_unixtime(enroll_date/1000))) > 354
+        -- order by: (DAYOFYEAR(enroll_date) + daysLeftInThisYear) % (days of year)
+        ORDER BY
+            (DAYOFYEAR(t.enroll_date/1000) + to_days(concat(YEAR(now()), '-12-31')) - to_days(YEAR(now())))
+            % (to_days(concat(YEAR(now()),'-12-31')) - to_days(concat(YEAR(now()), '-01-01')) + 1)  ASC
+        LIMIT
+            #{listSize}
+    </select>
+
+    <select id="countUserIdByOrgIdAndOnboardingStatus"
+            parameterType="map"
+            resultType="int">
+        SELECT
+            COUNT(DISTINCT user_id)
+        FROM
+            user_employment
+        WHERE
+            org_id = #{orgId}
+            AND onboarding_status = #{onboardingStatus}
+            AND is_deleted = 0
+    </select>
+
+    <select id="sublistUserIdByUserStatus"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            DISTINCT user_id
+        FROM
+            user_employment
+        WHERE
+            org_id = #{orgId}
+            AND user_id IN
+            <foreach collection="userIds" item="userId" index="index"
+                     open="(" separator="," close=")">
+                #{userId}
+            </foreach>
+            AND user_status = #{userStatus}
+            AND is_deleted = 0
+    </select>
+
+    <select id="sublistUserIdNotResignedByEmploymentStatus"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            DISTINCT user_id
+        FROM
+            user_employment
+        WHERE
+            org_id = #{orgId}
+            AND user_id IN
+            <foreach collection="userIds" item="userId" index="index"
+                     open="(" separator="," close=")">
+                #{userId}
+            </foreach>
+            AND employment_status = #{employmentStatus}
+            AND user_status != 4
+            AND is_deleted = 0
+    </select>
+
+
+    <update id="updateUserEmploymentByOrgIdAndUserIdSelective"
+            parameterType="UserEmployment">
+        UPDATE
+            user_employment
+        <set>
+            <if test="null != userStatus">
+                user_status = #{userStatus},
+            </if>
+            <if test="null != onboardingStatus">
+                onboarding_status = #{onboardingStatus},
+            </if>
+            <if test="null != contractType">
+                contract_type = #{contractType},
+            </if>
+            <if test="null != employmentStatus">
+                employment_status = #{employmentStatus},
+            </if>
+            <if test="null != internshipEnrollDate">
+                internship_enroll_date = #{internshipEnrollDate},
+            </if>
+            <if test="null != internshipResignDate">
+                internship_resign_date = #{internshipResignDate},
+            </if>
+            <if test="null != parttimeEnrollDate">
+                parttime_enroll_date = #{parttimeEnrollDate},
+            </if>
+            <if test="null != parttimeResignDate">
+                parttime_resign_date = #{parttimeResignDate},
+            </if>
+            <if test="null != fulltimeEnrollDate">
+                fulltime_enroll_date = #{fulltimeEnrollDate},
+            </if>
+            <if test="null != fulltimeResignDate">
+                fulltime_resign_date = #{fulltimeResignDate},
+            </if>
+            <if test="null != isDeleted">
+                is_deleted = #{isDeleted},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </update>
+
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.StatusUpdateMapper">
+
+    <insert id="insertStatusUpdate"
+            parameterType="StatusUpdate">
+        INSERT INTO status_update
+            (org_id,
+            user_id,
+            status_type,
+            update_type,
+            update_date,
+            description,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{userId},
+            #{statusType},
+            #{updateType},
+            #{updateDate},
+            #{description},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="statusUpdateId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findStatusUpdateByOrgIdAndPrimaryKey"
+            resultType="StatusUpdate">
+        SELECT
+            *
+        FROM
+            status_update
+        WHERE
+            status_update_id = #{statusUpdateId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listStatusUpdateByOrgIdOrderByCreatedTimeDesc"
+            resultType="StatusUpdate">
+        SELECT
+            *
+        FROM
+            status_update
+        WHERE
+            org_id = #{orgId}
+            AND status_type = #{statusType}
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="listStatusUpdateByOrgIdAndPrimaryKeys"
+            parameterType="map"
+            resultType="StatusUpdate">
+        SELECT
+            *
+        FROM
+            status_update
+        WHERE
+            status_update_id IN
+            <foreach collection="statusUpdateIds" item="statusUpdateId" index="index"
+                     open="(" separator="," close=")">
+                #{statusUpdateId}
+            </foreach>
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="countStatusUpdateByOrgIdAndStatusType"
+            parameterType="map"
+            resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            status_update
+        WHERE
+            org_id = #{orgId}
+            AND status_type = #{statusType}
+            AND is_deleted = 0
+    </select>
+
+    <update id="revokeStatusUpdateByPrimaryKeyAndOrgId"
+            parameterType="map">
+        UPDATE
+            status_update
+        SET
+            update_date = -1,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        WHERE
+            status_update_id = #{statusUpdateId}
+            AND org_id = #{orgId}
+            AND update_date != -1
+            AND is_deleted = 0
+    </update>
+
+
+</mapper>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.TeamMemberMapper">
+
+    <insert id="insertTeamMember"
+            parameterType="TeamMember">
+        <selectKey keyProperty="teamMemberId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO team_member
+        (user_id,
+        team_id,
+        org_id,
+        is_team_admin,
+        created_user_id,
+        created_time,
+        last_modified_user_id,
+        last_modified_time)
+        VALUES
+        (#{userId},
+        #{teamId},
+        #{orgId},
+        <choose>
+            <when test="null == isTeamAdmin">
+                0,
+            </when>
+            <otherwise>
+                #{isTeamAdmin},
+            </otherwise>
+        </choose>
+        #{createdUserId},
+        ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+        #{lastModifiedUserId},
+        ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+    </insert>
+
+    <insert id="batchInsertTeamMember"
+            parameterType="java.util.List">
+        <selectKey keyProperty="teamMemberId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO team_member
+        (user_id,
+        team_id,
+        org_id,
+        created_user_id,
+        created_time,
+        last_modified_user_id,
+        last_modified_time)
+        VALUES
+        <foreach collection="list" item="teamMember" index="index"
+                 separator=",">
+            (#{teamMember.userId},
+            #{teamMember.teamId},
+            #{teamMember.orgId},
+            #{teamMember.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{teamMember.lastModifiedUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        </foreach>
+    </insert>
+
+    <update id="deleteTeamMember" parameterType="map">
+        UPDATE team_member
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        org_id = #{orgId}
+        AND user_id = #{userId}
+    </update>
+
+    <update id="batchDeleteTeamMember" parameterType="java.util.List">
+        <foreach collection="list" item="teamMember" index="index"
+                 open="" separator=";" close="">
+            UPDATE team_member
+            <set>
+                is_deleted = 1,
+                last_modified_user_id = #{teamMember.lastModifiedUserId},
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+            </set>
+            WHERE
+            org_id = #{teamMember.orgId}
+            AND user_id = #{teamMember.userId}
+            AND team_id = #{teamMember.teamId}
+        </foreach>
+    </update>
+
+    <update id="batchDeleteTeamMembersByUserIds" parameterType="map">
+        UPDATE team_member
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND user_id IN
+            <foreach item="item" index="index" collection="userIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </update>
+
+    <update id="updateTeamMember" parameterType="TeamMember">
+        UPDATE team_member
+        <set>
+            <if test="null != isTeamAdmin">
+                is_team_admin = #{isTeamAdmin},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        org_id = #{orgId}
+        AND user_id = #{userId}
+        AND team_id = #{teamId}
+        AND is_deleted = 0
+    </update>
+
+    <update id="batchUpdateTeamMembers" parameterType="map">
+        UPDATE team_member
+        <set>
+            team_id = #{toTeamId},
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        org_id = #{orgId}
+        AND user_id IN
+        <foreach item="item" index="index" collection="userIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND is_deleted = 0
+    </update>
+
+    <select id="findByUserIdAndOrgId" parameterType="map" resultType="TeamMember">
+        select
+            *
+        from team_member
+        where
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listUserIdsByOrgIdAndTeamIds" resultType="java.lang.Long">
+        SELECT user_id FROM team_member WHERE org_id = #{orgId} AND team_id IN
+        <foreach item="item" index="index" collection="teamIds"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND is_deleted = 0
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countUserNumberByTeamId" parameterType="map" resultType="java.lang.Long">
+        select count(1) FROM team_member WHERE org_id = #{orgId} AND team_id IN
+        <foreach item="item" index="index" collection="teamIds"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND is_deleted = 0
+    </select>
+
+    <select id="listTeamMemberInfoByUserIds" parameterType="map" resultType="TeamMemberInfo">
+        select A.user_id, A.team_id, B.team_name, A.is_team_admin
+        from team_member A
+        join team B on A.team_id = B.team_id
+        where
+            A.org_id = #{orgId}
+            AND B.org_id = #{orgId}
+            AND A.is_deleted = 0
+            AND B.is_deleted = 0
+            AND user_id IN
+            <foreach item="item" index="index" collection="userIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </select>
+
+</mapper>

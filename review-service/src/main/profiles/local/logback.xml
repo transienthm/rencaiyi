@@ -1,0 +1,42 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+
+        <file>log/log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>log/log.%d{yyyy-MM-dd_HH,Asia/Shanghai}</fileNamePattern>
+            <maxHistory>1024</maxHistory>
+        </rollingPolicy>
+
+<!--        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Shanghai} %-5p %c{1} - %m%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>-->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+    </appender>
+
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+
+        <file>log/err</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>log/err.%d{yyyy-MM-dd_HH,Asia/Shanghai}</fileNamePattern>
+            <maxHistory>1024</maxHistory>
+        </rollingPolicy>
+
+<!--        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,Asia/Shanghai} %-5p %c{1} - %m%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>-->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="INFO" />
+        <appender-ref ref="ERROR" />
+    </root>
+</configuration>

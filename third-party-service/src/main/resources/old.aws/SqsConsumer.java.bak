@@ -1,0 +1,251 @@
+package hr.wozai.service.thirdparty.server.utils;
+
+import com.alibaba.fastjson.JSONObject;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.model.DeleteMessageRequest;
+import com.amazonaws.services.sqs.model.Message;
+import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
+import hr.wozai.service.servicecommons.commons.enums.ServiceStatus;
+import hr.wozai.service.thirdparty.client.bean.BatchEmail;
+import hr.wozai.service.thirdparty.client.bean.EmailContent;
+import hr.wozai.service.thirdparty.server.enums.SmsTemplate;
+import hr.wozai.service.thirdparty.server.service.SmsService;
+import hr.wozai.service.servicecommons.utils.logging.LogAround;
+import io.jstack.sendcloud4j.SendCloud;
+import io.jstack.sendcloud4j.mail.Email;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+/**
+ * @author lepujiu
+ * @version 1.0
+ * @created 16/3/23
+ */
+@Component("sqsConsumer")
+public class SqsConsumer implements Runnable, ApplicationContextAware, InitializingBean {
+    private static Logger LOGGER = LoggerFactory.getLogger(SqsConsumer.class);
+
+    @Value("${aws.sqs.access.key}")
+    private String accessKey;
+
+    @Value("${aws.sqs.secret.key}")
+    private String secretKey;
+
+    private AmazonSQS amazonSQS;
+
+    @Value("${sqs.email.queue.url}")
+    private String sqsEmailURL;
+
+    @Value("${sqs.email.batch.queue.url}")
+    private String sqsBatchEmailURL;
+//    private String sqsBatchEmailURL = "https://sqs.cn-north-1.amazonaws.com.cn/745956536067/test";
+
+    @Value("${sqs.email.queue.forxml.url}")
+    private String sqsForxmlUrl;
+
+    @Value("${sqs.sms.queue.url}")
+    private String sqsSmsURL;
+
+    private static ApplicationContext context;
+
+    @Value("${email.sendcloud.apiUser}")
+    private String sendCloudApiUser;
+
+    @Value("${email.sendcloud.apiKey}")
+    private String sendCloudApiKey;
+
+    @Value("${email.sendcloud.from}")
+    private String sendCloudFrom;
+
+    //@Value("${email.sendcloud.fromName}")
+    private String sendCloudFromName = "人才易";
+
+    //private static final Properties properties;
+    private static final String ENCODING = "UTF-8";
+
+    @Autowired
+    private SmsService smsService;
+
+    @Autowired
+    private SendCloudBatchUtils sendCloudBatchUtils;
+
+    private SendCloud sendCloudApi;
+
+    @PostConstruct
+    public void init() {
+        sendCloudApi = SendCloud.createWebApi(sendCloudApiUser, sendCloudApiKey);
+    }
+
+    public SqsConsumer() {
+        LOGGER.info("spring实例化中....,实例化对象为:" + this);
+    }
+
+    /*    static {
+        properties = new Properties();
+        InputStream inputStream = SqsConsumer.class.getClassLoader().getResourceAsStream(PROPERTIES);
+        try {
+            properties.load(inputStream);
+        } catch (IOException e) {
+            LOGGER.error();
+        }
+    }*/
+
+    @LogAround
+    public void sendSmsMessage(String mobilePhoneNumber, String text) throws Exception {
+        LOGGER.info("Sqs sending cloudwatch warning message:" + text + " to:" + mobilePhoneNumber);
+        boolean result = smsService.sendSmsMessage(mobilePhoneNumber, text, SmsTemplate.WARNING_NOTICE.getTemplateId());
+        if (!result) {
+            LOGGER.error("sendSmsMessage()-error", ServiceStatus.COMMON_INTERNAL_SERVER_ERROR);
+        } else {
+            LOGGER.info("send warning text to mobile phone:" + text);
+        }
+    }
+
+    @LogAround
+    public void sendTemplate(JSONObject data) throws Exception {
+        String url = "http://api.sendcloud.net/apiv2/mail/sendtemplate";
+
+        //String apiUser = "Mail_Wozai_Prod";
+        //String apiKey = "tjHGh3xWzTkMvpCT";
+        //String from = "service@mail.sqian.com";
+        //String fromName = "闪签";
+
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost(url);
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("apiUser", sendCloudApiUser));
+        params.add(new BasicNameValuePair("apiKey", sendCloudApiKey));
+        params.add(new BasicNameValuePair("from", sendCloudFrom));
+        params.add(new BasicNameValuePair("fromName", sendCloudFromName));
+        params.add(new BasicNameValuePair("templateInvokeName", data.getString("templateInvokeName")));
+        params.add(new BasicNameValuePair("xsmtpapi", data.getString("xsmtpapi")));
+
+        httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+
+        HttpResponse response = httpClient.execute(httpPost);
+
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) { // 正常返回
+            LOGGER.info(EntityUtils.toString(response.getEntity()));
+        } else {
+            LOGGER.error("sendTemplate()-error");
+        }
+        httpPost.releaseConnection();
+    }
+
+    @Override
+    @LogAround
+    public void run() {
+        LOGGER.info("可用队列有:" + sqsEmailURL);
+        while (true) {
+            try {
+                if (amazonSQS != null) {
+
+                    List<Message> emailMsgs = amazonSQS.receiveMessage(
+                            new ReceiveMessageRequest(sqsEmailURL).withMaxNumberOfMessages(1)).getMessages();
+                    List<Message> batchEmailMsgs = amazonSQS.receiveMessage(
+                            new ReceiveMessageRequest(sqsBatchEmailURL).withMaxNumberOfMessages(1)).getMessages();
+                    List<Message> xmlEmailMsgs = amazonSQS.receiveMessage(
+                            new ReceiveMessageRequest(sqsForxmlUrl).withMaxNumberOfMessages(1)).getMessages();
+
+                    if (emailMsgs.size() > 0) {
+                        LOGGER.info("正在消费Email队列:" + sqsEmailURL);
+                        for (Message message : emailMsgs) {
+                            LOGGER.info("The message is {}", message.getBody());
+                            try {
+                                sendTemplate(JSONObject.parseObject(message.getBody()));
+                            } catch (Exception e) {
+                                LOGGER.error("send email error: {}", e.getMessage());
+                            }
+                            amazonSQS.deleteMessage(new DeleteMessageRequest(sqsEmailURL, message.getReceiptHandle()));
+                        }
+                    }
+
+                    if (batchEmailMsgs.size() > 0) {
+                        long start = System.currentTimeMillis();
+                        LOGGER.info("正在消费BatchEmail队列：" + sqsBatchEmailURL);
+                        for (Message message : batchEmailMsgs) {
+                            LOGGER.info("The message is {}", message.getBody());
+                            BatchEmail batchEmail = JSONObject.parseObject(message.getBody(),BatchEmail.class);
+                            sendCloudBatchUtils.batchSend(batchEmail);
+                            amazonSQS.deleteMessage(new DeleteMessageRequest(sqsBatchEmailURL, message.getReceiptHandle()));
+                        }
+                        long end = System.currentTimeMillis();
+                        LOGGER.info("读取批量邮件队列并发送批量邮件总时间为" + (end - start) + "ms");
+                    }
+
+                    if (xmlEmailMsgs.size() > 0) {
+                        LOGGER.info("正在消费xmlEmail队列：" + sqsForxmlUrl);
+                        for (Message message : xmlEmailMsgs) {
+                            LOGGER.info("The message is {}", message.getBody());
+                            EmailContent emailContent = JSONObject.parseObject(message.getBody(), EmailContent.class);
+                            Email email = Email.general()
+                                    .from(sendCloudFrom)
+                                    .fromName(sendCloudFromName)
+                                    .subject(emailContent.getSubject())
+                                    .html(emailContent.getHtml())
+                                    .to(emailContent.getDstEmailAddress());
+                            sendCloudApi.mail().send(email);
+                            amazonSQS.deleteMessage(new DeleteMessageRequest(sqsForxmlUrl, message.getReceiptHandle()));}
+                    }
+                } else {
+                    LOGGER.error("amazonSQS: {null}");
+                }
+            } catch (Exception e) {
+                LOGGER.error("sqsConsumer-run():{}", e);
+            }
+        }
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        smsService = (SmsService) getBean("smsService");
+
+        amazonSQS = new AmazonSQSClient(new BasicAWSCredentials(accessKey, secretKey));
+        amazonSQS.setRegion(Region.getRegion(Regions.CN_NORTH_1));
+        Thread sqsConsumer = new Thread(this);
+        sqsConsumer.setDaemon(true);
+        sqsConsumer.start();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        context = applicationContext;
+    }
+
+    public static ApplicationContext getContext() {
+        return context;
+    }
+
+    public static Object getBean(String beanName) {
+        return context.getBean(beanName);
+    }
+
+}

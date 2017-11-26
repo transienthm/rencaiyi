@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.UserAccountMapper">
+
+    <insert id="insertUserAccount"
+            parameterType="UserAccount">
+        insert into user_account
+            (encrypted_password,
+            email_address,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend)
+        values
+            (#{encryptedPassword},
+            #{emailAddress},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{extend})
+        <selectKey keyProperty="userId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findByPrimaryKey"
+            resultType="UserAccount">
+        select
+            *
+        from
+            user_account
+        where
+            user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="findByEmailAddress"
+            resultType="UserAccount">
+        select
+            *
+        from
+            user_account
+        where
+            email_address = #{emailAddress}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listUserAccountByEmailAddress"
+            parameterType="list"
+            resultType="UserAccount">
+        SELECT
+            *
+        FROM
+            user_account
+        WHERE
+            email_address IN
+            <foreach collection="list" item="emailAddress" index="index"
+                     open="(" separator="," close=")">
+                #{emailAddress}
+            </foreach>
+            AND is_deleted = 0
+    </select>
+
+    <update id="deleteByPrimaryKey" parameterType="map">
+        update user_account
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <update id="updateByPrimaryKeySelective"
+            parameterType="UserAccount">
+        update user_account
+        <set>
+            <if test="null != emailAddress">
+                email_address = #{emailAddress},
+            </if>
+            <if test="null != encryptedPassword">
+                encrypted_password = #{encryptedPassword},
+            </if>
+            <if test="null != loginFailTime">
+                login_fail_time = #{loginFailTime},
+            </if>
+            <if test="null != extend">
+                extend = #{extend},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        where
+            user_id = #{userId}
+            AND is_deleted = 0
+    </update>
+
+</mapper>

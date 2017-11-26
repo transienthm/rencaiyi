@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.ConvrRecordMapper">
+
+    <insert id="insertConvrRecord"
+            parameterType="ConvrRecord">
+        INSERT INTO convr_record
+            (org_id,
+            convr_schedule_id,
+            convr_date,
+            topic_progress,
+            topic_plan,
+            topic_obstacle,
+            topic_help,
+            topic_career,
+            topic_else,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{convrScheduleId},
+            #{convrDate},
+            #{topicProgress},
+            #{topicPlan},
+            #{topicObstacle},
+            #{topicHelp},
+            #{topicCareer},
+            #{topicElse},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="convrRecordId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findConvrRecordByPrimaryKeyAndOrgId"
+            parameterType="map"
+            resultType="ConvrRecord">
+        SELECT
+            *
+        FROM
+            convr_record
+        WHERE
+            convr_record_id = #{convrRecordId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listConvrRecordByConvrScheduleIdAndOrgId"
+            parameterType="map"
+            resultType="ConvrRecord">
+        SELECT
+            convr_record_id,
+            convr_schedule_id,
+            convr_date
+        FROM
+            convr_record
+        WHERE
+            org_id = #{orgId}
+            AND convr_schedule_id IN
+            <foreach collection="convrScheduleIds" item="convrScheduleId" index="index"
+                     open="(" separator="," close=")">
+                #{convrScheduleId}
+            </foreach>
+            AND is_deleted = 0
+        ORDER BY convr_date DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countConvrRecordByConvrScheduleIdAndOrgId"
+            parameterType="map"
+            resultType="int">
+        SELECT
+            count(convr_record_id)
+        FROM
+            convr_record
+        WHERE
+            org_id = #{orgId}
+            AND convr_schedule_id IN
+            <foreach collection="convrScheduleIds" item="convrScheduleId" index="index"
+                     open="(" separator="," close=")">
+                #{convrScheduleId}
+            </foreach>
+            AND is_deleted = 0
+        ORDER BY convr_date DESC
+    </select>
+
+    <!--<select id="listConvrRecordByTargetUserIdAndOrgId"-->
+            <!--parameterType="map"-->
+            <!--resultType="ConvrRecord">-->
+        <!--SELECT-->
+            <!--convr_record_id,-->
+            <!--convr_schedule_id,-->
+            <!--convr_date-->
+        <!--FROM-->
+            <!--convr_record-->
+        <!--WHERE-->
+            <!--org_id = #{orgId}-->
+            <!--AND target_user_id = #{targetUserId}-->
+            <!--AND is_deleted = 0-->
+        <!--ORDER BY convr_date DESC-->
+        <!--LIMIT #{pageStart}, #{pageSize}-->
+    <!--</select>-->
+
+    <!--<select id="countConvrRecordByTargetUserIdAndOrgId"-->
+            <!--parameterType="map"-->
+            <!--resultType="int">-->
+        <!--SELECT-->
+            <!--count(convr_record_id)-->
+        <!--FROM-->
+            <!--convr_record-->
+        <!--WHERE-->
+            <!--org_id = #{orgId}-->
+            <!--AND target_user_id = #{targetUserId}-->
+            <!--AND is_deleted = 0-->
+        <!--ORDER BY convr_date DESC-->
+    <!--</select>-->
+
+    <update id="updateConvrRecordByPrimaryKeyAndOrgIdSelective"
+            parameterType="ConvrRecord">
+        UPDATE convr_record
+        <set>
+            <if test="null != convrDate">
+                convr_date = #{convrDate},
+            </if>
+            <if test="null != topicProgress">
+                topic_progress = #{topicProgress},
+            </if>
+            <if test="null != topicPlan">
+                topic_plan = #{topicPlan},
+            </if>
+            <if test="null != topicObstacle">
+                topic_obstacle = #{topicObstacle},
+            </if>
+            <if test="null != topicHelp">
+                topic_help = #{topicHelp},
+            </if>
+            <if test="null != topicCareer">
+                topic_career = #{topicCareer},
+            </if>
+            <if test="null != topicElse">
+                topic_else = #{topicElse},
+            </if>
+            <if test="null != isDeleted">
+                is_deleted = #{isDeleted},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            convr_record_id = #{convrRecordId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+</mapper>

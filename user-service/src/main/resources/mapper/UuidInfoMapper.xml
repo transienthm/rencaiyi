@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.token.UuidInfoMapper">
+
+    <insert id="insertUuidInfo"
+            parameterType="UuidInfo">
+        INSERT INTO uuid_info
+            (org_id,
+            user_id,
+            uuid,
+            uuid_usage,
+            expire_time,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+            (#{orgId},
+            #{userId},
+            #{uuid},
+            #{uuidUsage},
+            #{expireTime},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        <selectKey keyProperty="uuidInfoId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getUuidInfoByUuid"
+            resultType="UuidInfo">
+        SELECT
+            *
+        FROM
+            uuid_info
+        WHERE
+            uuid = #{uuid}
+            AND is_deleted = 0
+    </select>
+
+    <update id="deleteUuidInfo"
+            parameterType="map">
+        UPDATE uuid_info
+        <set>
+            is_deleted = 1
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND uuid_info_id = #{uuidInfoId}
+    </update>
+
+    <update id="deleteUuidInfoByOrgIdAndUserIdAndUsage"
+            parameterType="map">
+        UPDATE uuid_info
+        <set>
+            is_deleted = 1
+        </set>
+        WHERE
+        org_id = #{orgId}
+        AND user_id = #{userId}
+        AND uuid_usage = #{uuidUsage}
+    </update>
+
+    <select id="listUuidsByOrgIdAndUserIdAndUuidUsage" parameterType="map" resultType="UuidInfo">
+        SELECT
+            *
+        FROM
+            uuid_info
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND uuid_usage = #{uuidUsage}
+            AND <![CDATA[ expire_time > #{expireTime} ]]>
+            AND is_deleted = 0
+    </select>
+
+</mapper>

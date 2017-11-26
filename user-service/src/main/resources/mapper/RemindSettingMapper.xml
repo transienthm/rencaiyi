@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.common.RemindSettingMapper">
+
+    <insert id="batchInsertRemindSetting"
+            parameterType="java.util.List">
+        <selectKey keyProperty="remindSettingId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO remind_setting
+            (org_id,
+            user_id,
+            remind_type,
+            status,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+        <foreach collection="list" item="remindSetting" index="index"
+                 separator=",">
+            (#{remindSetting.orgId},
+            #{remindSetting.userId},
+            #{remindSetting.remindType},
+            #{remindSetting.status},
+            #{remindSetting.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{remindSetting.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateRemindSetting" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+            UPDATE remind_setting
+            <set>
+                status = #{item.status},
+                last_modified_user_id = #{item.lastModifiedUserId},
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+            </set>
+            WHERE
+                remind_setting_id = #{item.remindSettingId}
+                AND org_id = #{item.orgId}
+                AND is_deleted = 0
+        </foreach>
+    </update>
+
+    <select id="listRemindSettingByUserId" parameterType="map" resultType="RemindSetting">
+        SELECT * FROM remind_setting
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="getRemindSettingByUserIdAndRemindType" parameterType="map" resultType="RemindSetting">
+        SELECT * FROM remind_setting
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND remind_type = #{remindType}
+            AND is_deleted = 0
+    </select>
+
+    <update id="deleteRemindSettingByUserId" parameterType="map">
+        UPDATE remind_setting
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+    </update>
+
+</mapper>

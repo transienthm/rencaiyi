@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mapper.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="false" />
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+
+    <typeAliases>
+        <typeAlias alias="Feed" type="hr.wozai.service.feed.server.model.Feed" />
+        <typeAlias alias="Comment" type="hr.wozai.service.feed.server.model.Comment" />
+        <typeAlias alias="Thumbup" type="hr.wozai.service.feed.server.model.Thumbup" />
+        <typeAlias alias="Reward" type="hr.wozai.service.feed.server.model.Reward" />
+        <typeAlias alias="RewardQuotaSetting" type="hr.wozai.service.feed.server.model.RewardQuotaSetting" />
+        <typeAlias alias="RewardMedal" type="hr.wozai.service.feed.server.model.RewardMedal" />
+    </typeAliases>
+
+
+    <typeHandlers>
+        <typeHandler javaType="java.util.List"
+                     handler="hr.wozai.service.servicecommons.utils.persistence.StringListHandler" />
+        <typeHandler javaType="com.alibaba.fastjson.JSONObject"
+                     handler="hr.wozai.service.servicecommons.utils.persistence.FastJSONHandler" />
+    </typeHandlers>
+
+	<mappers>
+        <mapper resource="mapper/FeedMapper.xml" />
+        <mapper resource="mapper/CommentMapper.xml" />
+        <mapper resource="mapper/ThumbupMapper.xml" />
+        <mapper resource="mapper/RewardMapper.xml" />
+        <mapper resource="mapper/RewardQuotaSettingMapper.xml" />
+        <mapper resource="mapper/RewardMedalMapper.xml" />
+    </mappers>
+
+</configuration>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.survey.SurveyResponseMapper">
+
+    <insert id="batchInsertSurveyResponse"
+            parameterType="SurveyResponse">
+        <selectKey keyProperty="surveyResponseId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO survey_response
+            (org_id,
+            user_id,
+            survey_activity_id,
+            survey_item_id,
+            survey_item_type,
+            response,
+            response_detail,
+            is_submit,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+        <foreach collection="list" item="response" index="index"
+                 separator=",">
+            (#{response.orgId},
+            #{response.userId},
+            #{response.surveyActivityId},
+            #{response.surveyItemId},
+            #{response.surveyItemType},
+            #{response.response},
+            #{response.responseDetail},
+            0,
+            #{response.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{response.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateSurveyResponse" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" separator=";" close="">
+            UPDATE survey_response
+            <set>
+                <if test="null != item.response">
+                    response = #{item.response},
+                </if>
+                <if test="null != item.responseDetail">
+                    response_detail = #{item.responseDetail},
+                </if>
+                <if test="null != item.isSubmit">
+                    is_submit = #{item.isSubmit},
+                </if>
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+            </set>
+            WHERE
+            survey_response_id = #{item.surveyResponseId}
+            AND org_id = #{item.orgId}
+            AND is_deleted = 0
+        </foreach>
+    </update>
+
+    <select id="listSurveyResponsesByOrgIdAndActivityIdAndUserId" parameterType="map" resultType="SurveyResponse">
+        SELECT
+            *
+        FROM
+            survey_response
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND survey_activity_id = #{activityId}
+            AND is_deleted = 0
+            ORDER BY survey_item_type
+    </select>
+
+    <select id="countSurveyResponseBySurveyItemId" parameterType="map" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            survey_response
+        WHERE
+            org_id = #{orgId}
+            AND survey_item_id = #{surveyItemId}
+    </select>
+
+    <select id="listSurveyResponsesByOrgIdAndActivityIds" parameterType="map" resultType="SurveyResponse">
+        SELECT
+            *
+        FROM
+            survey_response
+        WHERE
+            org_id = #{orgId}
+            AND is_submit = 1
+            AND is_deleted = 0
+            AND survey_activity_id IN
+            <foreach item="item" index="index" collection="surveyActivityIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            ORDER BY survey_item_type,survey_item_id
+    </select>
+
+    <select id="searchResponsesByOrgIdAndActivityIdAndItemId" parameterType="map" resultType="SurveyResponse">
+        SELECT
+            *
+        FROM
+            survey_response
+        WHERE
+            org_id = #{orgId}
+            AND survey_activity_id = #{surveyActivityId}
+            AND survey_item_id = #{surveyItemId}
+            AND response_detail != ""
+            AND response_detail like #{keyword}
+            AND is_deleted = 0
+            LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+</mapper>

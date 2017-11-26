@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mapper.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="false" />
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias alias="ReviewComment" type="hr.wozai.service.review.server.model.ReviewComment" />
+        <typeAlias alias="ReviewInvitation" type="hr.wozai.service.review.server.model.ReviewInvitation" />
+        <typeAlias alias="ReviewProject" type="hr.wozai.service.review.server.model.ReviewProject" />
+        <typeAlias alias="ReviewQuestion" type="hr.wozai.service.review.server.model.ReviewQuestion" />
+        <typeAlias alias="ReviewTemplate" type="hr.wozai.service.review.server.model.ReviewTemplate" />
+        <typeAlias alias="ReviewActivity" type="hr.wozai.service.review.server.model.ReviewActivity" />
+        <typeAlias alias="ReviewInvitedTeam" type="hr.wozai.service.review.server.model.ReviewInvitedTeam" />
+    </typeAliases>
+
+    <typeHandlers>
+        <typeHandler javaType="com.alibaba.fastjson.JSONObject"
+                     handler="hr.wozai.service.servicecommons.utils.persistence.FastJSONHandler" />
+    </typeHandlers>
+
+    <mappers>
+        <mapper resource="mapper/ReviewCommentMapper.xml" />
+        <mapper resource="mapper/ReviewInvitationMapper.xml" />
+        <mapper resource="mapper/ReviewProjectMapper.xml" />
+        <mapper resource="mapper/ReviewQuestionMapper.xml" />
+        <mapper resource="mapper/ReviewTemplateMapper.xml" />
+        <mapper resource="mapper/ReviewActivityMapper.xml" />
+        <mapper resource="mapper/ReviewInvitedTeamMapper.xml" />
+    </mappers>
+
+</configuration>

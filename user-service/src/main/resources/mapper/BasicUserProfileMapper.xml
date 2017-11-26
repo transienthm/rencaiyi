@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.BasicUserProfileMapper">
+
+    <insert id="insertBasicUserProfile"
+            parameterType="BasicUserProfile">
+        INSERT INTO basic_user_profile
+            (org_id,
+            user_id,
+            self_intro,
+            resume,
+            citizen_id,
+            degree_level,
+            college_name,
+            marital_status,
+            living_address,
+            weixin_account,
+            weibo_account,
+            qq_account,
+            linkedin_account,
+            personal_website,
+            payroll_account,
+            payroll_bank,
+            gongjijin_account,
+            shebao_account,
+            residence_type,
+            residence_address,
+            official_photo,
+            citizen_id_copy,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{userId},
+            #{selfIntro},
+            #{resume},
+            #{citizenId},
+            #{degreeLevel},
+            #{collegeName},
+            #{maritalStatus},
+            #{livingAddress},
+            #{weixinAccount},
+            #{weiboAccount},
+            #{qqAccount},
+            #{linkedinAccount},
+            #{personalWebsite},
+            #{payrollAccount},
+            #{payrollBank},
+            #{gongjijinAccount},
+            #{shebaoAccount},
+            #{residenceType},
+            #{residenceAddress},
+            #{officialPhoto},
+            #{citizenIdCopy},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="basicUserProfileId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <select id="findBasicUserProfileByOrgIdAndUserId"
+            parameterType="map"
+            resultType="BasicUserProfile">
+        SELECT
+            *
+        FROM
+            basic_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listBasicUserProfileByOrgIdAndUserId"
+            parameterType="map"
+            resultType="BasicUserProfile">
+        SELECT
+            *
+        FROM
+            basic_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id IN
+                <foreach collection="userIds" item="userId" index="index"
+                         open="(" separator="," close=")">
+                    #{userId}
+                </foreach>
+            AND is_deleted = 0
+    </select>
+
+    <select id="listBasicUserProfileByCreatedUserId"
+            parameterType="map"
+            resultType="BasicUserProfile">
+        SELECT
+            *
+        FROM
+            basic_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND created_user_id = #{createdUserId}
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="listBasicUserProfileByOrgIdOrderByCreatedTimeDesc"
+            parameterType="map"
+            resultType="BasicUserProfile">
+        SELECT
+            *
+        FROM
+            basic_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countBasicUserProfileByOrgId"
+            parameterType="long"
+            resultType="int">
+        SELECT
+            count(1)
+        FROM
+            basic_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateBasicUserProfileByOrgIdAndUserId"
+            parameterType="BasicUserProfile">
+        UPDATE basic_user_profile
+        <set>
+            <if test="null != selfIntro">
+                self_intro = #{selfIntro},
+            </if>
+            <if test="null != resume">
+                resume = #{resume},
+            </if>
+            <if test="null != citizenId">
+                citizen_id = #{citizenId},
+            </if>
+            <if test="null != degreeLevel">
+                degree_level = #{degreeLevel},
+            </if>
+            <if test="null != collegeName">
+                college_name = #{collegeName},
+            </if>
+            <if test="null != maritalStatus">
+                marital_status = #{maritalStatus},
+            </if>
+            <if test="null != livingAddress">
+                living_address = #{livingAddress},
+            </if>
+            <if test="null != weixinAccount">
+                weixin_account = #{weixinAccount},
+            </if>
+            <if test="null != weiboAccount">
+                weibo_account = #{weiboAccount},
+            </if>
+            <if test="null != qqAccount">
+                qq_account = #{qqAccount},
+            </if>
+            <if test="null != linkedinAccount">
+                linkedin_account = #{linkedinAccount},
+            </if>
+            <if test="null != personalWebsite">
+                personal_website = #{personalWebsite},
+            </if>
+            <if test="null != payrollAccount">
+                payroll_account = #{payrollAccount},
+            </if>
+            <if test="null != payrollBank">
+                payroll_bank = #{payrollBank},
+            </if>
+            <if test="null != gongjijinAccount">
+                gongjijin_account = #{gongjijinAccount},
+            </if>
+            <if test="null != shebaoAccount">
+                shebao_account = #{shebaoAccount},
+            </if>
+            <if test="null != residenceType">
+                residence_type = #{residenceType},
+            </if>
+            <if test="null != residenceAddress">
+                residence_address = #{residenceAddress},
+            </if>
+            <if test="null != officialPhoto">
+                official_photo = #{officialPhoto},
+            </if>
+            <if test="null != citizenIdCopy">
+                citizen_id_copy = #{citizenIdCopy},
+            </if>
+            <if test="null != isDeleted">
+                is_deleted = #{isDeleted},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+    </update>
+
+</mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.RolePermissionMapper">
+
+    <insert id="batchInsertRolePermission"
+            parameterType="java.util.List">
+        <selectKey keyProperty="role_permission_id" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO role_permission
+            (org_id,
+            role_id,
+            permission_id,
+            status,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend)
+        VALUES
+        <foreach collection="list" item="rolePermissions" index="index"
+                 separator=",">
+            (#{rolePermissions.orgId},
+            #{rolePermissions.roleId},
+            #{rolePermissions.permissionId},
+            #{rolePermissions.status},
+            #{rolePermissions.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{rolePermissions.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{rolePermissions.extend})
+        </foreach>
+    </insert>
+
+    <update id="deleteRolePermissoinByPrimaryKey" parameterType="map">
+        update role_permission
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        where
+            role_permission_id = #{rolePermissionId}
+            AND org_id = #{orgId}
+    </update>
+
+    <update id="batchDeleteRolePermissionsByPrimaryKey" parameterType="map">
+        update role_permission
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        where
+            org_id = #{orgId}
+            AND role_permission_id IN
+            <foreach item="item" index="index" collection="rolePermissionIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </update>
+
+    <update id="batchDeleteRolePermissionsByRoleIdAndPermissionIds" parameterType="map">
+        update role_permission
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        where
+        org_id = #{orgId}
+        AND role_id = #{roleId}
+        AND permission_id IN
+        <foreach item="item" index="index" collection="permissionIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="getRolePermissionByRoleIds" resultType="RolePermission">
+        select * from role_permission
+        where org_id = #{orgId} AND role_id IN
+        <foreach item="item" index="index" collection="roleIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND is_deleted = 0
+    </select>
+
+    <select id="listRolePermissionsByOrgId" parameterType="map" resultType="RolePermission">
+        SELECT * FROM role_permission
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listRolePermissionsByRoleIdAndPermissionIds" parameterType="map" resultType="RolePermission">
+        SELECT * FROM role_permission
+        WHERE
+            org_id = #{orgId}
+            AND role_id = #{roleId}
+            AND permission_id IN
+            <foreach item="item" index="index" collection="permissionIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND is_deleted = 0
+    </select>
+    
+    <select id="listScopeByRoleIdAndResourceCodeAndActionCode" resultType="java.lang.Integer">
+        SELECT scope FROM role_permission r
+        LEFT JOIN permission p
+        ON r.permission_id = p.permission_id
+        WHERE
+            org_id = #{orgId}
+            AND role_id = #{roleId}
+            AND resource_code = #{resourceCode}
+            AND action_code = #{actionCode}
+            AND r.is_deleted = 0
+            AND p.is_deleted = 0
+
+    </select>
+</mapper>

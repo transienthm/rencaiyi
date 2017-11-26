@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.thirdparty.server.dao.message.MessageLogMapper">
+
+    <insert id="batchInsertMessageLog"
+            parameterType="java.util.List">
+        <selectKey keyProperty="messageLogId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO message_log
+            (org_id,
+            receiver_id,
+            message_id,
+            created_time)
+        VALUES
+        <foreach collection="list" item="messageLog" index="index"
+                 separator=",">
+            (#{messageLog.orgId},
+            #{messageLog.receiverId},
+            #{messageLog.messageId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        </foreach>
+    </insert>
+
+    <select id="findMessageLog" parameterType="map" resultType="MessageLog">
+        SELECT * FROM message_log
+        WHERE
+            message_id = #{messageId}
+            AND org_id = #{orgId}
+            AND receiver_id = #{receiverId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listMessageIdsByRecId" parameterType="map" resultType="java.lang.Long">
+        SELECT message_id FROM message_log
+        WHERE
+            org_id = #{orgId}
+            AND receiver_id = #{receiverId}
+            AND is_deleted = 0
+    </select>
+
+</mapper>

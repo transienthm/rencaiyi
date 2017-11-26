@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.thirdparty.server.dao.HistoryLogMapper">
+
+    <insert id="insert"
+            parameterType="HistoryLog">
+        INSERT INTO history_log
+        (org_id,
+        user_id,
+        actor_user_id,
+        log_type,
+        created_time,
+        created_user_id,
+        content,
+        pre_value,
+        cur_value,
+        is_deleted)
+        VALUES
+        (#{orgId},
+        #{userId},
+        #{actorUserId},
+        #{logType},
+        ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+        #{createdUserId},
+        #{content},
+        #{preValue},
+        #{curValue},
+        #{isDeleted})
+        <selectKey keyProperty="historyLogId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="delete" parameterType="map">
+        UPDATE history_log
+        <set>
+            is_deleted = 1
+        </set>
+        WHERE history_log_id =
+        #{historyLogId}
+        AND org_id = #{orgId}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="HistoryLog">
+        UPDATE history_log
+        <set>
+            <if test="null != orgId">
+                org_id = #{orgId},
+            </if>
+            <if test="null != userId">
+                user_id = #{userId},
+            </if>
+            <if test="null != actorUserId">
+                actor_user_id = #{actorUserId},
+            </if>
+            <if test="null != logType">
+                log_type = #{logType},
+            </if>
+
+            <if test="null != content">
+                content = #{content},
+            </if>
+            <if test="null != preValue">
+                pre_value = #{preValue},
+            </if>
+            <if test="null != curValue">
+                cur_value = #{curValue},
+            </if>
+        </set>
+        WHERE history_log_id = #{historyLogId}
+        AND org_id = #{orgId}
+        AND is_deleted = 0
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="map" resultType="HistoryLog">
+        SELECT
+        *
+        FROM
+        history_log
+        WHERE
+        history_log_id = #{historyLogId}
+        AND org_id = #{orgId}
+        AND is_deleted = 0
+    </select>
+
+    <select id="listHistoryLogByUserId"
+            parameterType="map"
+            resultType="HistoryLog">
+        SELECT
+        *
+        FROM
+        history_log
+        WHERE
+        org_id = #{orgId}
+        AND user_id = #{userId}
+        AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT #{pageStart},#{pageSize}
+        <!--        AND is_deleted = 0
+                AND status = 2 -->
+    </select>
+
+    <select id="listHistoryLogByActorUserId"
+            parameterType="map"
+            resultType="HistoryLog">
+        SELECT
+        *
+        FROM
+        history_log
+        WHERE
+        org_id = #{orgId}
+        AND actor_user_id = #{actorUserId}
+        AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT #{pageStart},#{pageSize}
+        <!--        AND is_deleted = 0
+                AND status = 2 -->
+    </select>
+</mapper>

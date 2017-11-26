@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="ldaOptionForEstimator" name="ldaOptionForEstimator"
+          class="hr.wozai.service.nlp.server.model.labelcloud.LDAOptionModel">
+        <property name="est" value="true"></property>
+        <property name="alpha" value="0.5"></property>
+        <property name="beta" value="15"></property>
+        <property name="K" value="100"></property>
+        <property name="niters" value="100"></property>
+        <property name="twords" value="100"></property>
+    </bean>
+
+    <bean id="ldaOptionForInferencer" name="ldaOptionForInferencer"
+          class="hr.wozai.service.nlp.server.model.labelcloud.LDAOptionModel">
+        <property name="inf" value="true"></property>
+        <property name="niters" value="100"></property>
+        <property name="twords" value="100"></property>
+        <property name="weightThreshold" value="0.003"></property>
+        <property name="maxTopicNumber" value="99"></property>
+    </bean>
+
+</beans>

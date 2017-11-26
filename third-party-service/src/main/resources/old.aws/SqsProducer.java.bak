@@ -1,0 +1,276 @@
+package hr.wozai.service.thirdparty.client.utils;
+
+import com.alibaba.fastjson.JSONObject;
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.model.*;
+import hr.wozai.service.thirdparty.client.enums.EmailTemplate;
+import hr.wozai.service.servicecommons.utils.logging.LogAround;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * @author lepujiu
+ * @version 1.0
+ * @created 16/3/23
+ */
+@Component("sqsProducer")
+public class SqsProducer implements ApplicationContextAware, InitializingBean {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(SqsProducer.class);
+
+    @Value("${aws.sqs.access.key}")
+    private String awsAccessKey;
+
+    @Value("${aws.sqs.secret.key}")
+    private String awsSecretKey;
+
+    private AmazonSQS amazonSQS;
+
+    @Value("${sqs.email.queue.url}")
+    private String sqsURL;
+
+    @Value("${email.sendcloud.apiUser}")
+    private String sendCloudApiUser;
+
+    @Value("${email.sendcloud.apiKey}")
+    private String sendCloudApiKey;
+
+    @Value("${sqs.email.batch.queue.url}")
+    private String sqsBatchURL;
+//    private String sqsBatchURL = "https://sqs.cn-north-1.amazonaws.com.cn/745956536067/test";
+
+    @Value("${sqs.email.queue.forxml.url}")
+    private String sqsForxmlUrl;
+
+    private static ApplicationContext ctx;
+
+    public SqsProducer() {
+    }
+
+    @LogAround
+    public void sendMessage(String message) {
+        amazonSQS.sendMessage(new SendMessageRequest(sqsURL, message));
+    }
+
+    @LogAround
+    public void sendMessage(EmailTemplate emailTemplate, Map<String, String> params) {
+        checkNullValue(params);
+        String message = EmailTemplateHelper.generateEmailContent(emailTemplate, params);
+        amazonSQS.sendMessage(new SendMessageRequest(sqsURL, message));
+    }
+
+    @LogAround
+    public void preSendBatchEmail(String batchEmailJson) {
+        amazonSQS.sendMessage(new SendMessageRequest(sqsBatchURL, batchEmailJson));
+    }
+
+    @LogAround
+    public void preSendEmail(String emailJson) {
+        amazonSQS.sendMessage(new SendMessageRequest(sqsForxmlUrl, emailJson));
+    }
+
+    @LogAround
+    public void sendMessageWithoutSurroundingPercentSign(EmailTemplate emailTemplate, Map<String, String> params) {
+        checkNullValue(params);
+        String message = EmailTemplateHelper.generateEmailContentWithoutSurroundingPercentSign(emailTemplate, params);
+        amazonSQS.sendMessage(new SendMessageRequest(sqsURL, message));
+    }
+
+    @LogAround
+    private void checkNullValue(Map<String, String> params) {
+        Map<String, String> result = new HashMap<>();
+        for (Map.Entry entry : params.entrySet()) {
+            if (entry.getValue() == null || entry.getValue() == "") {
+                entry.setValue("（空）");
+            }
+        }
+    }
+
+    @LogAround
+    public void sendBatchMessage(List<String> messages) {
+        int batchSize = messages.size();
+        final AtomicInteger producedCount = new AtomicInteger(batchSize);
+        AtomicBoolean stop = new AtomicBoolean(false);
+        Thread[] producers = new Thread[batchSize];
+        for (int i = 0; i < batchSize; i++) {
+            producers[i] = new BatchProducer(amazonSQS, sqsBatchURL, messages, producedCount, stop);
+            LOGGER.info("正在批量发送消息,这是第" + i + 1 + "个线程");
+            producers[i].start();
+        }
+    }
+
+  /*  public static void main(String[] args) throws Exception {
+
+        /*LOGGER.info("=====accessKey:" + sqsProducer.awsAccessKey + "===========secretKey:" + sqsProducer.awsSecretKey +
+                "=========url:" + sqsProducer.sqsURL);
+        emailTemplateComponent = EmailTemplateComponent.getCurEmailTemplateComponent();
+        EmailTemplateApi emailTemplate = EmailTemplateApi.ENROLL_BROADCAST;
+        Map<String, String> param = emailTemplateComponent.generateParamsMap(emailTemplate);
+        param.put("dstEmailAddress", "wangbin@sqian.com");
+        param.remove("jobTitleName");
+        param.put("jobTitleName", null);
+        LOGGER.info("EmailTemplateApi:" + emailTemplate + " param:" + param);
+/*        List<String> messages = new ArrayList<>();
+        messages.add(EmailTemplateComponent.generateEmailContent(emailTemplate,param));
+        emailTemplate = EmailTemplateApi.APPROVE_ONBOARDING;
+        param = EmailTemplateComponent.generateParamsMap(emailTemplate);
+        param.put("dstEmailAddress", "wangbin@sqian.com");
+        LOGGER.info("EmailTemplateApi:" + emailTemplate + " param:" + param);
+        messages.add(EmailTemplateComponent.generateEmailContent(emailTemplate,param));
+        for (int i =0 ;i<messages.size();i++) {
+            LOGGER.info("这是第" + i+1 + "条消息:" + messages.get(i));
+        }
+        //sqsProducer.sendBatchMessage(messages);
+        SqsProducer sqsProducer = getCurSqsProducer();
+        sqsProducer.sendMessageWithoutSurroundingPercentSign(emailTemplate, param);
+
+    }*/
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        amazonSQS = new AmazonSQSClient(new BasicAWSCredentials(awsAccessKey, awsSecretKey));
+        amazonSQS.setRegion(Region.getRegion(Regions.CN_NORTH_1));
+    }
+
+    public static SqsProducer getCurSqsProducer() {
+        SqsProducer result = ctx.getBean(SqsProducer.class);
+        return result;
+    }
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.ctx = applicationContext;
+    }
+
+    /**
+     * 得到相应模板的参数集
+     * @param emailTemplate
+     * @return
+     */
+    public Set<String> getParamNameSet(EmailTemplate emailTemplate) {
+        Set<String> keySet = new HashSet<>();
+        try {
+
+            String invokeName = emailTemplate.getEmailType();
+
+            final String url = "http://api.sendcloud.net/apiv2/template/get";
+            HttpPost httpPost = new HttpPost(url);
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+
+            List<NameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("apiUser", sendCloudApiUser));
+            params.add(new BasicNameValuePair("apiKey", sendCloudApiKey));
+            params.add(new BasicNameValuePair("invokeName", invokeName));
+
+            httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+
+            HttpResponse response = httpClient.execute(httpPost);
+            // 处理响应
+            JSONObject jsonObject;
+            JSONObject info;
+            JSONObject data;
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                // 正常返回, 解析返回数据
+                jsonObject = (JSONObject) JSONObject.parse(EntityUtils.toString(response.getEntity()));
+                info = (JSONObject) jsonObject.get("info");
+                data = (JSONObject) info.get("data");
+                String html = (String) data.get("html");
+                String subject = (String) data.get("subject");
+                html = subject + html;
+                keySet = EmailTemplateHelper.getStringBetweenPercentSign(html);
+            }
+            httpPost.releaseConnection();
+        } catch (Exception e) {
+            LOGGER.error("getParamNameSet()-error");
+        }
+        return keySet;
+    }
+
+    class BatchProducer extends Thread {
+        final AmazonSQS sqsClient;
+        final String queueUrl;
+        int batchSize;
+        final AtomicInteger producedCount;
+        final AtomicBoolean stop;
+        List<String> theMessage;
+
+        BatchProducer(AmazonSQS sqsQueueBuffer, String queueUrl,
+                      List<String> theMessage, AtomicInteger producedCount,
+                      AtomicBoolean stop) {
+            this.sqsClient = sqsQueueBuffer;
+            this.queueUrl = queueUrl;
+            this.batchSize = theMessage.size();
+            this.producedCount = producedCount;
+            this.stop = stop;
+            this.theMessage = theMessage;
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (!stop.get()) {
+                    SendMessageBatchRequest batchRequest = new SendMessageBatchRequest().withQueueUrl(queueUrl);
+
+                    List<SendMessageBatchRequestEntry> entries = new ArrayList<SendMessageBatchRequestEntry>();
+                    for (int i = 0; i < batchSize; i++) {
+                        entries.add(new SendMessageBatchRequestEntry().withId(Integer.toString(i))
+                                .withMessageBody(theMessage.get(i)));
+                        LOGGER.info("正在批量发送消息...");
+                        LOGGER.info("这是第" + i + 1 + "条消息,内容为:" + theMessage.get(i));
+                    }
+                    batchRequest.setEntries(entries);
+                    SendMessageBatchResult batchResult = sqsClient.sendMessageBatch(batchRequest);
+                    producedCount.addAndGet(batchResult.getSuccessful().size());
+                    LOGGER.info("成功消息数量:" + batchResult.getSuccessful().size() + " 失败消息数量:" + batchResult.getFailed().size());
+                    // sendMessageBatch can return successfully, and yet individual batch
+                    // items fail. So, make sure to retry the failed ones.
+                    if (!batchResult.getFailed().isEmpty()) {
+                        //通过BatchResultErrorEntry来获取失败的消息
+                        List<BatchResultErrorEntry> failedMessages = batchResult.getFailed();
+                        List<String> errorMessages = new ArrayList<>();
+                        for (BatchResultErrorEntry batchResultErrorEntry : failedMessages) {
+                            errorMessages.add(batchResultErrorEntry.getMessage());
+                        }
+                        LOGGER.warn("Producer: retrying sending "
+                                + batchResult.getFailed().size() + " messages");
+                        for (int i = 0, n = batchResult.getFailed().size(); i < n; i++) {
+                            LOGGER.info("正在重新发送未指发送成功的消息:" + errorMessages.get(i));
+                            sqsClient.sendMessage(new SendMessageRequest(queueUrl, errorMessages.get(i)));
+                            producedCount.incrementAndGet();
+                        }
+                    }
+                    stop.set(true);
+                }
+            } catch (AmazonClientException e) {
+                // by default AmazonSQSClient retries calls 3 times before failing,
+                // so, when this rare condition occurs, simply stop
+                LOGGER.error("BatchProducer: " + e.getMessage());
+                System.exit(1);
+            }
+        }
+    }
+}

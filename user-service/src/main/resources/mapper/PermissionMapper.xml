@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.PermissionMapper">
+
+    <insert id="batchInsertPermissions"
+            parameterType="java.util.List">
+        INSERT INTO permission
+            (resource_name,
+            resource_code,
+            resource_type,
+            action_code,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend
+            )
+        VALUES
+        <foreach collection="list" item="permissions" index="index"
+                 separator=",">
+            (#{permissions.resourceName},
+            #{permissions.resourceCode},
+            #{permissions.resourceType},
+            #{permissions.actionCode},
+            #{permissions.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{permissions.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{permissions.extend})
+        </foreach>
+        <selectKey keyProperty="permissionId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="listPermissionsByIds" resultType="Permission">
+        select * from permission
+        where permission_id IN
+        <foreach item="item" index="index" collection="permissionIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND is_deleted = 0
+    </select>
+
+    <select id="getPermissionByResourceCodeAndActionCode" parameterType="map" resultType="Permission">
+        SELECT * FROM permission
+        WHERE
+        resource_code = #{resourceCode}
+        AND action_code = #{actionCode}
+        AND is_deleted = 0
+    </select>
+
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.onboarding.OnboardingTemplateMapper">
+
+    <insert id="insertOnboardingTemplate"
+            parameterType="OnboardingTemplate">
+        INSERT INTO onboarding_template
+            (org_id,
+            display_name,
+            prologue,
+            epilogue,
+            profile_template_id,
+            is_preset,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{displayName},
+            #{prologue},
+            #{epilogue},
+            #{profileTemplateId},
+            #{isPreset},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="onboardingTemplateId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findOnboardingTemplateByPrimaryKeyAndOrgId"
+            parameterType="map"
+            resultType="OnboardingTemplate">
+        SELECT
+            *
+        FROM
+            onboarding_template
+        WHERE
+            onboarding_template_id = #{onboardingTemplateId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listOnboardingTemplateByOrgId"
+            parameterType="map"
+            resultType="OnboardingTemplate">
+        SELECT
+            *
+        FROM
+            onboarding_template
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateOnboardingTemplateByPrimaryKeySelective"
+            parameterType="OnboardingTemplate">
+        UPDATE onboarding_template
+        <set>
+            <if test="null != displayName">
+                display_name = #{displayName},
+            </if>
+            <if test="null != prologue">
+                prologue = #{prologue},
+            </if>
+            <if test="null != epilogue">
+                epilogue = #{epilogue},
+            </if>
+            <if test="null != profileTemplateId">
+                profile_template_id = #{profileTemplateId},
+            </if>
+            <if test="null != isDeleted">
+                is_deleted = #{isDeleted},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            onboarding_template_id = #{onboardingTemplateId}
+            and org_id = #{orgId}
+            and is_deleted = 0
+    </update>
+
+</mapper>

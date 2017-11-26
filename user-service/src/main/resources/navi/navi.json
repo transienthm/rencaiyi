@@ -1,0 +1,1634 @@
+{
+  "org": {
+    "orgId": "1",
+    "shortName": "得谋科技",
+    "fullOrgName": "北京得谋科技有限公司",
+    "avatarUrl": "",
+    "mobilePhone": "13333333333",
+    "fullName": "王山前"
+  },
+  "teams": [
+    {
+      "teamId": "1",
+      "teamName": "研发中心",
+      "parentTeamId": "0"
+    },
+    {
+      "teamId": "2",
+      "teamName": "销售部",
+      "parentTeamId": "0"
+    },
+    {
+      "teamId": "3",
+      "teamName": "客户成功中心",
+      "parentTeamId": "0"
+    },
+    {
+      "teamId": "4",
+      "teamName": "产品部",
+      "parentTeamId": "1"
+    }
+  ],
+  "users": [
+    {
+      "userId": "1",
+      "mobilePhone": "13333333333",
+      "fullName": "陈文汉",
+      "teamId": "1"
+    },
+    {
+      "userId": "2",
+      "mobilePhone": "13333333333",
+      "fullName": "李珊珊",
+      "teamId": "1"
+    },
+    {
+      "userId": "3",
+      "mobilePhone": "13333333333",
+      "fullName": "傅俊滨",
+      "teamId": "4"
+    },
+    {
+      "userId": "4",
+      "mobilePhone": "13333333333",
+      "fullName": "黄衍",
+      "teamId": "4"
+    },
+    {
+      "userId": "5",
+      "mobilePhone": "13333333333",
+      "fullName": "孙菡蕾",
+      "teamId": "4"
+    },
+    {
+      "userId": "6",
+      "mobilePhone": "13333333333",
+      "fullName": "尹露",
+      "teamId": "4"
+    },
+    {
+      "userId": "7",
+      "mobilePhone": "13333333333",
+      "fullName": "易任材",
+      "teamId": "4",
+      "isOwner":"1",
+      "reportor":"6"
+    },
+    {
+      "userId": "8",
+      "mobilePhone": "13333333333",
+      "fullName": "黄文峰",
+      "teamId": "2",
+      "reportor":"6"
+    },
+    {
+      "userId": "9",
+      "mobilePhone": "13333333333",
+      "fullName": "李涛",
+      "teamId": "2",
+      "reportor":"6"
+    },
+    {
+      "userId": "10",
+      "mobilePhone": "13333333333",
+      "fullName": "王燕",
+      "teamId": "2",
+      "reportor":"7"
+    },
+    {
+      "userId": "11",
+      "mobilePhone": "13333333333",
+      "fullName": "宁莉娜",
+      "teamId": "2",
+      "reportor":"7"
+    },
+    {
+      "userId": "12",
+      "mobilePhone": "13333333333",
+      "fullName": "唐园玮",
+      "teamId": "2"
+    },
+    {
+      "userId": "13",
+      "mobilePhone": "13333333333",
+      "fullName": "张诗燊",
+      "teamId": "3"
+    },
+    {
+      "userId": "14",
+      "mobilePhone": "13333333333",
+      "fullName": "刘沛泽",
+      "teamId": "3"
+    },
+    {
+      "userId": "15",
+      "mobilePhone": "13333333333",
+      "fullName": "张俊楠",
+      "teamId": "3"
+    },
+    {
+      "userId": "16",
+      "mobilePhone": "13333333333",
+      "fullName": "兰青",
+      "teamId": "3"
+    },
+    {
+      "userId": "17",
+      "mobilePhone": "13333333333",
+      "fullName": "汪一鸣",
+      "teamId": "3"
+    },
+    {
+      "userId": "18",
+      "mobilePhone": "13333333333",
+      "fullName": "宋易航",
+      "teamId": "3"
+    },
+    {
+      "userId": "19",
+      "mobilePhone": "13333333333",
+      "fullName": "魏斌斌",
+      "teamId": "3"
+    },
+    {
+      "userId": "20",
+      "mobilePhone": "13333333333",
+      "fullName": "卓依婧",
+      "teamId": "3"
+    }
+  ],
+  "okrs": [
+    {
+      "objectivePeriodId": "1",
+      "periodTimeSpanName": "第四季度",
+      "year": "2016",
+      "type": "1",
+      "objectives": [
+        {
+          "objectiveId": "1",
+          "directorList": [
+            {
+              "userId": "3"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "0",
+          "isAutoCalc": 1,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "成为最具行业影响力的企业谋略品牌",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "0",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "每月客户量平均增长 10%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%"
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "媒体曝光率比上季度增加 10%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%"
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "作为主讲方参加 3 个公开行业会议",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "objectivePeriodId": "2",
+      "periodTimeSpanName": "第四季度",
+      "year": "2016",
+      "ownerId": "1",
+      "type": "2",
+      "objectives": [
+        {
+          "objectiveId": "2",
+          "directorList": [
+            {
+              "userId": "4"
+            },
+            {
+              "userId": "5"
+            },
+            {
+              "userId": "7"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "提升产品整体可用性",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "0",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "发布两项重大更新，核心功能集增加 5%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "X-Live 功能留存率增加到超过 50%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "objectiveId": "3",
+          "directorList": [
+            {
+              "userId": "4"
+            },
+            {
+              "userId": "5"
+            },
+            {
+              "userId": "7"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "提升研发速度",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "2",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "每月功能点完成量增加 10%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 604800,
+              "content": "部署 QA 流程，降低新产品研发障碍",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "objectiveId": "4",
+          "directorList": [
+            {
+              "userId": "4"
+            },
+            {
+              "userId": "5"
+            },
+            {
+              "userId": "7"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "改进产品性能",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "2",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "提升 10 个最慢及最常用的后台页面性能",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "提升 10 个最慢的前端页面性能",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "objectiveId": "5",
+          "directorList": [
+            {
+              "userId": "4"
+            },
+            {
+              "userId": "5"
+            },
+            {
+              "userId": "7"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "解决技术债务",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "1",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "降低 10% 合并代码时的前端报错率/测试失败率",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "建立静态检查流程，提升代码质量",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "objectivePeriodId": "3",
+      "periodTimeSpanName": "第四季度",
+      "year": "2016",
+      "ownerId": "4",
+      "type": "2",
+      "objectives": [
+        {
+          "objectiveId": "6",
+          "directorList": [
+            {
+              "userId": "4"
+            },
+            {
+              "userId": "5"
+            },
+            {
+              "userId": "7"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "提升用户首次登录体验",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "1",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 604800,
+              "content": "找出并实践客户成功的核心指标",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "启动关于首次登录体验的 3 项用研，用研符合预期比例大于 50%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "objectiveId": "7",
+          "directorList": [
+            {
+              "userId": "4"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "成为中小企业 X-Live 解决方案的首选",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "1",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 777600,
+              "content": "在 Net Promoter 核心功能中应用新算法",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 604800,
+              "content": "设定「从使用到付费」的转化率基准",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "objectivePeriodId": "4",
+      "periodTimeSpanName": "第四季度",
+      "year": "2016",
+      "ownerId": "3",
+      "type": "2",
+      "objectives": [
+        {
+          "objectiveId": "8",
+          "directorList": [
+            {
+              "userId": "13"
+            },
+            {
+              "userId": "17"
+            },
+            {
+              "userId": "16"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "所有客户在全流程中均得到支持",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "1",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "客户公司活跃子帐号比例从 60% 提升到 70%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "14"
+                },
+                {
+                  "userId": "18"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "客户流失率降低 2.5%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "14"
+                },
+                {
+                  "userId": "15"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "objectiveId": "9",
+          "directorList": [
+            {
+              "userId": "14"
+            },
+            {
+              "userId": "15"
+            },
+            {
+              "userId": "17"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "提供良好的培训体验",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "6",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "所有客户支持 how-to 视频发布延迟不超过 1 个月",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "14"
+                },
+                {
+                  "userId": "15"
+                },
+                {
+                  "userId": "17"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "客户持续普遍反馈用户支持优秀",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "13"
+                },
+                {
+                  "userId": "14"
+                },
+                {
+                  "userId": "15"
+                },
+                {
+                  "userId": "16"
+                },
+                {
+                  "userId": "17"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "objectiveId": "10",
+          "directorList": [
+            {
+              "userId": "13"
+            },
+            {
+              "userId": "19"
+            },
+            {
+              "userId": "20"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "让客户更轻松地开始使用",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "9",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "客户反映培训时间变少",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "13"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "onboard 新客户的时间降低 50%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "19"
+                },
+                {
+                  "userId": "20"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "objectivePeriodId": "5",
+      "periodTimeSpanName": "第四季度",
+      "year": "2016",
+      "ownerId": "2",
+      "type": "2",
+      "objectives": [
+        {
+          "objectiveId": "11",
+          "directorList": [
+            {
+              "userId": "8"
+            },
+            {
+              "userId": "9"
+            },
+            {
+              "userId": "10"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "年循环收入相比上季度提升 10%",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "1",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "有效销售线索增加 5%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "11"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "成单率提升 2.5%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "10"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "新销售收入 3000万",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "8"
+                },
+                {
+                  "userId": "9"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "objectiveId": "12",
+          "directorList": [
+            {
+              "userId": "4"
+            },
+            {
+              "userId": "5"
+            },
+            {
+              "userId": "7"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "提供优质的支持和培训体验",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "1",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "所有客户支持 how-to 视频发布延迟不超过 1 个月",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "客户持续普遍反馈用户支持优秀",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "objectiveId": "13",
+          "directorList": [
+            {
+              "userId": "4"
+            },
+            {
+              "userId": "5"
+            },
+            {
+              "userId": "7"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "30",
+          "isAutoCalc": 0,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "让客户更轻松地开始使用",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "12",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "客户反映培训时间变少",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "onboard 新客户的时间降低 50%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "objectivePeriodId": "6",
+      "periodTimeSpanName": "第四季度",
+      "year": "2016",
+      "ownerId": "1",
+      "type": "3",
+      "objectives": [
+        {
+          "objectiveId": "14",
+          "directorList": [
+            {
+              "userId": "8"
+            }
+          ],
+          "startingAmount": "0",
+          "currentAmount": "0",
+          "isAutoCalc": 1,
+          "isPrivate": 0,
+          "deadline": 0,
+          "regularRemindType": 2,
+          "content": "成为金牌销售",
+          "priority": 0,
+          "progressMetricType": 1,
+          "goalAmount": "100",
+          "unit": "%",
+          "parentObjectiveId": "11",
+          "keyResults": [
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "增进服务提升 5%",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "成为 demo 冠军（100个/月）",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "新单销售收入 200万",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            },
+            {
+              "startingAmount": "0",
+              "currentAmount": "0",
+              "deadline": 0,
+              "content": "根据新的用户肖像，定义新的成单流程",
+              "priority": 0,
+              "progressMetricType": 1,
+              "goalAmount": "100",
+              "unit": "%",
+              "directorList": [
+                {
+                  "userId": "1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "reviews": {
+    "selfEvaluate": {
+      "reviewTemplate": {
+        "templateName": "反馈活动演示（自评阶段）"
+      },
+      "reviewActivities": [
+        {
+          "revieweeId": 7,
+          "isSubmitted": 0
+        }
+      ],
+      "reviewInvitations": [
+        {
+          "revieweeId": 7,
+          "reviewerId": 6,
+          "isManager": 1,
+          "score": 0,
+          "isSubmitted": 0
+        }
+      ],
+      "reviewComments": [],
+      "reviewQuestions": [
+        {
+          "questionId": 1,
+          "name": "有哪些地方你觉得自己做得不错，并且打算继续保持？"
+        },
+        {
+          "questionId": 2,
+          "name": "有哪些地方有待改进？"
+        }
+      ],
+      "reviewProjects": [],
+      "reviewInvitedTeams": [
+        {
+          "teamId": 0
+        }
+      ]
+    },
+    "peerEvaluate": {
+      "reviewTemplate": {
+        "templateName": "反馈活动演示（同事反馈阶段）"
+      },
+      "reviewActivities": [
+        {
+          "revieweeId": 7,
+          "isSubmitted": 1
+        },
+        {
+          "revieweeId": 8,
+          "isSubmitted": 1
+        },
+        {
+          "revieweeId": 9,
+          "isSubmitted": 1
+        }
+      ],
+      "reviewInvitations": [
+        {
+          "revieweeId": 7,
+          "reviewerId": 6,
+          "isManager": 1,
+          "score": 0,
+          "isSubmitted": 0
+        },
+        {
+          "revieweeId": 8,
+          "reviewerId": 6,
+          "isManager": 1,
+          "score": 0,
+          "isSubmitted": 0
+        },
+        {
+          "revieweeId": 9,
+          "reviewerId": 6,
+          "isManager": 1,
+          "score": 0,
+          "isSubmitted": 0
+        },
+        {
+          "revieweeId": 8,
+          "reviewerId": 7,
+          "isManager": 0,
+          "score": 0,
+          "isSubmitted": 0
+        },
+        {
+          "revieweeId": 9,
+          "reviewerId": 7,
+          "isManager": 0,
+          "score": 0,
+          "isSubmitted": 0
+        }
+      ],
+      "reviewComments": [
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 7,
+          "reviewerId": 7,
+          "content": "准确地实现需求，合理的迭代节奏。\n（仅供演示，实际应填写更多）"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 7,
+          "reviewerId": 7,
+          "content": "及时获取来自客户的一手需求，在产品角度控制 bug 数量。\n（仅供演示，实际应填写更多）"
+        },
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 8,
+          "reviewerId": 8,
+          "content": "Peer-self 8 Question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 8,
+          "reviewerId": 8,
+          "content": "Peer-self 8 Question 2 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 9,
+          "reviewerId": 9,
+          "content": "Peer-self 9 Question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 9,
+          "reviewerId": 9,
+          "content": "Peer-self 9 Question 2 comment"
+        }
+      ],
+      "reviewQuestions": [
+        {
+          "questionId": 1,
+          "name": "有哪些地方你觉得自己做得不错，并且打算继续保持？"
+        },
+        {
+          "questionId": 2,
+          "name": "有哪些地方有待改进？"
+        }
+      ],
+      "reviewProjects": [
+        {
+          "revieweeId": 7,
+          "name": "人才易-目标模块产品设计",
+          "role": "负责人",
+          "score": 5,
+          "comment": "负责了人才易系统目标管理功能的改版设计，包括功能规划、需求分析、原型设计等。\n按照 Google 的 OKR 实施流程完成了第一版原型并推动迭代；根据国内公司的具体需求完成了第二版设计并推动实现。初步了设计了包含提醒机制、复杂权限机制的第三版雏形。"
+        },
+        {
+          "revieweeId": 8,
+          "name": "Peer 8 project name",
+          "role": "参与者",
+          "score": 5,
+          "comment": "Peer 8 project comment"
+        },
+        {
+          "revieweeId": 9,
+          "name": "Peer 9 project name",
+          "role": "参与者",
+          "score": 3,
+          "comment": "Peer 9 project comment"
+        }
+      ],
+      "reviewInvitedTeams": [
+        {
+          "teamId": 0
+        }
+      ]
+    },
+    "managerEvaluate": {
+      "reviewTemplate": {
+        "templateName": "反馈活动演示（主管评价阶段）"
+      },
+      "reviewActivities": [
+        {
+          "revieweeId": 7,
+          "isSubmitted": 1
+        },
+        {
+          "revieweeId": 10,
+          "isSubmitted": 1
+        },
+        {
+          "revieweeId": 11,
+          "isSubmitted": 1
+        }
+      ],
+      "reviewInvitations": [
+        {
+          "revieweeId": 7,
+          "reviewerId": 6,
+          "isManager": 1,
+          "score": 0,
+          "isSubmitted": 0
+        },
+        {
+          "revieweeId": 10,
+          "reviewerId": 7,
+          "isManager": 1,
+          "score": 0,
+          "isSubmitted": 0
+        },
+        {
+          "revieweeId": 11,
+          "reviewerId": 7,
+          "isManager": 1,
+          "score": 0,
+          "isSubmitted": 0
+        },
+        {
+          "revieweeId": 7,
+          "reviewerId": 8,
+          "isManager": 0,
+          "score": 5,
+          "isSubmitted": 1
+        },
+        {
+          "revieweeId": 7,
+          "reviewerId": 9,
+          "isManager": 0,
+          "score": 5,
+          "isSubmitted": 1
+        },
+        {
+          "revieweeId": 10,
+          "reviewerId": 11,
+          "isManager": 0,
+          "score": 5,
+          "isSubmitted": 1
+        },
+        {
+          "revieweeId": 11,
+          "reviewerId": 10,
+          "isManager": 0,
+          "score": 5,
+          "isSubmitted": 1
+        }
+      ],
+      "reviewComments": [
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 7,
+          "reviewerId": 7,
+          "content": "Manager-self 7 question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 7,
+          "reviewerId": 7,
+          "content": "Manager-self 7 question 2 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 10,
+          "reviewerId": 10,
+          "content": "Manager-self 10 question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 10,
+          "reviewerId": 10,
+          "content": "Manager-self 10 question 2 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 11,
+          "reviewerId": 11,
+          "content": "Manager-self 11 question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 11,
+          "reviewerId": 11,
+          "content": "Manager-self 11 question 2 comment"
+        },
+        {
+          "itemType": 1,
+          "itemId": 0,
+          "revieweeId": 7,
+          "reviewerId": 8,
+          "content": "Manager-peer 7-8 evaluate comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 7,
+          "reviewerId": 8,
+          "content": "Manager-peer 7-8 question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 7,
+          "reviewerId": 8,
+          "content": "Manager-peer 7-8 question 2 comment"
+        },
+        {
+          "itemType": 1,
+          "itemId": 0,
+          "revieweeId": 7,
+          "reviewerId": 9,
+          "content": "Manager-peer 7-9 evaluate comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 7,
+          "reviewerId": 9,
+          "content": "Manager-peer 7-9 question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 7,
+          "reviewerId": 9,
+          "content": "Manager-peer 7-9 question 2 comment"
+        },
+        {
+          "itemType": 1,
+          "itemId": 0,
+          "revieweeId": 10,
+          "reviewerId": 11,
+          "content": "Manager-peer 10-11 evaluate comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 10,
+          "reviewerId": 11,
+          "content": "Manager-peer 10-11 question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 10,
+          "reviewerId": 11,
+          "content": "Manager-peer 10-11 question 2 comment"
+        },
+        {
+          "itemType": 1,
+          "itemId": 0,
+          "revieweeId": 11,
+          "reviewerId": 10,
+          "content": "Manager-peer 11-10 evaluate comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 11,
+          "reviewerId": 10,
+          "content": "Manager-peer 11-10 question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 11,
+          "reviewerId": 10,
+          "content": "Manager-peer 11-10 question 2 comment"
+        }
+      ],
+      "reviewQuestions": [
+        {
+          "questionId": 1,
+          "name": "有哪些地方你觉得自己做得不错，并且打算继续保持？"
+        },
+        {
+          "questionId": 2,
+          "name": "有哪些地方有待改进？"
+        }
+      ],
+      "reviewProjects": [
+        {
+          "revieweeId": 7,
+          "name": "Manager 7 project name",
+          "role": "负责人",
+          "score": 5,
+          "comment": "Manager 7 project comment"
+        },
+        {
+          "revieweeId": 10,
+          "name": "Manager 10 project name",
+          "role": "负责人",
+          "score": 5,
+          "comment": "Manager 10 project comment"
+        },
+        {
+          "revieweeId": 11,
+          "name": "Manager 11 project name",
+          "role": "参与者",
+          "score": 2,
+          "comment": "Manager 11 project comment"
+        }
+      ],
+      "reviewInvitedTeams": [
+        {
+          "teamId": 0
+        }
+      ]
+    },
+    "publicDay": {
+      "reviewTemplate": {
+        "templateName": "反馈活动演示（公示后阶段）"
+      },
+      "reviewActivities": [
+        {
+          "revieweeId": 7,
+          "isSubmitted": 1
+        }
+      ],
+      "reviewInvitations": [
+        {
+          "revieweeId": 7,
+          "reviewerId": 6,
+          "isManager": 1,
+          "score": 5,
+          "isSubmitted": 1
+        },
+        {
+          "revieweeId": 7,
+          "reviewerId": 8,
+          "isManager": 0,
+          "score": 5,
+          "isSubmitted": 1
+        },
+        {
+          "revieweeId": 7,
+          "reviewerId": 9,
+          "isManager": 0,
+          "score": 5,
+          "isSubmitted": 1
+        }
+      ],
+      "reviewComments": [
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 7,
+          "reviewerId": 7,
+          "content": "Public-self 7 question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 7,
+          "reviewerId": 7,
+          "content": "Public-self 7 question 2 comment"
+        },
+        {
+          "itemType": 1,
+          "itemId": 0,
+          "revieweeId": 7,
+          "reviewerId": 8,
+          "content": "Public-peer 7-8 evaluate comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 7,
+          "reviewerId": 8,
+          "content": "Public-peer 7-8 question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 7,
+          "reviewerId": 8,
+          "content": "Public-peer 7-8 question 2 comment"
+        },
+        {
+          "itemType": 1,
+          "itemId": 0,
+          "revieweeId": 7,
+          "reviewerId": 9,
+          "content": "Public-peer 7-9 evaluate comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 7,
+          "reviewerId": 9,
+          "content": "Public-peer 7-9 question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 7,
+          "reviewerId": 9,
+          "content": "Public-peer 7-9 question 2 comment"
+        },
+        {
+          "itemType": 1,
+          "itemId": 0,
+          "revieweeId": 7,
+          "reviewerId": 6,
+          "content": "Public-manager 7-6 evaluate comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 1,
+          "revieweeId": 7,
+          "reviewerId": 6,
+          "content": "Public-manager 7-6 question 1 comment"
+        },
+        {
+          "itemType": 0,
+          "itemId": 2,
+          "revieweeId": 7,
+          "reviewerId": 6,
+          "content": "Public-manager 7-6 question 2 comment"
+        }
+      ],
+      "reviewQuestions": [
+        {
+          "questionId": 1,
+          "name": "有哪些地方你觉得自己做得不错，并且打算继续保持？"
+        },
+        {
+          "questionId": 2,
+          "name": "有哪些地方有待改进？"
+        }
+      ],
+      "reviewProjects": [
+        {
+          "revieweeId": 7,
+          "name": "Public 7 project name",
+          "role": "负责人",
+          "score": 5,
+          "comment": "Public 7 project comment"
+        }
+      ],
+      "reviewInvitedTeams": [
+        {
+          "teamId": 0
+        }
+      ]
+    }
+  }
+}

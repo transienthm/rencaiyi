@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="messageCenterFacadeProxy" name="messageCenterFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.thirdparty.client.facade.MessageCenterFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/message/local"></property>
+        <property name="port" value="8105"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="reviewTemplateFacadeProxy" name="reviewTemplateFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.review.client.facade.ReviewTemplateFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/review/template/local"></property>
+        <property name="port" value="8222"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+</beans>

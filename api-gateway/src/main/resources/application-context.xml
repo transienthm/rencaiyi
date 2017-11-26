@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+    <!--imports-->
+
+    <!--Simply disable Basic Authentication-->
+
+    <import resource="classpath:thrift/thrift-service.xml"/>
+    <import resource="classpath:redis/redis-config.xml" />
+<!--
+    <import resource="classpath:db/datasource.xml"/>
+-->
+
+    <!--Properties-->
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:application.properties</value>
+                <value>classpath:aliyun/oss.properties</value>
+                <value>classpath:jetty/boot.properties</value>
+                <value>classpath:redis/redis.properties</value>
+                <value>classpath:aws/aws_email_sms.properties</value>
+                <value>classpath:fe/fe.properties</value>
+                <value>classpath:constant/url.properties</value>
+                <value>classpath:zookeeper.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--Exception Resolver-->
+    <bean id="exceptionResolver"
+          class="hr.wozai.service.api.resolver.ExceptionResolver">
+    </bean>
+
+</beans>

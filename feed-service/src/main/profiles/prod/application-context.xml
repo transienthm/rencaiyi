@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+
+    <!--imports-->
+    <import resource="classpath:thrift/thrift-service.xml" />
+    <import resource="classpath:db/datasource.xml" />
+    <import resource="classpath:spring/spring-security-config.xml" />
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:constant/url.properties</value>
+                <value>classpath:thrift/thrift.properties</value>
+                <value>classpath:db/db.properties</value>
+                <value>classpath:application.properties</value>
+                <value>classpath:zookeeper.properties</value>
+                <value>classpath:aws_email_sqs.properties</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>

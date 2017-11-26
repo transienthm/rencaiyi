@@ -1,0 +1,291 @@
+[
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 1,
+    "isMandatory": 1,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 0,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 2,
+    "isMandatory": 1,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 0,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 3,
+    "isMandatory": 1,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 4,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 5,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 6,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 0,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 7,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 0,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 8,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 0,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 9,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 10,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 11,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 12,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 101,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 102,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 103,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 104,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 105,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 106,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 108,
+    "isMandatory": 0,
+    "isEnabled": 1,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 0
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 109,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 110,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 111,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 112,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 113,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 1,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 114,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 115,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 116,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 117,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 118,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 119,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 120,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  },
+  {
+    "isSystemRequired": 1,
+    "fieldCode": 121,
+    "isMandatory": 0,
+    "isEnabled": 0,
+    "isActiveStaffEditable": 0,
+    "isOnboardingStaffEditable": 1,
+    "isEnabledEditable": 1
+  }
+]
+

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.ProjectTeamMapper">
+
+    <insert id="insertProjectTeam"
+            parameterType="ProjectTeam">
+        INSERT INTO project_team
+            (org_id,
+            team_id,
+            project_team_name,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+            (#{orgId},
+            #{teamId},
+            #{projectTeamName},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        <selectKey keyProperty="projectTeamId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="deleteProjectTeamByPrimaryKeyAndOrgId"
+            parameterType="map">
+        UPDATE project_team
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        project_team_id = #{projectTeamId}
+        AND org_id = #{orgId}
+    </update>
+
+    <update id="updateProjectTeam"
+            parameterType="ProjectTeam">
+        UPDATE project_team
+        <set>
+            <if test="null != projectTeamName">
+                project_team_name = #{projectTeamName},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            project_team_id = #{projectTeamId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <select id="getProjectTeamByPrimaryKeyAndOrgId" parameterType="map" resultType="ProjectTeam">
+        SELECT
+            *
+        FROM
+            project_team
+        WHERE
+            project_team_id = #{projectTeamId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listProjectTeamsByOrgIdAndTeamId" parameterType="map" resultType="ProjectTeam">
+        SELECT
+            *
+        FROM
+            project_team
+        WHERE
+            org_id = #{orgId}
+            AND team_id = #{teamId}
+            AND is_deleted = 0
+        order by created_time desc
+    </select>
+
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.token.RefreshTokenMapper">
+
+    <insert id="insertRefreshToken"
+            parameterType="RefreshToken">
+        <selectKey keyProperty="refreshTokenId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into refresh_token
+            (refresh_token_key,
+            refresh_token_value)
+        values
+            (#{refreshTokenKey},
+            #{refreshTokenValue})
+    </insert>
+
+    <update id="deleteByRefreshTokenKey" parameterType="map">
+        update refresh_token
+        <set>
+            is_deleted = 1
+        </set>
+        where
+            refresh_token_key = #{refreshTokenKey}
+    </update>
+
+    <select id="findRefreshToken" parameterType="java.lang.Long" resultType="RefreshToken">
+        SELECT
+            *
+        FROM
+            refresh_token
+        WHERE
+            refresh_token_id = #{refreshTokenId}
+            AND is_deleted = 0
+    </select>
+
+</mapper>

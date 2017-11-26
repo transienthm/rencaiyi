@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.okr.OkrCommentMapper">
+
+    <insert id="insertOkrComment"
+            parameterType="OkrComment">
+        <selectKey keyProperty="okrCommentId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO okr_comment
+            (org_id,
+            objective_id,
+            key_result_id,
+            key_result_content,
+            user_id,
+            content,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+            (#{orgId},
+            #{objectiveId},
+            #{keyResultId},
+            #{keyResultContent},
+            #{userId},
+            #{content},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+    </insert>
+
+    <select id="findOkrComment" parameterType="map" resultType="OkrComment">
+        SELECT
+            *
+        FROM
+            okr_comment
+        WHERE
+            okr_comment_id = #{okrCommentId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateOkrComment"
+            parameterType="OkrComment">
+        UPDATE okr_comment
+        <set>
+            <if test="null != content">
+                content = #{content},
+            </if>
+            <if test="null != isDeleted">
+                is_deleted = #{isDeleted},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            okr_comment_id = #{okrCommentId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <select id="listOkrCommentsByObjectiveId" parameterType="map" resultType="OkrComment">
+        SELECT
+            *
+        FROM
+            okr_comment
+        WHERE
+            org_id = #{orgId}
+            AND objective_id = #{objectiveId}
+            <choose>
+                <when test="0 != keyResultId">
+                    AND key_result_id = #{keyResultId}
+                </when>
+            </choose>
+            AND is_deleted = 0
+            ORDER BY created_time desc
+            LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countOkrCommentByObjectiveId" parameterType="map" resultType="Long">
+        SELECT
+            count(1)
+        FROM
+            okr_comment
+        WHERE
+            org_id = #{orgId}
+            AND objective_id = #{objectiveId}
+            <choose>
+                <when test="0 != keyResultId">
+                    AND key_result_id = #{keyResultId}
+                </when>
+            </choose>
+            AND is_deleted = 0
+    </select>
+
+</mapper>

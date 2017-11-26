@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.token.AccessTokenMapper">
+
+    <insert id="insertAccessToken"
+            parameterType="AccessToken">
+        <selectKey keyProperty="accessTokenId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into access_token
+            (access_token_key,
+            access_token_value)
+        values
+            (#{accessTokenKey},
+            #{accessTokenValue})
+    </insert>
+
+    <update id="deleteAccessTokenByKeyAndValue" parameterType="map">
+        update access_token
+        <set>
+            is_deleted = 1
+        </set>
+        where
+            access_token_key = #{accessTokenKey}
+            AND access_token_value = #{accessTokenValue}
+    </update>
+
+    <update id="deleteByAccessTokenKey" parameterType="map">
+        update access_token
+        <set>
+            is_deleted = 1
+        </set>
+        where
+        access_token_key = #{accessTokenKey}
+    </update>
+
+    <select id="findAccessToken" parameterType="java.lang.Long" resultType="AccessToken">
+        SELECT
+            *
+        FROM
+            access_token
+        WHERE
+            access_token_id = #{accessTokenId}
+        AND is_deleted = 0
+    </select>
+
+</mapper>

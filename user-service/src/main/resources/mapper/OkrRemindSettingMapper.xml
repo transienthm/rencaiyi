@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.okr.OkrRemindSettingMapper">
+
+    <insert id="batchInsertOkrRemindSetting"
+            parameterType="java.util.List">
+        <selectKey keyProperty="okrRemindSettingId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO okr_remind_setting
+            (org_id,
+            remind_type,
+            frequency,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+        <foreach collection="list" item="okrRemindSetting" index="index"
+                 separator=",">
+            (#{okrRemindSetting.orgId},
+            #{okrRemindSetting.remindType},
+            #{okrRemindSetting.frequency},
+            #{okrRemindSetting.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{okrRemindSetting.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        </foreach>
+    </insert>
+
+    <update id="deleteOkrRemindSettingByOrgId" parameterType="java.lang.Long">
+        UPDATE okr_remind_setting
+        <set>
+            is_deleted = 1,
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        org_id = #{orgId}
+    </update>
+
+    <select id="getOkrRemindSettingByOrgIdAndRemindType" resultType="OkrRemindSetting">
+        SELECT
+            *
+        FROM
+            okr_remind_setting
+        WHERE
+            org_id = #{orgId}
+            AND remind_type = #{remindType}
+            AND is_deleted = 0
+    </select>
+
+</mapper>

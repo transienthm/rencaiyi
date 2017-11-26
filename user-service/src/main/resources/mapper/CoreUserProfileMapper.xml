@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.CoreUserProfileMapper">
+
+    <insert id="insertCoreUserProfile"
+            parameterType="CoreUserProfile">
+        INSERT INTO core_user_profile
+            (org_id,
+            user_id,
+            profile_template_id,
+            onboarding_template_id,
+            full_name,
+            email_address,
+            mobile_phone,
+            personal_email,
+            employee_id,
+            job_title,
+            job_level,
+            nick_name,
+            gender,
+            avatar_url,
+            date_of_birth,
+            signature_line,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{userId},
+            #{profileTemplateId},
+            #{onboardingTemplateId},
+            #{fullName},
+            #{emailAddress},
+            #{mobilePhone},
+            #{personalEmail},
+            #{employeeId},
+            #{jobTitle},
+            #{jobLevel},
+            #{nickName},
+            #{gender},
+            #{avatarUrl},
+            #{dateOfBirth},
+            #{signatureLine},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="coreUserProfileId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <select id="findCoreUserProfileByOrgIdAndUserId"
+            parameterType="map"
+            resultType="CoreUserProfile">
+        SELECT
+            *
+        FROM
+            core_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listUserIdByOnboardingTemplateId"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            user_id
+        FROM
+            core_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND onboarding_template_id = #{onboardingTemplateId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listCoreUserProfileByOrgIdAndUserId"
+            parameterType="map"
+            resultType="CoreUserProfile">
+        SELECT
+            *
+        FROM
+            core_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id IN
+                <foreach collection="userIds" item="userId" index="index"
+                         open="(" separator="," close=")">
+                    #{userId}
+                </foreach>
+            AND is_deleted = 0
+    </select>
+
+    <select id="listCoreUserProfileByCreatedUserId"
+            parameterType="map"
+            resultType="CoreUserProfile">
+        SELECT
+            *
+        FROM
+            core_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND created_user_id = #{createdUserId}
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="listCoreUserProfileByOrgIdOrderByCreatedTimeDesc"
+            parameterType="map"
+            resultType="CoreUserProfile">
+        SELECT
+            *
+        FROM
+            core_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countCoreUserProfileByOrgId"
+            parameterType="long"
+            resultType="int">
+        SELECT
+            count(1)
+        FROM
+            core_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listCoreUserProfileFromOnboardingByOrgIdAndHasApproved"
+            parameterType="map"
+            resultType="CoreUserProfile">
+        SELECT
+            cup.*
+        FROM
+            core_user_profile cup
+        JOIN
+            user_employment ue
+        ON
+            cup.user_id = ue.user_id
+        WHERE
+            cup.org_id = #{orgId}
+            AND ue.org_id = #{orgId}
+            AND cup.onboarding_template_id IS NOT NULL
+            <choose>
+                <when test="hasApproved == 1">
+                    AND ue.onboarding_status = 3
+                </when>
+                <otherwise>
+                    AND ue.onboarding_status != 3
+                </otherwise>
+            </choose>
+            AND cup.is_deleted = 0
+            AND ue.is_deleted = 0
+        ORDER BY
+            ue.onboarding_status DESC, cup.created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countCoreUserProfileFromOnboardingByOrgIdAndHasApproved"
+            parameterType="map"
+            resultType="int">
+        SELECT
+            COUNT(cup.user_id)
+        FROM
+            core_user_profile cup
+        JOIN
+            user_employment ue
+        ON
+            cup.user_id = ue.user_id
+        WHERE
+            cup.org_id = #{orgId}
+            AND ue.org_id = #{orgId}
+            AND cup.onboarding_template_id IS NOT NULL
+            <choose>
+                <when test="hasApproved == 1">
+                    AND ue.onboarding_status = 3
+                </when>
+                <otherwise>
+                    AND ue.onboarding_status != 3
+                </otherwise>
+            </choose>
+            AND cup.is_deleted = 0
+            AND ue.is_deleted = 0
+    </select>
+
+    <select id="listCoreUserProfileFromImportByUserStatus"
+            parameterType="map"
+            resultType="CoreUserProfile">
+        SELECT
+            cup.*
+        FROM
+            core_user_profile cup
+        JOIN
+            user_employment ue
+        ON
+            cup.user_id = ue.user_id
+        WHERE
+            cup.org_id = #{orgId}
+            AND ue.org_id = #{orgId}
+            AND cup.onboarding_template_id IS NULL
+            AND ue.user_status = #{userStatus}
+            AND cup.is_deleted = 0
+            AND ue.is_deleted = 0
+        ORDER BY cup.created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countCoreUserProfileFromImportByUserStatus"
+            parameterType="map"
+            resultType="int">
+        SELECT
+            COUNT(cup.user_id)
+        FROM
+            core_user_profile cup
+        JOIN
+            user_employment ue
+        ON
+            cup.user_id = ue.user_id
+        WHERE
+            cup.org_id = #{orgId}
+            AND ue.org_id = #{orgId}
+            AND cup.onboarding_template_id IS NULL
+            AND ue.user_status = #{userStatus}
+            AND cup.is_deleted = 0
+            AND ue.is_deleted = 0
+    </select>
+
+    <select id="listAllCoreUserProfileFromImport"
+            parameterType="map"
+            resultType="CoreUserProfile">
+        SELECT
+            cup.*
+        FROM
+            core_user_profile cup
+        JOIN
+            user_employment ue
+        ON
+            cup.user_id = ue.user_id
+        WHERE
+            cup.org_id = #{orgId}
+            AND ue.org_id = #{orgId}
+            AND cup.onboarding_template_id IS NULL
+            AND cup.is_deleted = 0
+            AND ue.is_deleted = 0
+        ORDER BY
+            cup.created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countAllCoreUserProfileFromImport"
+            parameterType="map"
+            resultType="int">
+        SELECT
+            COUNT(cup.user_id)
+        FROM
+            core_user_profile cup
+        JOIN
+            user_employment ue
+        ON
+            cup.user_id = ue.user_id
+        WHERE
+            cup.org_id = #{orgId}
+            AND ue.org_id = #{orgId}
+            AND cup.onboarding_template_id IS NULL
+            AND cup.is_deleted = 0
+            AND ue.is_deleted = 0
+    </select>
+
+    <select id="listFullNameAndEmailAddressWhichIsNotResignedForUpdate"
+            parameterType="long"
+            resultType="CoreUserProfile">
+        SELECT
+            cup.user_id,
+            cup.full_name,
+            cup.email_address
+        FROM
+            core_user_profile cup
+        JOIN
+            user_employment ue
+        ON
+            cup.user_id = ue.user_id
+        WHERE
+            cup.org_id = #{orgId}
+            AND ue.org_id = #{orgId}
+            -- exclude RESIGNED users
+            AND ue.user_status != 4
+            AND cup.is_deleted = 0
+            AND ue.is_deleted = 0
+        FOR UPDATE
+    </select>
+
+
+    <update id="updateCoreUserProfileByOrgIdAndUserId"
+            parameterType="CoreUserProfile">
+        UPDATE core_user_profile
+        <set>
+            <if test="null != fullName">
+                full_name = #{fullName},
+            </if>
+            <if test="null != mobilePhone">
+                mobile_phone = #{mobilePhone},
+            </if>
+            <if test="null != personalEmail">
+                personal_email = #{personalEmail},
+            </if>
+            <if test="null != employeeId">
+                employee_id = #{employeeId},
+            </if>
+            <if test="null != jobTitle">
+                job_title = #{jobTitle},
+            </if>
+            <if test="null != jobLevel">
+                job_level = #{jobLevel},
+            </if>
+            <if test="null != nickName">
+                nick_name = #{nickName},
+            </if>
+            <if test="null != gender">
+                gender = #{gender},
+            </if>
+            <if test="null != avatarUrl">
+                avatar_url = #{avatarUrl},
+            </if>
+            <if test="null != dateOfBirth">
+                date_of_birth = #{dateOfBirth},
+            </if>
+            <if test="null != signatureLine">
+                signature_line = #{signatureLine},
+            </if>
+            <if test="null != isDeleted">
+                is_deleted = #{isDeleted},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+    </update>
+
+</mapper>

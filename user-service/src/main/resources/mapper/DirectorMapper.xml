@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.okr.DirectorMapper">
+
+    <insert id="batchInsertDirector"
+            parameterType="java.util.List">
+        <selectKey keyProperty="derectorId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO director
+            (org_id,
+            user_id,
+            type,
+            object_id,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+        <foreach collection="list" item="director" index="index"
+                 separator=",">
+            (#{director.orgId},
+            #{director.userId},
+            #{director.type},
+            #{director.objectId},
+            #{director.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{director.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        </foreach>
+    </insert>
+
+    <update id="batchDeleteDirectorByTypeAndObjectId" parameterType="map">
+        UPDATE director
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        org_id = #{orgId}
+        AND type = #{type}
+        AND object_id IN
+        <foreach item="item" index="index" collection="objectIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="listDirectorByTypeAndObjectId" resultType="Director">
+        SELECT
+            *
+        FROM
+            director
+        WHERE
+            org_id = #{orgId}
+            AND type = #{type}
+            AND object_id = #{objectId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listDirectorsByObjectIds" parameterType="map" resultType="Director">
+        SELECT
+            *
+        FROM
+            director
+        WHERE
+            org_id = #{orgId}
+            AND type = #{directorType}
+            AND is_deleted = 0
+            AND object_id IN
+            <foreach item="item" index="index" collection="objectIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </select>
+
+    <select id="listObjectiveAndKeyResultDirectorsByObjectiveId" parameterType="map" resultType="java.lang.Long">
+        select
+            distinct(user_id)
+        from
+            director
+        where
+            org_id = #{orgId}
+            AND object_id in
+                (select key_result_id from key_result
+                where org_id = #{orgId} AND objective_id = #{objectiveId}) and type = 2 and is_deleted=0
+        union
+        select
+            user_id
+        from
+            director
+        where
+            org_id = #{orgId}
+            AND object_id = #{objectiveId}
+            AND type=1
+            AND is_deleted=0;
+    </select>
+
+</mapper>

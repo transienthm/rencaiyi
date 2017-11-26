@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.feed.server.dao.RewardMapper">
+
+    <!-- <insert id="batchInsertRewardMedal" parameterType="java.util.List">
+      <selectKey keyProperty="rewardMedalId" resultType="long" order="AFTER">
+          SELECT LAST_INSERT_ID()
+      </selectKey>
+        INSERT INTO reward_medal
+        (
+        org_id,
+        medal_icon,
+        medal_name,
+        medal_type,
+        description,
+        created_user_id,
+        created_time,
+        last_modified_user_id,
+        last_modified_time,
+        is_deleted
+        )
+        VALUES
+
+              (
+                #{rewardMedal.orgId},
+                #{rewardMedal.medalIcon},
+                #{rewardMedal.medalName},
+                #{rewardMedal.medalType},
+                #{rewardMedal.description},
+                #{rewardMedal.createdUserId},
+                ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+                #{rewardMedal.createdUserId},
+                ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+                0
+              )
+
+    </insert>-->
+    <insert id="insertReward"
+            parameterType="java.util.List">
+        INSERT INTO reward
+        (
+        org_id,
+        user_id,
+        feed_id,
+        reward_type,
+        rewardee_id,
+        reward_medal_id,
+        created_time,
+        last_modified_user_id,
+        last_modified_time,
+        extend,
+        is_deleted
+        )
+        VALUES
+        <foreach collection="list" item="reward" index="index"
+                 separator=",">
+        (
+        #{reward.orgId},
+        #{reward.userId},
+        #{reward.feedId},
+        #{reward.rewardType},
+        #{reward.rewardeeId},
+        #{reward.rewardMedalId},
+        ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+        #{reward.lastModifiedUserId},
+        ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+        #{reward.extend},
+        0
+        )
+        </foreach>
+    </insert>
+
+    <select id="findReward"
+            parameterType="map"
+            resultType="Reward">
+      SELECT
+          *
+      FROM
+          reward
+      WHERE
+          reward_id = #{rewardId}
+          AND org_id = #{orgId}
+          AND is_deleted = 0
+  </select>
+
+    <select id="findRewardByFeedId"
+            parameterType="map"
+            resultType="Reward">
+        SELECT
+         *
+        FROM
+         reward
+        WHERE
+          org_id = #{orgId}
+          AND feed_id = #{feedId}
+          AND is_deleted = 0
+    </select>
+
+    <select id="listRewardOfOrg"
+            parameterType="map"
+            resultType="Reward">
+      SELECT
+          *
+      FROM
+          reward
+      WHERE
+          org_id = #{orgId}
+          AND is_deleted = 0
+      ORDER BY created_time DESC
+
+  </select>
+
+    <select id="listRewardByUserId"
+            parameterType="map"
+            resultType="Reward">
+        SELECT
+          *
+        FROM
+          reward
+        WHERE
+          org_id = #{orgId}
+          AND user_id = #{userId}
+          AND <![CDATA[ created_time > #{firstDayOfMonth} ]]>
+          AND <![CDATA[ created_time < #{lastDayOfMonth} ]]>
+    </select>
+
+    <select id="listRewardByRewardIds"
+            parameterType="map"
+            resultType="Reward">
+        SELECT
+        *
+        FROM
+        reward
+        WHERE
+        org_id = #{orgId}
+        AND reward_id in
+        <foreach item="item" index="index" collection="rewardIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND is_deleted = 0
+    </select>
+
+    <update id="deleteReward"
+            parameterType="reward">
+      UPDATE
+          reward
+      SET
+          is_deleted = 1,
+          last_modified_user_id = #{lastModifiedUserId},
+          last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+      WHERE
+          reward_id = #{rewardId}
+          AND org_id = #{orgId}
+          AND is_deleted = 0
+  </update>
+
+    <update id="deleteRewardByFeedId"
+            parameterType="map">
+        UPDATE
+        reward
+        SET
+        is_deleted = 1,
+        last_modified_user_id = #{lastModifiedUserId},
+        last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        WHERE
+        feed_id = #{feedId}
+        AND org_id = #{orgId}
+        AND is_deleted = 0
+    </update>
+
+    <update id="updateReward"
+            parameterType="Feed">
+        UPDATE
+        reward
+        <set>
+            <if test="likeNumber != null">like_number = #{likeNumber},</if>
+            <if test="commentNumber != null">comment_number = #{commentNumber},</if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        reward_id = #{rewardId}
+        AND org_id = #{orgId}
+        AND is_deleted = 0
+    </update>
+
+    <select id="listRewardByFeedIds"
+            parameterType="map"
+            resultType="Reward">
+        SELECT
+        *
+        FROM
+        reward
+        WHERE
+        org_id = #{orgId}
+        AND feed_id in
+        <foreach item="item" index="index" collection="feedIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND is_deleted = 0
+    </select>
+
+
+    <select id="listRewardByRewardeeId"
+            parameterType="map"
+            resultType="Reward">
+        SELECT
+        *
+        FROM
+        reward
+        WHERE
+        org_id = #{orgId}
+        AND reward_type = 0
+        AND rewardee_id = #{rewardeeId}
+        AND is_deleted = 0
+    </select>
+</mapper>

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.review.server.dao.ReviewCommentMapper">
+
+    <insert id="insertReviewComment"
+            parameterType="ReviewComment">
+        INSERT INTO review_comment
+        (
+            org_id,
+            template_id,
+            item_type,
+            item_id,
+            reviewee_id,
+            reviewer_id,
+            content,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend,
+            is_deleted
+        )
+        VALUES
+        (
+            #{orgId},
+            #{templateId},
+            #{itemType},
+            #{itemId},
+            #{revieweeId},
+            #{reviewerId},
+            #{content},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{lastModifiedUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{extend},
+            0
+        )
+        <selectKey keyProperty="commentId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findReviewComment"
+            parameterType="map"
+            resultType="ReviewComment">
+        SELECT
+            *
+        FROM
+            review_comment
+        WHERE
+            comment_id = #{commentId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listReviewItemComment"
+            parameterType="map"
+            resultType="ReviewComment">
+        SELECT
+            *
+        FROM
+            review_comment
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = #{revieweeId}
+            AND reviewer_id in
+            <foreach item="item" index="index" collection="reviewerIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND item_type = #{itemType}
+            AND item_id = #{itemId}
+            AND is_deleted = 0
+        ORDER BY created_time ASC
+    </select>
+
+    <select id="listReviewAllCommentByReviewer"
+            parameterType="map"
+            resultType="ReviewComment">
+        SELECT
+            *
+        FROM
+            review_comment
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = #{revieweeId}
+            AND reviewer_id = #{reviewerId}
+            AND is_deleted = 0
+            ORDER BY created_time DESC
+    </select>
+
+    <update id="updateReviewComment"
+            parameterType="ReviewComment">
+        UPDATE
+            review_comment
+        <set>
+            <if test="null != content"> content = #{content}, </if>
+            <if test="null != extend">extend = #{extend},</if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            comment_id = #{commentId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="deleteReviewCommentByPrimaryKey"
+            parameterType="map">
+        UPDATE
+            review_comment
+        SET
+            is_deleted = 1,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        WHERE
+            comment_id = #{commentId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="deleteReviewCommentByReviewer"
+            parameterType="map">
+        UPDATE
+            review_comment
+        SET
+            is_deleted = 1,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = #{revieweeId}
+            AND reviewer_id = #{reviewerId}
+            AND is_deleted = 0
+    </update>
+
+    <select id="countReviewQuestionByReviewer"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            count(1)
+        FROM
+            review_comment
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = #{revieweeId}
+            AND reviewer_id = #{reviewerId}
+            AND item_type = 0
+            AND is_deleted = 0
+    </select>
+
+    <select id="countReviewItemCommentByReviewer"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            count(1)
+        FROM
+            review_comment
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = #{revieweeId}
+            AND reviewer_id = #{reviewerId}
+            AND item_type = #{itemType}
+            AND item_id = #{itemId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="countReviewAllCommentByReviewer"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            count(1)
+        FROM
+            review_comment
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = #{revieweeId}
+            AND reviewer_id = #{reviewerId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listActivityOfTemplate"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            distinct reviewee_id
+        FROM
+            review_comment
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = reviewer_id
+            AND reviewer_id in
+            <foreach item="item" index="index" collection="reviewerIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND is_deleted = 0
+    </select>
+
+    <select id="listInvitationOfTemplate"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            distinct reviewee_id, reviewer_id
+        FROM
+            review_comment
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id != reviewer_id
+            AND reviewer_id in
+            <foreach item="item" index="index" collection="reviewerIds" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND is_deleted = 0
+    </select>
+
+    <insert id="batchInsertReviewComments"
+            useGeneratedKeys="true"
+            parameterType="list">
+        INSERT INTO review_comment
+        (
+            org_id,
+            template_id,
+            item_type,
+            item_id,
+            reviewee_id,
+            reviewer_id,
+            content,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend,
+            is_deleted
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+                #{item.orgId},
+                #{item.templateId},
+                #{item.itemType},
+                #{item.itemId},
+                #{item.revieweeId},
+                #{item.reviewerId},
+                #{item.content},
+                #{item.createdTime},
+                #{item.lastModifiedUserId},
+                #{item.lastModifiedTime},
+                #{item.extend},
+                #{item.isDeleted}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

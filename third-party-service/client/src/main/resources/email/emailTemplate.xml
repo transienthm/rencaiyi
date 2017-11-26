@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplates>
+    <!--review 邮件模板 -->
+    <EmailTemplate name="review_self_reminder_001">
+        <Subject>[人才易]【%reviewActivityName%】反馈活动自评即将截止，请尽快提交自评</Subject>
+        <HTML><![CDATA[<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+<style type="text/css">body{
+    background: #eee;
+    font-size: 14px;
+    color: #555;
+  }
+  a {
+    color: #3e98df;
+  }
+  .container{
+    padding: 10px;
+    max-width: 800px;margin: 0 auto;
+  }
+  .main{
+    position: relative;
+    background: #fff;
+    padding: 23px 30px 18px 25px;
+    box-shadow: 1px 3px 8px 0px #ddd;
+  }
+  .main .inner{max-width: 650px;}
+  .main .from{
+    color:#aaa;
+    text-align: right;
+    font-size: 12px;
+    padding: 10px 3px 0 0;
+  }
+  .footer{
+    padding: 10px 20px;
+    text-align: center;
+    color: #999;
+  }
+</style>
+<div class="container" style="">
+<div class="main">
+<div class="inner">
+<p>%reviewee%，你好：</p>
+
+<p>【%reviewActivityName%】反馈活动的自评截止日为%deadline%，即将到达期限。请点击以下链接，尽快提交自评：<br />
+<a href="%url%">%url%</a></p>
+
+<p>%orgShortName%</p>
+</div>
+
+<div class="from">发送自：<a class="link" href="https://www.rencaiyi.com">www.rencaiyi.com</a></div>
+</div>
+
+<div class="footer">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+</div>
+]]></HTML>
+        <Parameters>
+            <parameter>reviewActivityName</parameter>
+            <parameter>reviewee</parameter>
+            <parameter>deadline</parameter>
+            <parameter>url</parameter>
+            <parameter>orgShortName</parameter>
+        </Parameters>
+    </EmailTemplate>
+
+    <EmailTemplate name="review_ongoing_reminder_001">
+        <Subject>[人才易]【%reviewActivityName%】反馈活动同事反馈即将截止，请尽快提交同事反馈</Subject>
+        <HTML><![CDATA[<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+<style type="text/css">body{
+    background: #eee;
+    font-size: 14px;
+    color: #555;
+  }
+  a {
+    color: #3e98df;
+  }
+  .container{
+    padding: 10px;
+    max-width: 800px;margin: 0 auto;
+  }
+  .main{
+    position: relative;
+    background: #fff;
+    padding: 23px 30px 18px 25px;
+    box-shadow: 1px 3px 8px 0px #ddd;
+  }
+  .main .inner{max-width: 650px;}
+  .main .from{
+    color:#aaa;
+    text-align: right;
+    font-size: 12px;
+    padding: 10px 3px 0 0;
+  }
+  .footer{
+    padding: 10px 20px;
+    text-align: center;
+    color: #999;
+  }
+</style>
+<div class="container" style="">
+<div class="main">
+<div class="inner">
+<p>%reviewer%，你好：</p>
+
+<p>【%reviewActivityName%】反馈活动的同事反馈截止日为%deadline%，即将到达期限。请点击以下链接，尽快提交同事反馈：<br />
+<a href="%url%">%url%</a></p>
+
+<p>%orgShortName%</p>
+</div>
+
+<div class="from">发送自：<a class="link" href="https://www.rencaiyi.com">www.rencaiyi.com</a></div>
+</div>
+
+<div class="footer">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+</div>
+]]></HTML>
+        <Parameters>
+            <parameter>reviewActivityName</parameter>
+            <parameter>reviewer</parameter>
+            <parameter>deadline</parameter>
+            <parameter>url</parameter>
+            <parameter>orgShortName</parameter>
+        </Parameters>
+    </EmailTemplate>
+
+    <EmailTemplate name="review_activity_auto_cancel">
+        <Subject>[人才易]您在【%reviewActivityName%】活动中的自评邀请被自动取消</Subject>
+        <HTML><![CDATA[<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+<style type="text/css">body{
+    background: #eee;
+    font-size: 14px;
+    color: #555;
+  }
+  a {
+    color: #3e98df;
+  }
+  .container{
+    padding: 10px;
+    max-width: 800px;margin: 0 auto;
+  }
+  .main{
+    position: relative;
+    background: #fff;
+    padding: 23px 30px 18px 25px;
+    box-shadow: 1px 3px 8px 0px #ddd;
+  }
+  .main .inner{max-width: 650px;}
+  .main .from{
+    color:#aaa;
+    text-align: right;
+    font-size: 12px;
+    padding: 10px 3px 0 0;
+  }
+  .footer{
+    padding: 10px 20px;
+    text-align: center;
+    color: #999;
+  }
+</style>
+<div class="container" style="">
+<div class="main">
+<div class="inner">
+<p>%reviewee%，您好：</p>
+
+<p>很抱歉地通知您，在【%reviewActivityName%】反馈活动中，因您超时未提交自评，自评邀请已自动取消。</p>
+
+<p>%orgShortName%</p>
+</div>
+
+<div class="from">发送自：<a class="link" href="https://www.rencaiyi.com">www.rencaiyi.com</a></div>
+</div>
+
+<div class="footer">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+</div>
+]]></HTML>
+        <Parameters>
+            <parameter>reviewActivityName</parameter>
+            <parameter>reviewee</parameter>
+            <parameter>orgShortName</parameter>
+        </Parameters>
+    </EmailTemplate>
+
+    <EmailTemplate name="review_deadline_reminder_001">
+        <Subject>[人才易]【%reviewActivityName%】反馈活动同事反馈即将截止，请尽快提交主管反馈</Subject>
+        <HTML><![CDATA[<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+<style type="text/css">body{
+    background: #eee;
+    font-size: 14px;
+    color: #555;
+  }
+  a {
+    color: #3e98df;
+  }
+  .container{
+    padding: 10px;
+    max-width: 800px;margin: 0 auto;
+  }
+  .main{
+    position: relative;
+    background: #fff;
+    padding: 23px 30px 18px 25px;
+    box-shadow: 1px 3px 8px 0px #ddd;
+  }
+  .main .inner{max-width: 650px;}
+  .main .from{
+    color:#aaa;
+    text-align: right;
+    font-size: 12px;
+    padding: 10px 3px 0 0;
+  }
+  .footer{
+    padding: 10px 20px;
+    text-align: center;
+    color: #999;
+  }
+</style>
+<div class="container" style="">
+<div class="main">
+<div class="inner">
+<p>%reviewer%，你好：</p>
+
+<p>【%reviewActivityName%】反馈活动的主管反馈截止日为%deadline%，即将到达期限。请点击以下链接，尽快提交主管反馈：<br />
+<a href="%url%">%url%</a></p>
+
+<p>%orgShortName%</p>
+</div>
+
+<div class="from">发送自：<a class="link" href="https://www.rencaiyi.com">www.rencaiyi.com</a></div>
+</div>
+
+<div class="footer">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+</div>
+]]></HTML>
+        <Parameters>
+            <parameter>reviewActivityName</parameter>
+            <parameter>reviewer</parameter>
+            <parameter>deadline</parameter>
+            <parameter>url</parameter>
+            <parameter>orgShortName</parameter>
+        </Parameters>
+    </EmailTemplate>
+
+    <EmailTemplate name="review_invitation_auto_cancel">
+        <Subject>[人才易]您在【%users%】发送给您的同事反馈邀请被自动取消</Subject>
+        <HTML><![CDATA[<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+<style type="text/css">body{
+    background: #eee;
+    font-size: 14px;
+    color: #555;
+  }
+  a {
+    color: #3e98df;
+  }
+  .container{
+    padding: 10px;
+    max-width: 800px;margin: 0 auto;
+  }
+  .main{
+    position: relative;
+    background: #fff;
+    padding: 23px 30px 18px 25px;
+    box-shadow: 1px 3px 8px 0px #ddd;
+  }
+  .main .inner{max-width: 650px;}
+  .main .from{
+    color:#aaa;
+    text-align: right;
+    font-size: 12px;
+    padding: 10px 3px 0 0;
+  }
+  .footer{
+    padding: 10px 20px;
+    text-align: center;
+    color: #999;
+  }
+</style>
+<div class="container" style="">
+<div class="main">
+<div class="inner">
+<p>%reviewer%，您好：</p>
+
+<p>很抱歉地通知您，在【%reviewActivityName%】反馈活动中，因您超时未提交反馈，%users%发送给您的同事反馈邀请被自动取消。</p>
+
+<p>%orgShortName%</p>
+</div>
+
+<div class="from">发送自：<a class="link" href="https://www.rencaiyi.com">www.rencaiyi.com</a></div>
+</div>
+
+<div class="footer">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+</div>
+]]></HTML>
+        <Parameters>
+            <parameter>users</parameter>
+            <parameter>reviewer</parameter>
+            <parameter>reviewActivityName</parameter>
+            <parameter>orgShortName</parameter>
+        </Parameters>
+    </EmailTemplate>
+
+    <EmailTemplate name="review_finish_002">
+        <Subject>[人才易]【%period%】反馈活动结果已公示</Subject>
+        <HTML><![CDATA[<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+<style type="text/css">body{
+    background: #eee;
+    font-size: 14px;
+    color: #555;
+  }
+  a {
+    color: #3e98df;
+  }
+  .container{
+    padding: 10px;
+    max-width: 800px;margin: 0 auto;
+  }
+  .main{
+    position: relative;
+    background: #fff;
+    padding: 23px 30px 18px 25px;
+    box-shadow: 1px 3px 8px 0px #ddd;
+  }
+  .main .inner{max-width: 650px;}
+  .main .from{
+    color:#aaa;
+    text-align: right;
+    font-size: 12px;
+    padding: 10px 3px 0 0;
+  }
+  .footer{
+    padding: 10px 20px;
+    text-align: center;
+    color: #999;
+  }
+</style>
+<div class="container" style="">
+<div class="main">
+<div class="inner">
+<p>%reviewee%，你好：</p>
+
+<p>【%period%】反馈活动结果已公示，请点击以下链接查看收到的反馈：<br />
+<a href="%url%">%url%</a></p>
+
+<p>如果以上网址无法打开，请将它复制到浏览器地址栏直接访问。</p>
+
+<p>%orgShortName%</p>
+</div>
+
+<div class="from">发送自：<a class="link" href="https://www.rencaiyi.com">www.rencaiyi.com</a></div>
+</div>
+
+<div class="footer">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+</div>
+]]></HTML>
+        <Parameters>
+            <parameter>period</parameter>
+            <parameter>reviewee</parameter>
+            <parameter>url</parameter>
+            <parameter>orgShortName</parameter>
+        </Parameters>
+    </EmailTemplate>
+
+    <EmailTemplate name="review_manager_invite_001">
+        <Subject>[人才易] %reviewee%同事邀请您撰写主管反馈</Subject>
+        <HTML><![CDATA[<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+            <title></title>
+            <style type="text/css">body{
+                background: #eee;
+                font-size: 14px;
+                color: #555;
+                }
+                a {
+                color: #3e98df;
+                }
+                .container{
+                padding: 10px;
+                max-width: 800px;margin: 0 auto;
+                }
+                .main{
+                position: relative;
+                background: #fff;
+                padding: 23px 30px 18px 25px;
+                box-shadow: 1px 3px 8px 0px #ddd;
+                }
+                .main .inner{max-width: 650px;}
+                .main .from{
+                color:#aaa;
+                text-align: right;
+                font-size: 12px;
+                padding: 10px 3px 0 0;
+                }
+                .footer{
+                padding: 10px 20px;
+                text-align: center;
+                color: #999;
+                }
+            </style>
+            <div class="container" style="">
+                <div class="main">
+                    <div class="inner">
+                        <p>%reviewer%，你好：</p>
+
+                        <p>%reviewee%邀请您撰写主管反馈，请点击以下链接填写：<br />
+                            <a href="%url%">%url%</a></p>
+
+                        <p>如果以上链接无法打开，请将它复制到浏览器地址栏直接访问。</p>
+
+                        <p>本次活动的同事反馈截止日为%deadline%，请留意。</p>
+
+                        <p>%orgShortName%</p>
+                    </div>
+
+                    <div class="from">发送自：<a class="link" href="https://www.rencaiyi.com">www.rencaiyi.com</a></div>
+                </div>
+
+                <div class="footer">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+            </div>]]></HTML>
+        <Parameters>
+            <parameter>reviewee</parameter>
+            <parameter>reviewer</parameter>
+            <parameter>url</parameter>
+            <parameter>deadline</parameter>
+            <parameter>orgShortName</parameter>
+        </Parameters>
+    </EmailTemplate>
+
+    <EmailTemplate name="review_ongoing_002">
+        <HTML><![CDATA[<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[人才易]【%reviewee%】邀请您对他做出同事反馈</title>
+<style type="text/css">body{
+    background: #eee;
+    font-size: 14px;
+    color: #555;
+  }
+  a {
+    color: #3e98df;
+  }
+  p{
+    word-wrap:break-word;
+  }
+  .container{
+    padding: 10px;
+    max-width: 800px;margin: 0 auto;
+  }
+  .main{
+    position: relative;
+    background: #fff;
+    padding: 23px 30px 18px 25px;
+    box-shadow: 1px 3px 8px 0px #ddd;
+  }
+  .main .inner{max-width: 650px;}
+  .main .from{
+    color:#aaa;
+    text-align: right;
+    font-size: 12px;
+    padding: 10px 3px 0 0;
+  }
+  .footer{
+    padding: 10px 20px;
+    text-align: center;
+    color: #999;
+  }
+</style>
+<div class="container" style="">
+<div class="main">
+  <div class="inner"><p>%reviewer%，你好：</p >
+<p>【%reviewee%】邀请您对他做出同事反馈，请点击以下链接填写：<br><a href=" ">%url%</a ></p >
+<p>如果以上链接无法打开，请将它复制到浏览器地址栏直接访问。</p >
+<p>本次活动的同事反馈截止日为%deadline%，请留意。</p >
+<p>%orgShortName%</p >
+</div>
+  <div class="from">发送自：<a class="link" href="https://www.rencaiyi.com">www.rencaiyi.com</a ></div>
+</div>
+
+<div class="footer">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+</div>]]></HTML>
+        <Subject>[人才易]【%reviewee%】邀请您对他做出同事反馈</Subject>
+
+    </EmailTemplate>
+
+    <!-- OKR 邮件模板 -->
+
+    <EmailTemplate name="okr_regular_reminder_001">
+        <Subject>[人才易]提醒您更新目标「%objectiveName%」</Subject>
+        <HTML><![CDATA[
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[人才易]提醒您更新目标「%objectiveName%」</title>
+<style type="text/css">body{
+    background: #eee;
+    font-size: 14px;
+    color: #555;
+  }
+  a {
+    color: #3e98df;
+  }
+  .container{
+    padding: 10px;
+    max-width: 800px;margin: 0 auto;
+  }
+  .main{
+    position: relative;
+    background: #fff;
+    padding: 23px 30px 18px 25px;
+    box-shadow: 1px 3px 8px 0px #ddd;
+  }
+  .main .inner{max-width: 650px;}
+  .main .from{
+    color:#aaa;
+    text-align: right;
+    font-size: 12px;
+    padding: 10px 3px 0 0;
+  }
+  .footer{
+    padding: 10px 20px;
+    text-align: center;
+    color: #999;
+  }
+</style>
+<div class="container" style="">
+<div class="main">
+  <div class="inner"><p>%name% 你好：</p>
+<p>您的目标「%objectiveName%」是否需要更新？<br>%content%<br>点击以下链接前往目标页面：</p>
+<p><a href="%url%">%url%</a></p>
+<p>如果以上链接无法打开，请将它复制到浏览器地址栏直接访问。  </p>
+<p>%orgShortName%</p>
+</div>
+  <div class="from">发送自：<a class="link" href="https://www.rencaiyi.com">www.rencaiyi.com</a></div>
+</div>
+
+<div class="footer">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+</div>
+]]></HTML>
+        <Parameters>
+            <parameter>name</parameter>
+            <parameter>objectiveName</parameter>
+            <parameter>content</parameter>
+            <parameter>url</parameter>
+            <parameter>orgShortName</parameter>
+
+        </Parameters>
+    </EmailTemplate>
+
+    <EmailTemplate name="okr_keyresult_deadline_reminder">
+        <Subject>[人才易]您负责的关键结果「%keyResultName%」将在%daysBeforeExpired%天后到期</Subject>
+        <HTML><![CDATA[
+
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[人才易]您负责的关键结果「%keyResultName%」将在%daysBeforeExpired%天后到期</title>
+<style type="text/css">body{
+    background: #eee;
+    font-size: 14px;
+    color: #555;
+  }
+  a {
+    color: #3e98df;
+  }
+  .container{
+    padding: 10px;
+    max-width: 800px;margin: 0 auto;
+  }
+  .main{
+    position: relative;
+    background: #fff;
+    padding: 23px 30px 18px 25px;
+    box-shadow: 1px 3px 8px 0px #ddd;
+  }
+  .main .inner{max-width: 650px;word-wrap:break-word;}
+  .main .from{
+    color:#aaa;
+    text-align: right;
+    font-size: 12px;
+    padding: 10px 3px 0 0;
+  }
+  .footer{
+    padding: 10px 20px;
+    text-align: center;
+    color: #999;
+  }
+</style>
+<div class="container" style="">
+<div class="main">
+  <div class="inner"><p>%name% 你好：</p>
+<p>「%objectiveName%」目标中，您负责的关键结果「%keyResultName%」将在%deadline%到期，当前完成度为%progress%，请留意并随时更新进展。<br>点击以下链接前往目标页面：</p>
+<p><a href="%url%">%url%</a></p>
+<p>如果以上链接无法打开，请将它复制到浏览器地址栏直接访问。  </p>
+<p>%orgShortName%</p>
+</div>
+  <div class="from">发送自：<a class="link" href="https://www.rencaiyi.com">www.rencaiyi.com</a></div>
+</div>
+
+<div class="footer">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+</div>
+]]></HTML>
+        <Parameters>
+            <parameter>keyResultName</parameter>
+            <parameter>daysBeforeExpired</parameter>
+            <parameter>name</parameter>
+            <parameter>objectiveName</parameter>
+            <parameter>deadline</parameter>
+            <parameter>progress</parameter>
+            <parameter>url</parameter>
+            <parameter>orgShortName</parameter>
+        </Parameters>
+        <Method>preSendKeyResultDeadlineReminder</Method>
+    </EmailTemplate>
+
+    <EmailTemplate name="okr_add_notes">
+        <Subject>[人才易]%userName% 在你负责的%okrType%目标【%objectiveName%】上添加了批注</Subject>
+        <HTML><![CDATA[
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[人才易]%userName% 在你的团队目标【%objectiveName%】上添加了批注</title>
+<style type="text/css">
+body{
+  background: #eee;
+  font-size: 14px;
+  color: #555;
+}
+</style>
+<div style="background: #eee;font-size: 14px;color: #555;">
+  <div class="container" style="padding: 20px 10px 10px 10px;max-width: 800px;margin: 0 auto;">
+  <div class="main" style="position: relative;background: #fff;padding: 23px 30px 18px 25px;box-shadow: 1px 3px 8px 0px #ddd;">
+    <div class="inner" style="max-width: 650px;word-wrap:break-word;"><p>%name% 你好：<br>%userName% 在你负责的%okrType%目标【%objectiveName%】上添加了批注，如下：<br>%content%</p>
+<p>请访问以下链接查看详情：<br><a href="%url%">%url%</a><br>如果以上链接无法打开，请将它复制到浏览器地址栏直接访问。  </p>
+<p>%orgShortName%</p>
+</div>
+    <div class="from" style="color:#aaa;text-align: right;font-size: 12px;padding: 10px 3px 0 0;">发送自：<a class="link" href="https://www.rencaiyi.com" style="color: #3e98df;">www.rencaiyi.com</a></div>
+  </div>
+  <div class="footer" style="padding: 10px 20px;text-align: center;color: #999;">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+  </div>
+</div>
+]]></HTML>
+        <Parameters>
+            <parameter>userName</parameter>
+            <parameter>okrType</parameter>
+            <parameter>objectiveName</parameter>
+            <parameter>name</parameter>
+            <parameter>content</parameter>
+            <parameter>url</parameter>
+            <parameter>orgShortName</parameter>
+        </Parameters>
+        <Method>preSendOkrAddNote</Method>
+    </EmailTemplate>
+
+    <EmailTemplate name="convr_schedule_reminder_001">
+        <Subject>[人才易]提醒您与 %users% 等同事做定期交谈</Subject>
+        <HTML><![CDATA[
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[人才易]提醒您与 %users% 等同事做定期交谈</title>
+<style type="text/css">
+body{
+  background: #eee;
+  font-size: 14px;
+  color: #555;
+}
+</style>
+<div style="background: #eee;font-size: 14px;color: #555;">
+  <div class="container" style="padding: 20px 10px 10px 10px;max-width: 800px;margin: 0 auto;">
+  <div class="main" style="position: relative;background: #fff;padding: 23px 30px 18px 25px;box-shadow: 1px 3px 8px 0px #ddd;">
+    <div class="inner" style="max-width: 650px;word-wrap:break-word;"><p>%userName%，你好：</p>
+<p>最近您需要与 %users% 等同事做定期交谈，请留意。点击以下链接查看详情：</p>
+<p><a href="%url%">%url%</a></p>
+<p>如果以上链接无法打开，请将它复制到浏览器地址栏直接访问。</p>
+<p>%orgShortName%</p>
+</div>
+    <div class="from" style="color:#aaa;text-align: right;font-size: 12px;padding: 10px 3px 0 0;">发送自：<a class="link" href="https://www.rencaiyi.com" style="color: #3e98df;">www.rencaiyi.com</a></div>
+  </div>
+  <div class="footer" style="padding: 10px 20px;text-align: center;color: #999;">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+  </div>
+</div>
+        ]]></HTML>
+        <Parameters>
+            <parameter>users</parameter>
+            <parameter>userName</parameter>
+            <parameter>url</parameter>
+            <parameter>orgShortName</parameter>
+        </Parameters>
+    </EmailTemplate>
+
+    <EmailTemplate name="survey_push_001">
+        <Subject>[人才易]来自 %orgShortName% 公司的定期匿名调研，请花一分钟填写</Subject>
+        <HTML><![CDATA[
+
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[人才易]来自 %orgShortName% 公司的定期匿名调研，请花一分钟填写</title>
+<style type="text/css">
+body{
+  background: #eee;
+  font-size: 14px;
+  color: #555;
+}
+</style>
+<div style="background: #eee;font-size: 14px;color: #555;">
+  <div class="container" style="padding: 20px 10px 10px 10px;max-width: 800px;margin: 0 auto;">
+  <div class="main" style="position: relative;background: #fff;padding: 23px 30px 18px 25px;box-shadow: 1px 3px 8px 0px #ddd;">
+    <div class="inner" style="max-width: 650px;word-wrap:break-word;"><p>%userName%，你好：</p>
+<p>来自 %orgShortName% 的全员匿名调研问卷已送达！请点击以下链接，花一分钟填写：</p>
+<p><a href="%url%">%url%</a></p>
+<p>如果以上链接无法打开，请将它复制到浏览器地址栏直接访问。</p>
+<p>%orgShortName%</p>
+</div>
+    <div class="from" style="color:#aaa;text-align: right;font-size: 12px;padding: 10px 3px 0 0;">发送自：<a class="link" href="https://www.rencaiyi.com" style="color: #3e98df;">www.rencaiyi.com</a></div>
+  </div>
+  <div class="footer" style="padding: 10px 20px;text-align: center;color: #999;">人才易&middot;企业级目标&OKR绩效管理云平台</div>
+  </div>
+</div>
+]]>
+        </HTML>
+        <Parameters>
+            <parameter>userName</parameter>
+            <parameter>orgShortName</parameter>
+            <parameter>url</parameter>
+        </Parameters>
+    </EmailTemplate>
+    
+</EmailTemplates>
+

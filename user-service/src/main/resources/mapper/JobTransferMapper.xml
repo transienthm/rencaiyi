@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.JobTransferMapper">
+
+    <insert id="insertJobTransfer"
+            parameterType="JobTransfer">
+        INSERT INTO job_transfer
+            (org_id,
+            user_id,
+            transfer_type,
+            transfer_date,
+            description,
+            before_team_id,
+            before_reporter_id,
+            before_job_title_id,
+            before_job_level_id,
+            after_team_id,
+            after_reporter_id,
+            after_job_title_id,
+            after_job_level_id,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{userId},
+            #{transferType},
+            #{transferDate},
+            #{description},
+            #{beforeTeamId},
+            #{beforeReporterId},
+            #{beforeJobTitleId},
+            #{beforeJobLevelId},
+            #{afterTeamId},
+            #{afterReporterId},
+            #{afterJobTitleId},
+            #{afterJobLevelId},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="jobTransferId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findJobTransferByPrimaryKeyAndOrgId"
+            resultType="JobTransfer">
+        SELECT
+            *
+        FROM
+            job_transfer
+        WHERE
+            job_transfer_id = #{jobTransferId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listJobTransferByOrgIdOrderByCreatedTimeDesc"
+            resultType="JobTransfer">
+        SELECT
+            *
+        FROM
+            job_transfer
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="listJobTransferByOrgIdAndPrimaryKeys"
+            parameterType="map"
+            resultType="JobTransfer">
+        SELECT
+            *
+        FROM
+            job_transfer
+        WHERE
+            job_transfer_id IN
+                <foreach collection="jobTransferIds" item="jobTransferId" index="index"
+                open="(" separator="," close=")">
+                    #{jobTransferId}
+                </foreach>
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="countJobTransferByOrgId"
+            parameterType="long"
+            resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            job_transfer
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+
+
+    <!--<update id="updateOrgByPrimaryKeySelective"-->
+            <!--parameterType="Org">-->
+        <!--UPDATE org-->
+        <!--<set>-->
+            <!--<if test="null != fullName">-->
+                <!--full_name = #{fullName},-->
+            <!--</if>-->
+            <!--<if test="null != shortName">-->
+                <!--short_name = #{shortName},-->
+            <!--</if>-->
+            <!--<if test="null != description">-->
+                <!--description = #{description},-->
+            <!--</if>-->
+            <!--<if test="null != avatarUrl">-->
+                <!--avatar_url = #{avatarUrl},-->
+            <!--</if>-->
+            <!--<if test="null != timeZone">-->
+                <!--time_zone = #{timeZone},-->
+            <!--</if>-->
+            <!--<if test="null != isDeleted">-->
+                <!--is_deleted = #{isDeleted},-->
+            <!--</if>-->
+            <!--last_modified_user_id = #{lastModifiedUserId},-->
+            <!--last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)-->
+        <!--</set>-->
+        <!--WHERE-->
+            <!--org_id = #{orgId}-->
+    <!--</update>-->
+
+</mapper>

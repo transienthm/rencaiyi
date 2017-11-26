@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.thirdparty.server.dao.TrustedMobilePhoneMapper">
+
+    <insert id="insert" parameterType="TrustedMobilePhone" useGeneratedKeys="true">
+       insert into trusted_mobile_phone
+            (mobile_phone,
+            name,
+            email_address,
+            is_deleted)
+        values
+            (#{mobilePhone},
+            #{name},
+            #{emailAddress},
+            #{isDeleted})
+        <selectKey keyProperty="trustedMobilePhoneId" resultType="long" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <select id="selectTMPByPrimaryKey" parameterType="long" resultType="TrustedMobilePhone">
+        select * from trusted_mobile_phone
+        where
+            trusted_mobile_phone_id = #{trustedMobilePhoneId}
+        AND is_deleted = 0
+
+    </select>
+
+    <select id="findTMPByMobilePhone" parameterType="java.lang.String" resultType="TrustedMobilePhone">
+        select * from trusted_mobile_phone
+        where
+            mobile_phone = #{mobilePhone}
+        AND is_deleted = 0
+    </select>
+
+    <select id="listTMPByName" parameterType="java.lang.String" resultType="TrustedMobilePhone">
+        select * from trusted_mobile_phone
+        where
+            name = #{name}
+        AND is_deleted = 0
+    </select>
+
+    <select id="listTMPByEmail" parameterType="String" resultType="TrustedMobilePhone">
+        select * from trusted_mobile_phone
+        where
+            email_address = #{email}
+        AND is_deleted = 0
+    </select>
+
+    <update id="delete" parameterType="TrustedMobilePhone">
+        update trusted_mobile_phone
+        <set>
+            is_deleted = 1
+        </set>
+        where
+            trusted_mobile_phone_id = #{trustedMobilePhoneId}
+    </update>
+
+    <update id="update" parameterType="TrustedMobilePhone">
+        update trusted_mobile_phone
+        <set>
+            <if test="null != mobilePhone">
+                mobile_phone = #{mobilePhone},
+            </if>
+            <if test="null != name">
+                name = #{name},
+            </if>
+            <if test="null != emailAddress">
+                email_address =#{emailAddress},
+            </if>
+            <if test="null != isDeleted">
+                is_deleted = #{isDeleted}
+            </if>
+        </set>
+        where
+            trusted_mobile_phone_id = #{trustedMobilePhoneId}
+    </update>
+</mapper>

@@ -1,0 +1,7 @@
+CREATE TABLE `captcha_verification` (
+  `create_time` bigint(20) NOT NULL COMMENT '创建时间',
+  `verification_code` varchar(100) NOT NULL COMMENT '验证码',
+  `expire_time` bigint(20) NOT NULL COMMENT '到期时间',
+  `extend` text COMMENT '扩展字段',
+  PRIMARY KEY (`create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

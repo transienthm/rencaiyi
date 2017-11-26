@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.okr.ObjectiveMapper">
+
+    <insert id="insertObjective"
+            parameterType="Objective">
+        <selectKey keyProperty="objectiveId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO objective
+            (org_id,
+            parent_objective_id,
+            type,
+            owner_id,
+            content,
+            priority,
+            objective_period_id,
+            is_auto_calc,
+            progress_metric_type,
+            starting_amount,
+            goal_amount,
+            current_amount,
+            unit,
+            deadline,
+            order_index,
+            is_private,
+            regular_remind_type,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+            (#{orgId},
+            #{parentObjectiveId},
+            #{type},
+            #{ownerId},
+            #{content},
+            #{priority},
+            #{objectivePeriodId},
+            #{isAutoCalc},
+            #{progressMetricType},
+            #{startingAmount},
+            #{goalAmount},
+            #{currentAmount},
+            #{unit},
+            #{deadline},
+            #{orderIndex},
+            #{isPrivate},
+            #{regularRemindType},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{lastModifiedUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+    </insert>
+
+    <select id="findObjective" parameterType="map" resultType="Objective">
+        SELECT
+            *
+        FROM
+            objective
+        WHERE
+            objective_id = #{objectiveId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+        <choose>
+            <when test="forUpdate == 1">
+                FOR UPDATE
+            </when>
+        </choose>
+    </select>
+
+    <select id="listObjectivesByStartAndEndOrderIndex" parameterType="map" resultType="Objective">
+        SELECT
+            *
+        FROM
+            objective
+        WHERE
+            org_id = #{orgId}
+            AND objective_period_id = #{objectivePeriodId}
+            AND <![CDATA[ order_index > #{startOrderIndex} ]]>
+            AND <![CDATA[ order_index < #{endOrderIndex} ]]>
+            AND is_deleted = 0
+        FOR UPDATE
+    </select>
+
+    <select id="listObjectiveByTypeAndOwnerIdAndQuarterId" parameterType="map" resultType="Objective">
+        SELECT
+            *
+        FROM
+            objective
+        WHERE
+            org_id = #{orgId}
+            AND type = #{type}
+            AND owner_id = #{ownerId}
+            AND objective_period_id = #{objectivePeriodId}
+            AND is_deleted = 0
+        <choose>
+            <!-- 按照更新时间降序排列-->
+            <when test="orderBy == 2">
+                order by last_modified_time desc
+            </when>
+            <!-- 按照order顺序排列-->
+            <otherwise>
+                order by order_index asc
+            </otherwise>
+        </choose>
+    </select>
+
+    <update id="updateObjective"
+            parameterType="Objective">
+        UPDATE objective
+        <set>
+            <if test="null != parentObjectiveId">
+                parent_objective_id = #{parentObjectiveId},
+            </if>
+            <if test="null != content">
+                content = #{content},
+            </if>
+            <if test="null != priority">
+                priority = #{priority},
+            </if>
+            <if test="null != isAutoCalc">
+                is_auto_calc = #{isAutoCalc},
+            </if>
+            <if test="null != progressMetricType">
+                progress_metric_type = #{progressMetricType},
+            </if>
+            <if test="null != startingAmount">
+                starting_amount = #{startingAmount},
+            </if>
+            <if test="null != goalAmount">
+                goal_amount = #{goalAmount},
+            </if>
+            <if test="null != currentAmount">
+                current_amount = #{currentAmount},
+            </if>
+            <if test="null != unit">
+                unit = #{unit},
+            </if>
+            <if test="null != deadline">
+                deadline = #{deadline},
+            </if>
+            <if test="null != orderIndex">
+                order_index = #{orderIndex},
+            </if>
+            <if test="null != isPrivate">
+                is_private = #{isPrivate},
+            </if>
+            <if test="null != regularRemindType">
+                regular_remind_type = #{regularRemindType},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        objective_id = #{objectiveId}
+        AND org_id = #{orgId}
+        AND is_deleted = 0
+    </update>
+
+    <update id="batchUpdateOrderIndexOfObjectives" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="" separator=";" close="">
+            UPDATE objective
+            <set>
+                <if test="null != item.orderIndex">
+                    order_index = #{item.orderIndex}
+                </if>
+            </set>
+            WHERE
+            objective_id = #{item.objectiveId}
+            AND org_id = #{item.orgId}
+            AND is_deleted = 0
+        </foreach>
+    </update>
+
+    <update id="deleteObjective" parameterType="map">
+        UPDATE objective
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        objective_id = #{objectiveId}
+        AND org_id = #{orgId}
+    </update>
+
+    <select id="listObjectivesByObjectiveIds" parameterType="map" resultType="Objective">
+        SELECT
+            *
+        FROM
+            objective
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+            AND objective_id IN
+            <foreach item="item" index="index" collection="objectiveIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </select>
+
+    <select id="getMaxOrderIndexByObjectivePeriod" parameterType="map" resultType="java.lang.Integer">
+        SELECT
+            max(order_index)
+        FROM
+            objective
+        WHERE
+            org_id = #{orgId}
+            AND objective_period_id = #{objectivePeriodId}
+            AND is_deleted = 0
+        FOR UPDATE
+    </select>
+
+    <select id="searchObjectiveByKeyword" parameterType="map" resultType="Objective">
+        SELECT
+            *
+        FROM
+            objective
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+        <choose>
+            <when test="-1 != ownerId">
+                AND type = #{type}
+                AND owner_id = #{ownerId}
+            </when>
+        </choose>
+            AND content like #{keyword}
+    </select>
+
+    <select id="listFirstLevelSubordinateObjectives" parameterType="map" resultType="Objective">
+        SELECT
+            *
+        FROM
+            objective
+        WHERE
+        org_id = #{orgId}
+        AND parent_objective_id = #{parentObjectiveId}
+        AND is_deleted = 0
+    </select>
+
+    <select id="listObjectivesByStartAndEndDeadline" parameterType="map" resultType="Objective">
+        SELECT
+            *
+        FROM
+            objective
+        WHERE
+            org_id = #{orgId}
+            AND <![CDATA[ deadline >= #{startDeadline} ]]>
+            AND <![CDATA[ deadline < #{endDeadline} ]]>
+            AND is_deleted = 0
+    </select>
+
+    <select id="listObjectivesByPriorityAndOrderItem" parameterType="map" resultType="Objective">
+        SELECT
+            *
+        FROM
+            objective
+        WHERE
+        org_id = #{orgId}
+        <choose>
+            <when test="priority != -1">
+                AND priority = #{priority}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+        AND is_deleted = 0
+        <choose>
+            <!-- 按照ID降序排列-->
+            <when test="orderItem == -1">
+                order by objective_id desc
+            </when>
+            <!-- 按照优先级升序排列-->
+            <when test="orderItem == 2">
+                order by priority asc
+            </when>
+            <!-- 按照优先级降序排列-->
+            <when test="orderItem == -2">
+                order by priority desc
+            </when>
+            <!-- 按照截止日升序排列-->
+            <when test="orderItem == 3">
+                order by deadline asc
+            </when>
+            <!-- 按照截止日降序排列-->
+            <when test="orderItem == -3">
+                order by deadline desc
+            </when>
+            <!-- 按照更新时间升序排列-->
+            <when test="orderItem == 5">
+                order by last_modified_time asc
+            </when>
+            <!-- 按照更新时间降序排列-->
+            <when test="orderItem == -5">
+                order by last_modified_time desc
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="listObjectivesWithRegularRemindType" parameterType="java.lang.Long" resultType="Objective">
+        SELECT
+            *
+        FROM
+            objective
+        WHERE
+            org_id = #{orgId}
+            AND regular_remind_type != 1
+            AND is_deleted = 0;
+    </select>
+
+</mapper>

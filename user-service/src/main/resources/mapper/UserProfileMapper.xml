@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.UserProfileMapper">
+
+    <!--insert and set vals-->
+    <insert id="insertUserProfile"
+            parameterType="UserProfile">
+        INSERT INTO user_profile
+            (org_id,
+            user_id,
+            onboarding_template_id,
+            profile_template_id,
+            user_status,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted,
+        <foreach collection="profileFields" item="field" index="index"
+                 open="" close=")" separator=",">
+            <if test="null != field.dataValue">
+                val${field.physicalIndex}
+            </if>
+        </foreach>
+        VALUES
+            (#{orgId},
+            #{userId},
+            #{onboardingTemplateId},
+            #{profileTemplateId},
+            #{userStatus},
+            #{userId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{userId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0,
+        <foreach collection="profileFields" item="field" index="index"
+                 open="" close=")" separator=",">
+            <if test="null != field.dataValue">
+                #{field.dataValue}
+            </if>
+        </foreach>
+        <selectKey keyProperty="userProfileId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findUserProfileRawMapByOrgIdAndUserId"
+            parameterType="map"
+            resultType="map">
+        SELECT
+            user_profile_id         AS userProfileId,
+            org_id                  AS orgId,
+            user_id                 AS userId,
+            onboarding_template_id  AS onboardingTemplateId,
+            profile_template_id     AS profileTemplateId,
+            user_status             AS userStatus,
+            created_user_id         AS createdUserId,
+            created_time            AS createTime,
+            last_modified_user_id   AS lastModifiedUserId,
+            last_modified_time      AS lastModifiedTime,
+            is_deleted              AS isDeleted
+            <foreach collection="profileFields" item="field" index="index"
+                     open="" close="" separator="">
+                <if test="field.dataType != 1">
+                    , val${field.physicalIndex} AS ${field.referenceName}
+                </if>
+            </foreach>
+        FROM
+            user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="findUserProfileWithoutFieldDataByOrgIdAndUserId"
+            parameterType="map"
+            resultType="UserProfile">
+        SELECT
+            *
+        FROM
+            user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="findProfileTemplateIdByOrgIdAndUserId"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            profile_template_id
+        FROM
+            user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listUserIdByProfileTemplateId"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            user_id
+        FROM
+            user_profile
+        WHERE
+            org_id = #{orgId}
+            AND profile_template_id = #{profileTemplateId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listUserIdByOnboardingTemplateId"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            user_id
+        FROM
+            user_profile
+        WHERE
+            org_id = #{orgId}
+            AND onboarding_template_id = #{onboardingTemplateId}
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateUserStatusByOrgIdAndUserId"
+            parameterType="UserProfile">
+        UPDATE user_profile
+        SET
+            user_status = #{userStatus},
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="updateUserProfileByOrgIdAndUserIdSelective"
+            parameterType="UserProfile">
+        UPDATE user_profile
+        <set>
+            <foreach collection="profileFields" item="field" index="index">
+                <if test="null != field.dataValue and '' != field.dataValue">
+                    val${field.physicalIndex} = #{field.dataValue},
+                </if>
+                <if test="null != field.dataValue and '' == field.dataValue">
+                    val${field.physicalIndex} = NULL,
+                </if>
+            </foreach>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="deleteUserProfileOrgIdAndUserId"
+            parameterType="UserProfile">
+        UPDATE user_profile
+        SET
+            is_deleted = 1,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="wipeFieldValueByOrgIdAndProfileTemplateIdAndPhysicalIndex"
+            parameterType="map">
+        UPDATE
+            user_profile
+        <set>
+            val${physicalIndex} = NULL,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND profile_template_id = #{profileTemplateId}
+            AND is_deleted = 0
+    </update>
+
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.common.ContentIndexMapper">
+
+    <insert id="batchInsertContentIndexs"
+            parameterType="java.util.List">
+        <selectKey keyProperty="contentIndexId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO content_index
+        (org_id,
+        type,
+        content_object_id,
+        content,
+        pinyin,
+        abbreviation)
+        VALUES
+        <foreach collection="list" item="contentIndex" index="index"
+                 separator=",">
+            (#{contentIndex.orgId},
+            #{contentIndex.type},
+            #{contentIndex.contentObjectId},
+            #{contentIndex.content},
+            #{contentIndex.pinyin},
+            #{contentIndex.abbreviation})
+        </foreach>
+    </insert>
+
+    <update id="deleteContentIndexsByObjectIdAndType" parameterType="map">
+        UPDATE content_index
+        <set>
+            is_deleted = 1
+        </set>
+        WHERE
+        org_id = #{orgId}
+        AND type = #{type}
+        AND content_object_id = #{contentObjectId}
+    </update>
+
+    <select id="listContentObjectIdsByKeywordAndType" parameterType="map" resultType="java.lang.Long">
+        select distinct(content_object_id) from (
+        select content_object_id from content_index
+        where
+            org_id = #{orgId}
+            AND type = #{type}
+            AND is_deleted = 0
+            AND (content like #{keyword}
+            OR abbreviation like #{keyword})
+        union
+        select content_object_id from content_index
+        where
+            org_id = #{orgId}
+            AND type = #{type}
+            AND is_deleted = 0
+            AND pinyin like #{pingyinKeyword}
+            AND abbreviation like #{firstPingyin}
+        ) a
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countItem" parameterType="map" resultType="Long">
+        SELECT count(distinct content_object_id) FROM content_index
+        WHERE
+            org_id = #{orgId}
+            AND type = #{type}
+            AND is_deleted = 0
+            AND (content like #{keyword}
+            OR pinyin like #{keyword}
+            OR abbreviation like #{keyword})
+    </select>
+
+</mapper>

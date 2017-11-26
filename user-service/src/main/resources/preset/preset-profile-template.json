@@ -1,0 +1,1057 @@
+{
+  "fields": [
+
+    {
+      "displayName": "工作信息",
+      "referenceName": "essentialInfo",
+      "dataType": 1,
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 0,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 1,
+      "isEnabled": 1,
+      "isEnabledEditable": 0,
+      "isMandatory": 0,
+      "isMandatoryEditable": 0
+    },
+    {
+      "displayName": "姓名",
+      "referenceName": "fullName",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 0,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 1,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 0,
+      "isMandatory": 1,
+      "isMandatoryEditable": 0
+    },
+    {
+      "displayName": "企业邮箱",
+      "referenceName": "emailAddress",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100,
+        "isUnique": 1
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 0,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 1,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 0,
+      "isMandatory": 1,
+      "isMandatoryEditable": 0
+    },
+    {
+      "displayName": "工号",
+      "referenceName": "employeeId",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100,
+        "isUnique": 1
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 0,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "职位",
+      "referenceName": "jobTitle",
+      "dataType": 10,
+      "typeSpec": {
+        "pickOptions": [
+          {
+            "optionValue": "开发工程师",
+            "optionIndex": 0,
+            "isDefault": 1
+          },
+          {
+            "optionValue": "测试工程师",
+            "optionIndex": 1,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "售前工程师",
+            "optionIndex": 2,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "实施工程师",
+            "optionIndex": 3,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "技术经理",
+            "optionIndex": 4,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "技术总监",
+            "optionIndex": 5,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "CTO",
+            "optionIndex": 6,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "产品经理",
+            "optionIndex": 7,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "产品总监",
+            "optionIndex": 8,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "视觉设计师",
+            "optionIndex": 9,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "交互设计师",
+            "optionIndex": 10,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "设计总监",
+            "optionIndex": 11,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "数据分析师",
+            "optionIndex": 12,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "运营",
+            "optionIndex": 13,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "编辑",
+            "optionIndex": 14,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "运营总监",
+            "optionIndex": 15,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "COO",
+            "optionIndex": 16,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "市场推广",
+            "optionIndex": 17,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "市场策划",
+            "optionIndex": 18,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "商务拓展",
+            "optionIndex": 19,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "市场总监",
+            "optionIndex": 20,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "销售专员",
+            "optionIndex": 21,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "销售总监",
+            "optionIndex": 22,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "HR",
+            "optionIndex": 23,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "HRD",
+            "optionIndex": 24,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "行政",
+            "optionIndex": 25,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "会计",
+            "optionIndex": 26,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "出纳",
+            "optionIndex": 27,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "CMO",
+            "optionIndex": 28,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "CEO",
+            "optionIndex": 29,
+            "isDefault": 0
+          }
+        ]
+      },
+      "isTypeSpecEditable": 1,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 0,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 1,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 0
+    },
+    {
+      "displayName": "职级",
+      "referenceName": "jobLevel",
+      "dataType": 10,
+      "typeSpec": {
+        "pickOptions": [
+          {
+            "optionValue": "无",
+            "optionIndex": 0,
+            "isDefault": 1
+          },
+          {
+            "optionValue": "初级",
+            "optionIndex": 1,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "高级",
+            "optionIndex": 2,
+            "isDefault": 0
+          }
+        ]
+      },
+      "isTypeSpecEditable": 1,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 0,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 0
+    },
+    {
+      "displayName": "身份证号",
+      "referenceName": "citizenId",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100,
+        "isUnique": 1
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 0,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 0,
+      "isMandatory": 0,
+      "isMandatoryEditable": 0
+    },
+
+    {
+      "displayName": "基本信息",
+      "referenceName": "basicInfo",
+      "dataType": 1,
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 0,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 1,
+      "isEnabled": 1,
+      "isEnabledEditable": 0,
+      "isMandatory": 0,
+      "isMandatoryEditable": 0
+    },
+    {
+      "displayName": "昵称",
+      "referenceName": "nickName",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "性别",
+      "referenceName": "gender",
+      "dataType": 10,
+      "typeSpec": {
+        "pickOptions": [
+          {
+            "optionValue": "男",
+            "optionIndex": 0,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "女",
+            "optionIndex": 1,
+            "isDefault": 0
+          }
+        ]
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "生日",
+      "referenceName": "birthday",
+      "dataType": 4,
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "头像",
+      "referenceName": "avatarUrl",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 1,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 0,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "个性签名",
+      "referenceName": "signatureLine",
+      "dataType": 6,
+      "typeSpec": {
+        "maxLength": 255
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 1,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 0,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "个人介绍",
+      "referenceName": "selfIntro",
+      "dataType": 6,
+      "typeSpec": {
+        "maxLength": 255
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 1,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 0,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "工位",
+      "referenceName": "seatLocation",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "工作电话",
+      "referenceName": "workPhone",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "简历",
+      "referenceName": "resume",
+      "dataType": 7,
+      "typeSpec": {
+        "maxLength": 131072
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 1,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 0,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "学历",
+      "referenceName": "degreeLevel",
+      "dataType": 10,
+      "typeSpec": {
+        "pickOptions": [
+          {
+            "optionValue": "小学",
+            "optionIndex": 0,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "初中",
+            "optionIndex": 1,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "高中或中职",
+            "optionIndex": 2,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "大专",
+            "optionIndex": 3,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "本科",
+            "optionIndex": 4,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "硕士",
+            "optionIndex": 5,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "博士",
+            "optionIndex": 6,
+            "isDefault": 0
+          }
+        ]
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "毕业院校",
+      "referenceName": "collegeName",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "婚姻状态",
+      "referenceName": "maritalStatus",
+      "dataType": 10,
+      "typeSpec": {
+        "pickOptions": [
+          {
+            "optionValue": "有配偶",
+            "optionIndex": 0,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "无配偶",
+            "optionIndex": 1,
+            "isDefault": 0
+          }
+        ]
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+
+    {
+      "displayName": "联系方式",
+      "referenceName": "contactInfo",
+      "dataType": 1,
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 0,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 1,
+      "isEnabled": 1,
+      "isEnabledEditable": 0,
+      "isMandatory": 0,
+      "isMandatoryEditable": 0
+    },
+    {
+      "displayName": "手机号",
+      "referenceName": "mobilePhone",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 1,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 0,
+      "isMandatory": 1,
+      "isMandatoryEditable": 0
+    },
+    {
+      "displayName": "个人邮箱",
+      "referenceName": "personalEmail",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "现住址",
+      "referenceName": "livingAddress",
+      "dataType": 8,
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 1,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "微信",
+      "referenceName": "weixinAccount",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 0,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "QQ",
+      "referenceName": "QQAccount",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 0,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "微博",
+      "referenceName": "weiboAccount",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 0,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "LinkedIn",
+      "referenceName": "linkedinAccount",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 0,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "个人网址",
+      "referenceName": "personalWebsite",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 0,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+
+    {
+      "displayName": "薪酬福利相关",
+      "referenceName": "payrollInfo",
+      "dataType": 1,
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 0,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 1,
+      "isEnabled": 1,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "工资卡号",
+      "referenceName": "payrollAccount",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "工资卡开户行",
+      "referenceName": "payrollBank",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "公积金卡号",
+      "referenceName": "gongjijinAccount",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "社保账号",
+      "referenceName": "shebaoAccount",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "户籍类型",
+      "referenceName": "residenceType",
+      "dataType": 10,
+      "typeSpec": {
+        "pickOptions": [
+          {
+            "optionValue": "本地城镇",
+            "optionIndex": 0,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "本地农村",
+            "optionIndex": 1,
+            "isDefault": 0,
+            "isDeprecated": 1
+          },
+          {
+            "optionValue": "外地城镇",
+            "optionIndex": 2,
+            "isDefault": 0
+          },
+          {
+            "optionValue": "外地农村",
+            "optionIndex": 3,
+            "isDefault": 0
+          }
+        ]
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "户籍地址",
+      "referenceName": "residenceAddress",
+      "dataType": 8,
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "一寸免冠照",
+      "referenceName": "officialPhoto",
+      "dataType": 13,
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "身份证正反面照",
+      "referenceName": "citizenIdCopy",
+      "dataType": 14,
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 1,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+
+    {
+      "displayName": "紧急联系人",
+      "referenceName": "emergencyContactInfo",
+      "dataType": 1,
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 0,
+      "isOnboardingStaffEditable": 0,
+      "isActiveStaffEditable": 0,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 1,
+      "isEnabled": 1,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "紧急联系人姓名",
+      "referenceName": "emergencyContactName",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 0,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "社会关系",
+      "referenceName": "socialRelationship",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 0,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "联系电话",
+      "referenceName": "ordinaryPhone",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 0,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    },
+    {
+      "displayName": "备用电话",
+      "referenceName": "backupPhone",
+      "dataType": 5,
+      "typeSpec": {
+        "maxLength": 100
+      },
+      "isTypeSpecEditable": 0,
+      "isSystemRequired": 0,
+      "isOnboardingStaffEditable": 1,
+      "isActiveStaffEditable": 1,
+      "isPublicVisible": 0,
+      "isPublicVisibleEditable": 0,
+      "isEnabled": 0,
+      "isEnabledEditable": 1,
+      "isMandatory": 0,
+      "isMandatoryEditable": 1
+    }
+  ],
+
+  "relations": {
+    "essentialInfo": [
+      "fullName",
+      "emailAddress",
+      "employeeId",
+      "jobTitle",
+      "jobLevel",
+      "enrollDate",
+      "citizenId"
+    ],
+    "basicInfo": [
+      "nickName",
+      "gender",
+      "birthday",
+      "avatarUrl",
+      "signatureLine",
+      "selfIntro",
+      "seatLocation",
+      "workPhone",
+      "resume",
+      "degreeLevel",
+      "collegeName",
+      "maritalStatus"
+    ],
+    "contactInfo": [
+      "mobilePhone",
+      "personalEmail",
+      "livingAddress",
+      "weixinAccount",
+      "QQAccount",
+      "weiboAccount",
+      "linkedinAccount",
+      "personalWebsite"
+    ],
+    "payrollInfo": [
+      "payrollAccount",
+      "payrollBank",
+      "gongjijinAccount",
+      "shebaoAccount",
+      "residenceType",
+      "residenceAddress",
+      "officialPhoto",
+      "citizenIdCopy"
+    ],
+    "emergencyContactInfo": [
+      "emergencyContactName",
+      "socialRelationship",
+      "ordinaryPhone",
+      "backupPhone"
+    ]
+  }
+
+}
+

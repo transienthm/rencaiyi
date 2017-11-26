@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.review.server.dao.ReviewTemplateMapper">
+
+    <insert id="insertReviewTemplate"
+            parameterType="ReviewTemplate">
+        INSERT INTO review_template
+        (
+            org_id,
+            template_name,
+            published_time,
+            start_time,
+            end_time,
+            self_review_deadline,
+            peer_review_deadline,
+            public_deadline,
+            is_reviewer_anonymous,
+            state,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend,
+            is_deleted
+        )
+        VALUES
+        (
+            #{orgId},
+            #{templateName},
+            #{publishedTime},
+            #{startTime},
+            #{endTime},
+            #{selfReviewDeadline},
+            #{peerReviewDeadline},
+            #{publicDeadline},
+            #{isReviewerAnonymous},
+            #{state},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{lastModifiedUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{extend},
+            0
+        )
+        <selectKey keyProperty="templateId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findReviewTemplate"
+            parameterType="map"
+            resultType="ReviewTemplate">
+        SELECT
+            *
+        FROM
+            review_template
+        WHERE
+            template_id = #{templateId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listReviewTemplate"
+            parameterType="map"
+            resultType="ReviewTemplate">
+        SELECT
+            *
+        FROM
+            review_template
+        WHERE
+            org_id = #{orgId}
+            AND state IN
+            <foreach collection="statuses" item="status" index="index"
+                     open="(" separator="," close=")">
+                #{status}
+            </foreach>
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countReviewTemplate"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            count(1)
+        FROM
+            review_template
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <!-- used for schedule task -->
+    <select id="listActiveReviewTemplate"
+            parameterType="map"
+            resultType="ReviewTemplate">
+        SELECT
+            *
+        FROM
+            review_template
+        WHERE
+            <!-- for now list all -->
+            <!-- org_id = #{orgId} -->
+            <!-- in progress -->
+            state = 2
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateReviewTemplate"
+            parameterType="ReviewTemplate">
+        UPDATE
+            review_template
+        <set>
+            <if test="null != templateName">template_name = #{templateName},</if>
+            <if test="null != publishedTime">published_time = #{publishedTime},</if>
+            <if test="null != startTime">start_time = #{startTime},</if>
+            <if test="null != endTime">end_time = #{endTime},</if>
+            <if test="null != selfReviewDeadline">self_review_deadline = #{selfReviewDeadline},</if>
+            <if test="null != peerReviewDeadline">peer_review_deadline = #{peerReviewDeadline},</if>
+            <if test="null != publicDeadline">public_deadline= #{publicDeadline},</if>
+            <if test="null != state">state = #{state},</if>
+            <if test="null != extend">extend = #{extend},</if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            template_id = #{templateId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="finishReviewTemplate"
+            parameterType="map">
+        UPDATE
+            review_template
+        SET
+            state = 3,
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        WHERE
+            template_id = #{templateId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="deleteReviewTemplate"
+            parameterType="ReviewTemplate">
+    UPDATE
+        review_template
+    SET
+        is_deleted = 1
+    WHERE
+        template_id = #{templateId}
+        AND org_id = #{orgId}
+        AND is_deleted = 0
+    </update>
+
+    <select id="listReviewTemplateByTemplateIds"
+            parameterType="map"
+            resultType="ReviewTemplate">
+    SELECT
+        *
+    FROM
+        review_template
+    WHERE
+        org_id = #{orgId}
+        AND template_id in
+        <foreach item="item" index="index" collection="templateIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="listAllValidReviewTemplates"
+            parameterType="map"
+            resultType="ReviewTemplate">
+        SELECT
+            *
+        FROM
+            review_template
+        WHERE
+            org_id = #{orgId}
+        AND is_deleted = 0
+    </select>
+
+</mapper>

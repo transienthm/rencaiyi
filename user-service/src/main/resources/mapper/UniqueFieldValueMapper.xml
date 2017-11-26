@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.UniqueFieldValueMapper">
+
+    <insert id="insertUniqueFieldValue"
+            parameterType="UniqueFieldValue">
+        INSERT INTO unique_field_value
+            (org_id,
+            profile_field_id,
+            data_type,
+            data_value,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{profileFieldId},
+            #{dataType},
+            #{dataValue},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="uniqueFieldValueId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findUniqueFieldValueByProfileFieldIdAndDataValue"
+            parameterType="UniqueFieldValue"
+            resultType="UniqueFieldValue">
+        SELECT
+            *
+        FROM
+            unique_field_value
+        WHERE
+            org_id = #{orgId}
+            AND profile_field_id = #{profileFieldId}
+            AND data_value = #{dataValue}
+            AND is_deleted = 0
+        <if test="forUpdate == 1">
+            FOR UPDATE
+        </if>
+    </select>
+
+    <update id="deleteUniqueFieldValueByProfileFieldIdAndDataValue"
+        parameterType="map">
+        UPDATE
+            unique_field_value
+        SET
+            is_deleted = 1
+        WHERE
+            org_id = #{orgId}
+            AND profile_field_id = #{profileFieldId}
+            AND data_value = #{dataValue}
+            AND is_deleted = 0
+    </update>
+
+    <!--<select id="findDocumentByPrimaryKey"-->
+            <!--parameterType="map"-->
+            <!--resultType="Document">-->
+        <!--SELECT-->
+        <!--*-->
+        <!--FROM-->
+        <!--document-->
+        <!--WHERE-->
+        <!--document_id = #{documentId}-->
+        <!--AND org_id = #{orgId}-->
+        <!--AND is_deleted = 0-->
+    <!--</select>-->
+
+    <!--<select id="listDocumentByOrgId"-->
+            <!--parameterType="long"-->
+            <!--resultType="Document">-->
+        <!--SELECT-->
+        <!--*-->
+        <!--FROM-->
+        <!--document-->
+        <!--WHERE-->
+        <!--org_id = #{orgId}-->
+        <!--AND is_deleted = 0-->
+    <!--</select>-->
+
+    <!--<update id="updateDocumentByPrimaryKeySelective"-->
+            <!--parameterType="Document">-->
+        <!--UPDATE document-->
+        <!--<set>-->
+            <!--<if test="null != documentName">-->
+                <!--document_name = #{documentName},-->
+            <!--</if>-->
+            <!--<if test="null != storageStatus">-->
+                <!--storage_status = #{storageStatus},-->
+            <!--</if>-->
+            <!--<if test="null != isDeleted">-->
+                <!--is_deleted = #{isDeleted},-->
+            <!--</if>-->
+            <!--last_modified_user_id = #{lastModifiedUserId},-->
+            <!--last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)-->
+        <!--</set>-->
+        <!--WHERE-->
+        <!--document_id = #{documentId}-->
+        <!--and org_id = #{orgId}-->
+        <!--and is_deleted = 0-->
+    <!--</update>-->
+
+</mapper>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.survey.SurveyItemMapper">
+
+    <insert id="insertSurveyItem"
+            parameterType="SurveyItem">
+        <selectKey keyProperty="surveyItemId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO survey_item
+            (org_id,
+            survey_item_type,
+            question,
+            description,
+            low_label,
+            high_label,
+            start_time,
+            end_time,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+            (#{orgId},
+            #{surveyItemType},
+            #{question},
+            <choose>
+                <when test="null == description">
+                    "",
+                </when>
+                <otherwise>
+                    #{description},
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="null == lowLabel">
+                    "",
+                </when>
+                <otherwise>
+                    #{lowLabel},
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="null == highLabel">
+                    "",
+                </when>
+                <otherwise>
+                    #{highLabel},
+                </otherwise>
+            </choose>
+            #{startTime},
+            #{endTime},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+    </insert>
+
+    <update id="deleteSurveyItemByPrimaryKey" parameterType="map">
+        UPDATE survey_item
+        <set>
+            is_deleted = 1,
+            last_modified_user_id = #{actorUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        survey_item_id = #{surveyItemId}
+        AND org_id = #{orgId}
+    </update>
+
+    <update id="updateSurveyItem"
+            parameterType="SurveyItem">
+        UPDATE survey_item
+        <set>
+            <if test="null != question">
+                question = #{question},
+            </if>
+            <if test="null != description">
+                description = #{description},
+            </if>
+            <if test="null != lowLabel">
+                low_label = #{lowLabel},
+            </if>
+            <if test="null != highLabel">
+                high_label = #{highLabel},
+            </if>
+            <if test="null != endTime">
+                end_time = #{endTime},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+        survey_item_id = #{surveyItemId}
+        AND org_id = #{orgId}
+        AND is_deleted = 0
+    </update>
+
+    <select id="findSurveyItemByPrimaryKey" parameterType="map" resultType="SurveyItem">
+        SELECT
+            *
+        FROM
+            survey_item
+        WHERE
+            survey_item_id = #{surveyItemId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listSurveyItemsByOrgIdAndItemIds" parameterType="map" resultType="SurveyItem">
+        SELECT
+            *
+        FROM
+            survey_item
+        WHERE
+            org_id = #{orgId}
+            AND survey_item_id IN
+            <foreach item="item" index="index" collection="surveyItemIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND is_deleted = 0
+            ORDER BY survey_item_type
+    </select>
+
+    <select id="listAvailableSurveyItemsByOrgIdAndTimestamp" parameterType="map" resultType="SurveyItem">
+        SELECT
+            *
+        FROM
+            survey_item
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+            <choose>
+                <when test="timestamp != 0">
+                    AND <![CDATA[ start_time < #{timestamp} ]]>
+                    AND <![CDATA[ end_time > #{timestamp} ]]>
+                </when>
+            </choose>
+            ORDER BY end_time DESC, created_time DESC
+            LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countSurveyItemsByOrgId" parameterType="map" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            survey_item
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listSamePeriodSurveyItemsByOrgId" parameterType="map" resultType="SurveyItem">
+        SELECT
+            *
+        FROM
+            survey_item
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+            AND <![CDATA[ start_time = #{startTime} ]]>
+            AND <![CDATA[ end_time = #{endTime} ]]>
+    </select>
+
+</mapper>

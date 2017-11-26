@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.ConvrScheduleMapper">
+
+    <insert id="insertConvrSchedule"
+            parameterType="ConvrSchedule">
+        INSERT INTO convr_schedule
+            (org_id,
+            source_user_id,
+            target_user_id,
+            period_type,
+            remind_day,
+            is_active,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{sourceUserId},
+            #{targetUserId},
+            #{periodType},
+            #{remindDay},
+            1,
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="convrScheduleId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findConvrScheduleByPrimaryKeyAndOrgId"
+            parameterType="map"
+            resultType="ConvrSchedule">
+        SELECT
+            *
+        FROM
+            convr_schedule
+        WHERE
+            convr_schedule_id = #{convrScheduleId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="findConvrScheduleBySourceUserIdAndTargetUserIdAndOrgId"
+            parameterType="map"
+            resultType="ConvrSchedule">
+        SELECT
+            *
+        FROM
+            convr_schedule
+        WHERE
+            org_id = #{orgId}
+            AND source_user_id = #{sourceUserId}
+            AND target_user_id = #{targetUserId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listConvrScheduleByPrimaryKeyAndOrgId"
+            parameterType="map"
+            resultType="ConvrSchedule">
+        SELECT
+            *
+        FROM
+            convr_schedule
+        WHERE
+            org_id = #{orgId}
+            AND convr_schedule_id IN
+            <foreach collection="convrScheduleIds" item="convrScheduleId" index="index"
+                     open="(" separator="," close=")">
+                #{convrScheduleId}
+            </foreach>
+            AND is_deleted = 0
+    </select>
+
+    <select id="listConvrScheduleStatByPrimaryKeyAndOrgId"
+            parameterType="map"
+            resultType="ConvrSchedule">
+        SELECT
+            convr_schedule_id,
+            COUNT(convr_record_id) AS convr_count,
+            MAX(convr_date) AS last_convr_date
+        FROM
+            convr_record
+        WHERE
+            org_id = #{orgId}
+            AND convr_schedule_id IN
+            <foreach collection="convrScheduleIds" item="convrScheduleId" index="index"
+                     open="(" separator="," close=")">
+                #{convrScheduleId}
+            </foreach>
+            AND is_deleted = 0
+        GROUP BY
+            convr_schedule_id
+    </select>
+
+    <select id="listConvrScheduleByOrgIdAndSourceUserId"
+            parameterType="map"
+            resultType="ConvrSchedule">
+        SELECT
+            *
+        FROM
+            convr_schedule
+        WHERE
+            org_id = #{orgId}
+            AND source_user_id = #{sourceUserId}
+            AND is_deleted = 0
+        -- TODO: modify paging
+        ORDER BY created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="listConvrScheduleByTargetUserIdAndOrgId"
+            parameterType="map"
+            resultType="ConvrSchedule">
+        SELECT
+            *
+        FROM
+            convr_schedule
+        WHERE
+            org_id = #{orgId}
+            AND target_user_id = #{targetUserId}
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="countConvrScheduleByOrgIdAndSourceUserId"
+            parameterType="map"
+            resultType="int">
+        SELECT
+            count(convr_schedule_id)
+        FROM
+            convr_schedule
+        WHERE
+            org_id = #{orgId}
+            AND source_user_id = #{sourceUserId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listTargetUserIdsBySourceUserIdAndOrgId"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            target_user_id
+        FROM
+            convr_schedule
+        WHERE
+            org_id = #{orgId}
+            AND source_user_id = #{sourceUserId}
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateConvrScheduleByPrimaryKeyAndOrgIdSelective"
+            parameterType="ConvrSchedule">
+        UPDATE convr_schedule
+        <set>
+            <if test="null != periodType">
+                period_type = #{periodType},
+            </if>
+            <if test="null != remindDay">
+                remind_day = #{remindDay},
+            </if>
+            <if test="null != isActive">
+                is_active = #{isActive},
+            </if>
+            <if test="null != isDeleted">
+                is_deleted = #{isDeleted},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            convr_schedule_id = #{convrScheduleId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+</mapper>

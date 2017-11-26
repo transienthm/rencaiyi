@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.thirdparty.server.dao.message.MessageMapper">
+
+    <insert id="insertMessage"
+            parameterType="Message">
+        insert into message
+            (org_id,
+            senders,
+            template_id,
+            type,
+            object_id,
+            receiver_id,
+            object_content,
+            is_read,
+            created_time)
+        values
+            (#{orgId},
+            #{senders},
+            #{templateId},
+            #{type},
+            #{objectId},
+            #{receiverId},
+            #{objectContent},
+            #{isRead},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+        <selectKey keyProperty="messageId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!--查找未读的某一条特定消息-->
+    <select id="findPersonalMessageByTypeAndTemplatedIdAndObjectIdAndReceiverIdAndStatus" parameterType="Message" resultType="Message">
+        select * from message
+        where
+            org_id = #{orgId}
+            AND receiver_id = #{receiverId}
+            AND type = 0
+            AND template_id = #{templateId}
+            AND object_id = #{objectId}
+            AND is_read = #{isRead}
+            AND is_deleted = 0
+            FOR UPDATE
+    </select>
+
+    <select id="findSystemMessageByTypeAndTemplatedIdAndObjectId" parameterType="Message" resultType="Message">
+        select * from message
+        where org_id = #{orgId}
+        AND type = 1
+        AND template_id = #{templateId}
+        AND object_id = #{objectId}
+        AND is_deleted = 0
+        FOR UPDATE
+    </select>
+
+    <update id="updateSenders" parameterType="map">
+        update message
+        <set>
+            senders = #{senders},
+            created_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        where org_id = #{orgId}
+        AND message_id = #{messageId}
+        AND is_deleted = 0
+    </update>
+
+    <update id="batchUpdateStatus" parameterType="map">
+        update message
+        <set>
+            is_read = #{isRead}
+        </set>
+        where org_id = #{orgId}
+        AND receiver_id = #{receiverId}
+        AND message_id IN
+        <foreach item="item" index="index" collection="messageIds"
+                 open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND is_deleted = 0
+    </update>
+
+    <select id="listAllMessages" parameterType="map" resultType="Message">
+        select * from
+        (
+        <!--获取未读的系统消息-->
+        select message_id,org_id,senders,template_id,type,object_id,#{receiverId} as receiver_id,object_content,0 as is_read,created_time,is_deleted from message
+        where org_id = #{orgId} AND type = 1
+        <if test="readSystemMessageIds.size() > 0">
+            AND message_id NOT IN
+            <foreach item="item" index="index" collection="readSystemMessageIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            union all
+            <!--获取已读的系统消息-->
+            select message_id,org_id,senders,template_id,type,object_id,#{receiverId} as receiver_id,object_content,1 as is_read,created_time,is_deleted from message where org_id = #{orgId} AND type = 1
+            AND message_id IN
+            <foreach item="item" index="index" collection="readSystemMessageIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        union all
+        select * from message where org_id = #{orgId} AND receiver_id = #{receiverId} AND type = 0
+        ) A
+        WHERE <![CDATA[ created_time > #{onboardingTime} ]]> AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="listAllMessagesWithoutPagedQuery" parameterType="map" resultType="Message">
+        select * from
+        (
+        <!--获取未读的系统消息-->
+        select message_id,org_id,senders,template_id,type,object_id,#{receiverId} as receiver_id,object_content,0 as is_read,created_time,is_deleted from message
+        where org_id = #{orgId} AND type = 1
+        <if test="readSystemMessageIds.size() > 0">
+            AND message_id NOT IN
+            <foreach item="item" index="index" collection="readSystemMessageIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            union all
+            <!--获取已读的系统消息-->
+            select message_id,org_id,senders,template_id,type,object_id,#{receiverId} as receiver_id,object_content,1 as is_read,created_time,is_deleted from message where org_id = #{orgId} AND type = 1
+            AND message_id IN
+            <foreach item="item" index="index" collection="readSystemMessageIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        union all
+        select * from message where org_id = #{orgId} AND receiver_id = #{receiverId} AND type = 0
+        ) A
+        WHERE <![CDATA[ created_time > #{onboardingTime} ]]> AND is_deleted = 0
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="getUnReadMessageNumber" parameterType="map" resultType="java.lang.Integer">
+        select count(1) from
+        (
+        <!--获取未读的系统消息-->
+        select * from message where org_id = #{orgId} AND type = 1
+        <if test="readSystemMessageIds.size() > 0">
+            AND message_id NOT IN
+            <foreach item="item" index="index" collection="readSystemMessageIds"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+            union all
+            <!--获取未读的系统消息-->
+            select * from message where org_id=#{orgId} AND receiver_id = #{receiverId} AND type = 0  AND is_read = 0
+        ) A
+        WHERE <![CDATA[ created_time > #{onboardingTime} ]]> AND is_deleted = 0
+    </select>
+</mapper>

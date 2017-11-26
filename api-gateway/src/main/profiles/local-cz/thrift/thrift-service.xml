@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="userFacadeProxy" name="userFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.userorg.facade.UserFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/userorg/local-cz"></property>
+        <property name="port" value="8141"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="userProfileFacadeProxy" name="userProfileFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.userorg.facade.UserProfileFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/userprofile/local-cz"></property>
+        <property name="port" value="8301"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="tokenFacadeProxy" name="tokenFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.userorg.facade.TokenFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/token/local-cz"></property>
+        <property name="port" value="8142"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="captchaFacadeProxy" name="captchaFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.thirdparty.client.facade.CaptchaFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/captcha/local-cz"></property>
+        <property name="port" value="8103"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="smsFacadeProxy" name="smsFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.thirdparty.client.facade.SmsFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/sms/local-cz"></property>
+        <property name="port" value="8102"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="securityModelFacadeProxy" name="securityModelFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.userorg.facade.SecurityModelFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/securitymodel/local-cz"></property>
+        <property name="port" value="8143"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="feedFacadeProxy" name="feedFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.feed.client.facade.FeedFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/feed/local-cz"></property>
+        <property name="port" value="8121"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="reviewTemplateFacadeProxy" name="reviewTemplateFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.review.client.facade.ReviewTemplateFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/review/template/local-cz"></property>
+        <property name="port" value="8222"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="reviewActivityFacadeProxy" name="reviewActivityFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.review.client.facade.ReviewActivityFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/review/activity/local-cz"></property>
+        <property name="port" value="8223"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="reviewActivityDetailFacadeProxy" name="reviewActivityDetailFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.review.client.facade.ReviewActivityDetailFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/review/activitydetail/local-cz"></property>
+        <property name="port" value="8224"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="reviewActivityProjectFacadeProxy" name="reviewActivityProjectFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.review.client.facade.ReviewActivityProjectFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/review/activityproject/local-cz"></property>
+        <property name="port" value="8225"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="reviewInvitationFacadeProxy" name="reviewInvitationFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.review.client.facade.ReviewInvitationFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/review/invitation/local-cz"></property>
+        <property name="port" value="8226"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="reviewInvitationDetailFacadeProxy" name="reviewInvitationDetailFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.review.client.facade.ReviewInvitationDetailFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/review/invitationdetail/local-cz"></property>
+        <property name="port" value="8227"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="reviewInvitationProjectFacadeProxy" name="reviewInvitationProjectFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.review.client.facade.ReviewInvitationProjectFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/review/invitationproject/local-cz"></property>
+        <property name="port" value="8228"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="okrFacadeProxy" name="okrFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.okr.facade.OkrFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/okr/local-cz"></property>
+        <property name="port" value="8144"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="profileTemplateFacadeProxy" name="profileTemplateFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.userorg.facade.ProfileTemplateFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/profileTemplate/local-cz"></property>
+        <property name="port" value="8241"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="onboardingTemplateFacadeProxy" name="onboardingTemplateFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.onboarding.facade.OnboardingTemplateFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/onboardingTemplate/local-cz"></property>
+        <property name="port" value="8242"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="onboardingFlowFacadeProxy" name="onboardingFlowFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.onboarding.facade.OnboardingFlowFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/onboardingFlow/local-cz"></property>
+        <property name="port" value="8243"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="orgFacadeProxy" name="orgFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.userorg.facade.OrgFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/org/local-cz"></property>
+        <property name="port" value="8244"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="documentFacadeProxy" name="documentFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.document.facade.DocumentFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/document/local-cz"></property>
+        <property name="port" value="8261"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="avatarFacadeProxy" name="avatarFacadeProxy" class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.document.facade.AvatarFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/avatar/local-cz"></property>
+        <property name="port" value="8321"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="messageCenterFacadeProxy" name="messageCenterFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.thirdparty.client.facade.MessageCenterFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/message/local-cz"></property>
+        <property name="port" value="8105"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="commonToolFacadeProxy" name="commonToolFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.common.facade.CommonToolFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/commontool/local-cz"></property>
+        <property name="port" value="8145"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="historyLogFacadeProxy" name="historyLogFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.thirdparty.client.facade.HistoryLogFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/historylog/local-cz"></property>
+        <property name="port" value="8106"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="navigationFacadeProxy" name="navigationFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.userorg.facade.NavigationFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/navigation/local-cz"></property>
+        <property name="port" value="8146"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="rewardFacadeProxy" name="rewardFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.feed.client.facade.RewardFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/reward/local-cz"></property>
+        <property name="port" value="8123"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+    <bean id="convrFacadeProxy" name="convrFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface" value="hr.wozai.service.user.client.conversation.facade.ConvrFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/convr/local-cz"></property>
+        <property name="port" value="8341"></property>
+        <property name="timeout" value="10000"></property>
+    </bean>
+
+    <bean id="surveyFacadeProxy" name="surveyFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface"
+                  value="hr.wozai.service.user.client.survey.facade.SurveyFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/survey/local-cz"></property>
+        <property name="port" value="8147"></property>
+        <property name="timeout" value="10000"></property>
+    </bean>
+
+
+    <bean id="labelCloudFacadeProxy" name="labelCloudFacadeProxy"
+          class="hr.wozai.service.servicecommons.thrift.client.ThriftClientProxy">
+        <property name="serviceInterface"
+                  value="hr.wozai.service.nlp.client.labelcloud.facade.LabelCloudFacade"></property>
+        <property name="remoteServiceKey" value="/thrift/service/wozai/nlp/labelcloud/local"></property>
+        <property name="port" value="8501"></property>
+        <property name="timeout" value="20000"></property>
+    </bean>
+
+</beans>

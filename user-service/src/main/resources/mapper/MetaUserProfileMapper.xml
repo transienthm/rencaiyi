@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.MetaUserProfileMapper">
+
+    <!--insert and set vals-->
+    <insert id="insertMetaUserProfile"
+            parameterType="MetaUserProfile">
+        INSERT INTO meta_user_profile
+            (org_id,
+            user_id,
+            profile_template_id,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{userId},
+            #{profileTemplateId},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="metaUserProfileId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="findMetaUserProfileRawMapByOrgIdAndUserId"
+            parameterType="map"
+            resultType="map">
+        SELECT
+            meta_user_profile_id    AS metaUserProfileId,
+            org_id                  AS orgId,
+            user_id                 AS userId,
+            profile_template_id     AS profileTemplateId,
+            created_user_id         AS createdUserId,
+            created_time            AS createTime,
+            last_modified_user_id   AS lastModifiedUserId,
+            last_modified_time      AS lastModifiedTime,
+            is_deleted              AS isDeleted
+            <foreach collection="profileFields" item="field" index="index"
+                     open="" close="" separator="">
+                <if test="field.dataType != 1">
+                    , val${field.physicalIndex} AS ${field.referenceName}
+                </if>
+            </foreach>
+        FROM
+            meta_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="findMetaUserProfileWithoutFieldDataByOrgIdAndUserId"
+            parameterType="map"
+            resultType="MetaUserProfile">
+        SELECT
+            *
+        FROM
+            meta_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="findProfileTemplateIdByOrgIdAndUserId"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            profile_template_id
+        FROM
+            meta_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listUserIdByProfileTemplateId"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            user_id
+        FROM
+            meta_user_profile
+        WHERE
+            org_id = #{orgId}
+            AND profile_template_id = #{profileTemplateId}
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateMetaUserProfileByOrgIdAndUserIdSelective"
+            parameterType="MetaUserProfile">
+        UPDATE meta_user_profile
+        <set>
+            <foreach collection="profileFields" item="field" index="index">
+                <if test="null != field.dataValue and '' != field.dataValue">
+                    val${field.physicalIndex} = #{field.dataValue},
+                </if>
+                <if test="null != field.dataValue and '' == field.dataValue">
+                    val${field.physicalIndex} = NULL,
+                </if>
+            </foreach>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="deleteMetaUserProfileOrgIdAndUserId"
+            parameterType="MetaUserProfile">
+        UPDATE meta_user_profile
+        SET
+            is_deleted = 1,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        WHERE
+            org_id = #{orgId}
+            AND user_id = #{userId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="wipeFieldValueByOrgIdAndProfileTemplateIdAndPhysicalIndex"
+            parameterType="map">
+        UPDATE
+            meta_user_profile
+        <set>
+            val${physicalIndex} = NULL,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            org_id = #{orgId}
+            AND profile_template_id = #{profileTemplateId}
+            AND is_deleted = 0
+    </update>
+
+</mapper>

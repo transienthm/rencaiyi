@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.userorg.ProfileFieldMapper">
+
+    <insert id="insertProfileField"
+            parameterType="ProfileField">
+        INSERT INTO profile_field
+            (org_id,
+            profile_template_id,
+            container_id,
+            display_name,
+            reference_name,
+            logical_index,
+            physical_index,
+            data_type,
+            type_spec,
+            prompt_info,
+            is_type_spec_editable,
+            is_system_required,
+            is_onboarding_staff_editable,
+            is_active_staff_editable,
+            is_public_visible,
+            is_public_visible_editable,
+            is_enabled,
+            is_enabled_editable,
+            is_mandatory,
+            is_mandatory_editable,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+            (#{orgId},
+            #{profileTemplateId},
+            #{containerId},
+            #{displayName},
+            #{referenceName},
+            #{logicalIndex},
+            #{physicalIndex},
+            #{dataType},
+            #{typeSpec},
+            #{promptInfo},
+            #{isTypeSpecEditable},
+            #{isSystemRequired},
+            #{isOnboardingStaffEditable},
+            #{isActiveStaffEditable},
+            #{isPublicVisible},
+            #{isPublicVisibleEditable},
+            #{isEnabled},
+            #{isEnabledEditable},
+            #{isMandatory},
+            #{isMandatoryEditable},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        <selectKey keyProperty="profileFieldId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="batchInsertProfileField"
+            parameterType="java.util.List">
+        <selectKey keyProperty="profileFieldId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO profile_field
+            (org_id,
+            profile_template_id,
+            container_id,
+            display_name,
+            reference_name,
+            logical_index,
+            physical_index,
+            data_type,
+            type_spec,
+            prompt_info,
+            is_type_spec_editable,
+            is_system_required,
+            is_onboarding_staff_editable,
+            is_active_staff_editable,
+            is_public_visible,
+            is_public_visible_editable,
+            is_enabled,
+            is_enabled_editable,
+            is_mandatory,
+            is_mandatory_editable,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            is_deleted)
+        VALUES
+        <foreach collection="list" item="field" index="index"
+                 separator=",">
+            (#{field.orgId},
+            #{field.profileTemplateId},
+            #{field.containerId},
+            #{field.displayName},
+            #{field.referenceName},
+            #{field.logicalIndex},
+            #{field.physicalIndex},
+            #{field.dataType},
+            #{field.typeSpec},
+            #{field.promptInfo},
+            #{field.isTypeSpecEditable},
+            #{field.isSystemRequired},
+            #{field.isOnboardingStaffEditable},
+            #{field.isActiveStaffEditable},
+            #{field.isPublicVisible},
+            #{field.isPublicVisibleEditable},
+            #{field.isEnabled},
+            #{field.isEnabledEditable},
+            #{field.isMandatory},
+            #{field.isMandatoryEditable},
+            #{field.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{field.createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            0)
+        </foreach>
+    </insert>
+
+
+    <select id="findProfileFieldByPrimaryKeyAndOrgId"
+            parameterType="map"
+            resultType="ProfileField">
+        SELECT
+            *
+        FROM
+            profile_field
+        WHERE
+            profile_field_id = #{profileFieldId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+        <if test="forUpdate == 1">
+            FOR UPDATE
+        </if>
+    </select>
+
+    <select id="findProfileFieldByReferenceName"
+            parameterType="map"
+            resultType="ProfileField">
+        SELECT
+            *
+        FROM
+            profile_field
+        WHERE
+            org_id = #{orgId}
+            AND profile_template_id = #{profileTemplateId}
+            AND reference_name = #{referenceName}
+            AND is_deleted = 0
+    </select>
+
+    <!-- Enable gap-lock with "FOR UPDATE" to avoid race condition, if forUpdate is set -->
+    <!-- Should also add @Transactional to group this select and next insert operations -->
+    <select id="listProfileFieldByProfileTemplateId"
+            parameterType="map"
+            resultType="ProfileField">
+        SELECT
+            *
+        FROM
+            profile_field
+        WHERE
+            org_id = #{orgId}
+            AND profile_template_id = #{profileTemplateId}
+            AND is_deleted = 0
+        ORDER BY logical_index
+        <if test="forUpdate == 1">
+            FOR UPDATE
+        </if>
+    </select>
+
+    <!-- Enable gap-lock with "FOR UPDATE" to avoid race condition, if forUpdate is set -->
+    <!-- Should also add @Transactional to group this select and next insert operations -->
+    <select id="listDataProfileFieldByProfileTemplateId"
+            parameterType="map"
+            resultType="ProfileField">
+        SELECT
+            *
+        FROM
+            profile_field
+        WHERE
+            org_id = #{orgId}
+            AND profile_template_id = #{profileTemplateId}
+            AND data_type != 1
+            AND is_deleted = 0
+        ORDER BY logical_index
+        <if test="forUpdate == 1">
+            FOR UPDATE
+        </if>
+    </select>
+
+    <select id="listDataProfileFieldByContainerId"
+            parameterType="map"
+            resultType="ProfileField">
+        SELECT
+            *
+        FROM
+            profile_field
+        WHERE
+            org_id = #{orgId}
+            AND container_id = #{containerId}
+            AND data_type != 1
+            AND is_deleted = 0
+        ORDER BY logical_index
+    </select>
+
+    <!-- Enable gap-lock with "FOR UPDATE" to avoid race condition -->
+    <!-- Should also add @Transactional to group this select and next insert operations -->
+    <select id="findNextLogicalIndexByProfileTemplateIdForUpdate"
+            parameterType="map"
+            resultType="int">
+        SELECT
+            COUNT(1)
+        FROM
+            profile_field
+        WHERE
+            org_id = #{orgId}
+            AND profile_template_id = #{profileTemplateId}
+            AND is_deleted = 0
+        FOR UPDATE
+    </select>
+
+    <update id="batchUpdateLogicalIndexAndContainerIdByPrimaryKey"
+            parameterType="java.util.List">
+        <foreach collection="list" item="field" index="index"
+                 open="" separator=";" close="">
+            UPDATE
+                profile_field
+            <set>
+                container_id = #{field.containerId},
+                logical_index = #{field.logicalIndex},
+                last_modified_user_id = #{field.lastModifiedUserId},
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+            </set>
+            WHERE
+                profile_field_id = #{field.profileFieldId}
+                AND org_id = #{field.orgId}
+                AND is_deleted = 0
+        </foreach>
+    </update>
+
+    <update id="batchDeleteProfileFieldByPrimaryKey"
+            parameterType="map">
+        UPDATE
+            profile_field
+        <set>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            is_deleted = 1
+        </set>
+        WHERE
+            profile_field_id IN
+                <foreach collection="profileFieldIds" item="fieldId" index="index"
+                open="(" separator="," close=")">
+                    #{fieldId}
+                </foreach>
+            AND org_id = #{orgId}
+            ANd is_deleted = 0
+    </update>
+
+    <!--<update id="batchDeleteProfileFieldByProfileTemplateId"-->
+            <!--parameterType="map">-->
+        <!--UPDATE-->
+            <!--profile_field-->
+        <!--SET-->
+            <!--last_modified_user_id = #{lastModifiedUserId},-->
+            <!--last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),-->
+            <!--is_deleted = 1-->
+        <!--WHERE-->
+          <!--org_id = #{orgId}-->
+          <!--AND profile_template_id = #{profileTemplateId}-->
+          <!--ANd is_deleted = 0-->
+    <!--</update>-->
+
+    <update id="updateProfileFieldByPrimaryKeySelective"
+            parameterType="ProfileField">
+        UPDATE profile_field
+        <set>
+            <if test="null != displayName">
+                display_name = #{displayName},
+            </if>
+            <if test="null != typeSpec">
+                type_spec = #{typeSpec},
+            </if>
+            <if test="null != promptInfo">
+                prompt_info = #{promptInfo},
+            </if>
+            <if test="null != isPublicVisible">
+                is_public_visible = #{isPublicVisible},
+            </if>
+            <if test="null != isEnabled">
+                is_enabled = #{isEnabled},
+            </if>
+            <if test="null != isMandatory">
+                is_mandatory = #{isMandatory},
+            </if>
+            <if test="null != isDeleted">
+                is_deleted = #{isDeleted},
+            </if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            profile_field_id = #{profileFieldId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+</mapper>

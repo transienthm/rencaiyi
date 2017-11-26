@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.user.server.dao.survey.SurveyActivityMapper">
+
+    <insert id="insertSurveyActivity"
+            parameterType="SurveyActivity">
+        <selectKey keyProperty="surveyActivityId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO survey_activity
+            (org_id,
+            created_user_id,
+            created_time,
+            last_modified_user_id,
+            last_modified_time)
+        VALUES
+            (#{orgId},
+            #{createdUserId},
+            #{createdTime},
+            #{createdUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000))
+    </insert>
+
+    <select id="getSurveyActivityByOrgIdAndPrimaryKey" parameterType="map" resultType="SurveyActivity">
+        SELECT
+            *
+        FROM
+            survey_activity
+        WHERE
+            org_id = #{orgId}
+            AND survey_activity_id = #{surveyActivityId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listSurveyActivityByOrgId" parameterType="map" resultType="SurveyActivity">
+        SELECT
+            *
+        FROM
+            survey_activity
+        WHERE
+            org_id = #{orgId}
+            AND is_deleted = 0
+            ORDER BY created_time DESC
+            LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="listSurveyActivityByOrgIdAndStartTimeAndEndTime" parameterType="map" resultType="SurveyActivity">
+        SELECT
+            *
+        FROM
+            survey_activity
+        WHERE
+            org_id = #{orgId}
+            AND <![CDATA[ created_time >= #{startTime} ]]>
+            AND <![CDATA[ created_time <= #{endTime} ]]>
+            AND is_deleted = 0
+    </select>
+
+</mapper>

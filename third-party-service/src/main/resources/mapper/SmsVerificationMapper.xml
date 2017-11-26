@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.thirdparty.server.dao.SmsVerificationMapper">
+
+    <insert id="insert"
+            parameterType="SmsVerification">
+        insert into sms_verification
+            (mobile_phone,
+            optional_identifier,
+            verification_code,
+            entry_point,
+            create_time,
+            expire_time,
+            verify_time,
+            verification_status,
+            extend)
+        values
+            (#{mobilePhone},
+            #{optionalIdentifier},
+            #{verificationCode},
+            #{entryPoint},
+            #{createTime},
+            #{expireTime},
+            #{verifyTime},
+            #{verificationStatus},
+            #{extend})
+    </insert>
+
+    <select id="findByMobilePhoneAndVerificationCode"
+            resultType="SmsVerification">
+        select
+            *
+        from
+            sms_verification
+        where
+            mobile_phone = #{mobilePhone}
+            and verification_code = #{verificationCode}
+    </select>
+
+    <select id="findByMobilePhoneAndOptionalIdentifierAndVerificationCode"
+            resultType="SmsVerification">
+        SELECT
+            *
+        FROM
+            sms_verification
+        WHERE
+            mobile_phone = #{mobilePhone}
+            AND optional_identifier = #{optionalIdentifier}
+            AND verification_code = #{verificationCode}
+    </select>
+
+    <update id="updateByPrimaryKeySelective"
+            parameterType="SmsVerification">
+        update sms_verification
+        <set>
+            <!--<if test="null != mobilePhone">-->
+                <!--mobile_phone = #{mobilePhone},-->
+            <!--</if>-->
+            <!--<if test="null != verificationCode">-->
+                <!--verification_code = #{verificationCode},-->
+            <!--</if>-->
+            <if test="null != entryPoint">
+                entry_point = #{entryPoint},
+            </if>
+            <if test="null != createTime">
+                create_time = #{createTime},
+            </if>
+            <if test="null != expireTime">
+                expire_time = #{expireTime},
+            </if>
+            <if test="null != verifyTime">
+                verify_time = #{verifyTime},
+            </if>
+            <if test="null != verificationStatus">
+                verification_status = #{verificationStatus},
+            </if>
+            <if test="null != extend">
+                extend = #{extend}
+            </if>
+        </set>
+        where
+            sms_verification_id = #{smsVerificationId}
+    </update>
+
+</mapper>

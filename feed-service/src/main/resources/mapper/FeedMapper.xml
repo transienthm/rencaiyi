@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.feed.server.dao.FeedMapper">
+
+  <insert id="insertFeed"
+          parameterType="Feed">
+      INSERT INTO homepage_feed
+      (
+          org_id,
+          user_id,
+          team_id,
+          content,
+          at_users,
+          images,
+          like_number,
+          comment_number,
+          created_time,
+          last_modified_user_id,
+          last_modified_time,
+          extend,
+          is_deleted
+      )
+      VALUES
+      (
+          #{orgId},
+          #{userId},
+          #{teamId},
+          #{content},
+          #{atUsers},
+          #{images},
+          0,
+          0,
+          ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+          #{lastModifiedUserId},
+          ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+          #{extend},
+          0
+      )
+      <selectKey keyProperty="feedId" resultType="Long" order="AFTER">
+          SELECT LAST_INSERT_ID()
+      </selectKey>
+  </insert>
+
+  <select id="findFeed"
+          parameterType="map"
+          resultType="Feed">
+      SELECT
+          *
+      FROM
+          homepage_feed
+      WHERE
+          feed_id = #{feedId}
+          AND org_id = #{orgId}
+          AND is_deleted = 0
+  </select>
+
+  <select id="countFeedOfOrgAndTeam"
+          parameterType="map"
+          resultType="Long">
+      SELECT
+          count(1)
+      FROM
+          homepage_feed
+      WHERE
+          org_id = #{orgId}
+          AND team_id in (0, #{teamId})
+          AND is_deleted = 0
+  </select>
+
+  <select id="countFeedOfTeam"
+          parameterType="map"
+          resultType="Long">
+      SELECT
+          count(1)
+      FROM
+          homepage_feed
+      WHERE
+          org_id = #{orgId}
+          AND team_id = #{teamId}
+          AND is_deleted = 0
+  </select>
+
+  <select id="listPageFeedOfOrgAndTeam"
+          parameterType="map"
+          resultType="Feed">
+      SELECT
+          *
+      FROM
+          homepage_feed
+      WHERE
+          org_id = #{orgId}
+          AND team_id in (0, #{teamId})
+          AND is_deleted = 0
+      ORDER BY created_time DESC
+      LIMIT #{pageStart}, #{pageSize}
+  </select>
+
+  <select id="listPageFeedOfTeam"
+          parameterType="map"
+          resultType="Feed">
+      SELECT
+          *
+      FROM
+          homepage_feed
+      WHERE
+          org_id = #{orgId}
+          AND team_id = #{teamId}
+          AND is_deleted = 0
+      ORDER BY created_time DESC
+      LIMIT #{pageStart}, #{pageSize}
+  </select>
+
+  <select id="listFeedByFeedIds"
+          parameterType="map"
+          resultType="Feed">
+      SELECT
+          *
+      FROM
+          homepage_feed
+      WHERE
+          org_id = #{orgId}
+          AND feed_id in
+          <foreach item="item" index="index" collection="feedIds" open="(" separator="," close=")">
+              #{item}
+          </foreach>
+          AND is_deleted = 0
+  </select>
+
+  <update id="deleteFeed"
+          parameterType="map">
+      UPDATE
+          homepage_feed
+      SET
+          is_deleted = 1,
+          last_modified_user_id = #{lastModifiedUserId},
+          last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+      WHERE
+          feed_id = #{feedId}
+          AND org_id = #{orgId}
+          AND is_deleted = 0
+  </update>
+
+  <update id="updateFeed"
+          parameterType="Feed">
+      UPDATE
+          homepage_feed
+      <set>
+          <if test="likeNumber != null"> like_number = #{likeNumber}, </if>
+          <if test="commentNumber != null"> comment_number = #{commentNumber}, </if>
+          last_modified_user_id = #{lastModifiedUserId},
+          last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+      </set>
+      WHERE
+          feed_id = #{feedId}
+          AND org_id = #{orgId}
+          AND is_deleted = 0
+  </update>
+
+</mapper>

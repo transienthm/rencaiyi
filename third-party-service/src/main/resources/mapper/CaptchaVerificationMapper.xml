@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.thirdparty.server.dao.CaptchaVerificationMapper">
+
+    <insert id="insert"
+            parameterType="CaptchaVerification">
+        insert into captcha_verification
+            (create_time,
+            verification_code,
+            expire_time,
+            extend)
+        values
+            (#{createTime},
+            #{verificationCode},
+            #{expireTime},
+            #{extend})
+    </insert>
+
+    <select id="findByCreateTimeAndVerificationCode"
+            resultType="CaptchaVerification">
+        select
+            *
+        from
+            captcha_verification
+        where
+            create_time = #{createTime}
+            and verification_code = #{verificationCode}
+    </select>
+
+    <update id="updateByCreateTimeAndVerificationCodeSelective"
+            parameterType="CaptchaVerification">
+        update captcha_verification
+        <set>
+            <if test="null != createTime">
+                create_time = #{createTime},
+            </if>
+            <if test="null != verificationCode">
+                verification_code = #{verificationCode},
+            </if>
+            <if test="null != expireTime">
+                expire_time = #{expireTime},
+            </if>
+            <if test="null != extend">
+                extend = #{extend}
+            </if>
+        </set>
+        where
+            create_time = #{createTime}
+            and verification_code = #{verificationCode}
+    </update>
+
+</mapper>

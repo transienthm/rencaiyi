@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.review.server.dao.ReviewActivityMapper">
+
+    <insert id="insertReviewActivity"
+            parameterType="ReviewActivity">
+        INSERT INTO review_activity
+        (
+            org_id,
+            template_id,
+            reviewee_id,
+            is_readed,
+            is_submitted,
+            is_canceled,
+            is_backuped,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend,
+            is_deleted
+        )
+        VALUES
+        (
+            #{orgId},
+            #{templateId},
+            #{revieweeId},
+            0,
+            0,
+            0,
+            0,
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{lastModifiedUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{extend},
+            0
+        )
+        <selectKey keyProperty="activityId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="batchInsertReviewActivities"
+            useGeneratedKeys="true"
+            parameterType="list">
+        INSERT INTO review_activity
+        (
+            org_id,
+            template_id,
+            reviewee_id,
+            is_readed,
+            is_submitted,
+            is_canceled,
+            is_backuped,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend,
+            is_deleted
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.orgId},
+            #{item.templateId},
+            #{item.revieweeId},
+            0,
+            <choose>
+                <when test="item.isSubmitted == null">
+                    0,
+                </when>
+                <otherwise>
+                    #{item.isSubmitted},
+                </otherwise>
+            </choose>
+            0,
+            0,
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{item.lastModifiedUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{item.extend},
+            0
+        )
+        </foreach>
+    </insert>
+
+    <select id="findReviewActivity"
+            parameterType="map"
+            resultType="ReviewActivity">
+        SELECT
+            *
+        FROM
+            review_activity
+        WHERE
+            activity_id = #{activityId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="findReviewActivityByRevieweeId"
+            parameterType="map"
+            resultType="ReviewActivity">
+        SELECT
+            *
+        FROM
+            review_activity
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = #{revieweeId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listUnSubmittedReviewActivity"
+            parameterType="map"
+            resultType="ReviewActivity">
+        SELECT
+            *
+        FROM
+            review_activity
+        WHERE
+            org_id = #{orgId}
+            AND reviewee_id = #{revieweeId}
+            AND is_submitted = 0
+            AND is_canceled = 0
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="listOtherReviewActivity"
+            parameterType="map"
+            resultType="ReviewActivity">
+        SELECT
+            *
+        FROM
+            review_activity
+        WHERE
+            org_id = #{orgId}
+            AND reviewee_id = #{revieweeId}
+            AND is_deleted = 0
+            AND activity_id not in
+            (
+            SELECT activity_id FROM review_activity
+            WHERE
+                org_id = #{orgId}
+                AND reviewee_id = #{revieweeId}
+                AND is_submitted = 0
+                AND is_canceled = 0
+                AND is_deleted = 0
+            )
+        ORDER BY created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countOtherReviewActivity"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            count(1)
+        FROM
+            review_activity
+        WHERE
+            org_id = #{orgId}
+            AND reviewee_id = #{revieweeId}
+            AND is_deleted = 0
+            AND activity_id not in
+            (
+                SELECT activity_id FROM review_activity
+                WHERE
+                    org_id = #{orgId}
+                    AND reviewee_id = #{revieweeId}
+                    AND is_submitted = 0
+                    AND is_canceled = 0
+                    AND is_deleted = 0
+            )
+    </select>
+
+    <!-- used for hr cancel template -->
+    <select id="listUnCanceledReviewActivityOfTemplate"
+            parameterType="map"
+            resultType="ReviewActivity">
+        SELECT
+            *
+        FROM
+            review_activity
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_canceled = 0
+            AND is_deleted = 0
+    </select>
+
+
+    <update id="updateReviewActivity"
+            parameterType="ReviewActivity">
+        UPDATE
+            review_activity
+        <set>
+            <if test="null != isReaded">is_readed = #{isReaded},</if>
+            <if test="null != isSubmitted">is_submitted = #{isSubmitted},</if>
+            <if test="null != isCanceled">is_canceled= #{isCanceled},</if>
+            <if test="null != isBackuped">is_backuped= #{isBackuped},</if>
+            <if test="null != extend">extend = #{extend},</if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            activity_id = #{activityId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="batchUpdateReviewActivities"
+            parameterType="ReviewActivity">
+        <foreach collection="list" item="item" index="index" separator=";">
+            UPDATE
+                review_activity
+            <set>
+                <if test="null != item.isReaded">is_readed = #{item.isReaded},</if>
+                <if test="null != item.isSubmitted">is_submitted = #{item.isSubmitted},</if>
+                <if test="null != item.isCanceled">is_canceled= #{item.isCanceled},</if>
+                <if test="null != item.isBackuped">is_backuped= #{item.isBackuped},</if>
+                <if test="null != item.extend">extend = #{item.extend},</if>
+                last_modified_user_id = #{item.lastModifiedUserId},
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+            </set>
+            WHERE
+                activity_id = #{item.activityId}
+                AND org_id = #{item.orgId}
+                AND is_deleted = 0
+        </foreach>
+    </update>
+
+    <update id="deleteReviewActivity"
+            parameterType="map">
+        UPDATE
+            review_activity
+        SET
+            is_deleted = 1,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        WHERE
+            activity_id = #{activityId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <select id="countReviewActivityOfTemplate"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            count(1)
+        FROM
+            review_activity
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listAllRevieweeIdOfTemplate"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            reviewee_id
+        FROM
+            review_activity
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listSubmittedRevieweeIdOfTemplate"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            reviewee_id
+        FROM
+            review_activity
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_submitted = 1
+            AND is_deleted = 0
+    </select>
+
+    <select id="listAllReviewActivityOfTemplate"
+            parameterType="map"
+            resultType="ReviewActivity">
+        SELECT
+            *
+        FROM
+            review_activity
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_canceled = 0
+            AND is_deleted = 0
+    </select>
+
+    <select id="listAllReviewActivityOfRevieweeId"
+            parameterType="map"
+            resultType="ReviewActivity">
+        SELECT
+            *
+        FROM
+            review_activity
+        WHERE
+            org_id = #{orgId}
+            AND reviewee_id = #{revieweeId}
+            AND is_canceled = 0
+            AND is_deleted = 0
+    </select>
+
+    <select id="listAllValidReviewActivitiesByRevieweeAndTemplatesList"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            template_id
+        FROM
+            review_activity
+        WHERE
+            org_id = #{orgId}
+            AND reviewee_id = #{revieweeId}
+            AND template_id in
+            <foreach item="item" index="index" collection="templates" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            AND is_deleted = 0
+            AND is_canceled = 0
+    </select>
+
+</mapper>

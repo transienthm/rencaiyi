@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mapper.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="hr.wozai.service.review.server.dao.ReviewInvitationMapper">
+
+    <insert id="insertReviewInvitation"
+            parameterType="ReviewInvitation">
+        INSERT INTO review_invitation
+        (
+            org_id,
+            template_id,
+            reviewee_id,
+            reviewer_id,
+            is_manager,
+            score,
+            is_submitted,
+            is_canceled,
+            is_backuped,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend,
+            is_deleted
+        )
+        VALUES
+        (
+            #{orgId},
+            #{templateId},
+            #{revieweeId},
+            #{reviewerId},
+            #{isManager},
+            0,
+            0,
+            0,
+            0,
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{lastModifiedUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{extend},
+            0
+        )
+        <selectKey keyProperty="invitationId" resultType="long" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="batchInsertReviewInvitations"
+            useGeneratedKeys="true"
+            parameterType="list">
+        INSERT INTO review_invitation
+        (
+            org_id,
+            template_id,
+            reviewee_id,
+            reviewer_id,
+            is_manager,
+            score,
+            is_submitted,
+            is_canceled,
+            is_backuped,
+            created_time,
+            last_modified_user_id,
+            last_modified_time,
+            extend,
+            is_deleted
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            #{item.orgId},
+            #{item.templateId},
+            #{item.revieweeId},
+            #{item.reviewerId},
+            #{item.isManager},
+            <choose>
+                <when test="item.score == null">
+                    0,
+                </when>
+                <otherwise>
+                    #{item.score},
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.isSubmitted == null">
+                    0,
+                </when>
+                <otherwise>
+                    #{item.isSubmitted},
+                </otherwise>
+            </choose>
+            0,
+            0,
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{item.lastModifiedUserId},
+            ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000),
+            #{item.extend},
+            0
+        )
+        </foreach>
+    </insert>
+
+    <select id="findReviewInvitation"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            invitation_id = #{invitationId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="findManagerInvitation"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = #{revieweeId}
+            AND is_manager = 1
+            AND is_deleted = 0
+    </select>
+
+    <select id="findReviewInvitationByTemplate"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = #{revieweeId}
+            AND reviewer_id = #{reviewerId}
+            AND is_deleted = 0
+            AND is_canceled = 0
+    </select>
+
+    <select id="listUnSubmittedReviewInvitation"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            <!-- not include self review -->
+            AND reviewee_id != #{reviewerId}
+            AND reviewer_id = #{reviewerId}
+            AND is_submitted = 0
+            AND is_canceled = 0
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="listSubmittedReviewInvitation"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            <!-- not include self review -->
+            AND reviewee_id != #{reviewerId}
+            AND reviewer_id = #{reviewerId}
+            AND is_submitted = 1
+            AND is_canceled = 0
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countSubmittedReviewInvitation"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            count(1)
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            <!-- not include self review -->
+            AND reviewee_id != #{reviewerId}
+            AND reviewer_id = #{reviewerId}
+            AND is_submitted = 1
+            AND is_canceled = 0
+            AND is_deleted = 0
+    </select>
+
+    <select id="listRevieweeReviewInvitation"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND reviewee_id = #{revieweeId}
+            AND reviewer_id = #{reviewerId}
+            AND is_canceled = 0
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+    </select>
+
+    <select id="listCanceledReviewInvitation"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            <!-- not include self review -->
+            AND reviewee_id != #{reviewerId}
+            AND reviewer_id = #{reviewerId}
+            AND is_canceled = 1
+            AND is_deleted = 0
+        ORDER BY created_time DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="countCanceledReviewInvitation"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            count(1)
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            <!-- not include self review -->
+            AND reviewee_id != #{reviewerId}
+            AND reviewer_id = #{reviewerId}
+            AND is_canceled = 1
+            AND is_deleted = 0
+    </select>
+
+    <select id="listUnCanceledReviewInvitationOfTemplate"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_canceled = 0
+            AND is_deleted = 0
+    </select>
+
+    <select id="listReviewInvitationOfTemplateAsReviewee"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = #{revieweeId}
+            <!-- not limit submitted status -->
+            <!-- not include refused -->
+            AND is_canceled = 0
+            AND is_deleted = 0
+    </select>
+
+    <select id="listAllReviewInvitationByTemplateIdAndRevieweeId"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewee_id = #{revieweeId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listAllReviewInvitationByTemplateIdAndRevieweeIdExceptManager"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+        *
+        FROM
+        review_invitation
+        WHERE
+        org_id = #{orgId}
+        AND template_id = #{templateId}
+        AND reviewee_id = #{revieweeId}
+        AND is_deleted = 0
+        AND is_manager = 0
+    </select>
+
+    <select id="listAllReviewInvitationByTemplateIdAndReviewerId"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND reviewer_id = #{reviewerId}
+            AND is_deleted = 0
+    </select>
+
+    <update id="updateReviewInvitation"
+            parameterType="map">
+        UPDATE
+            review_invitation
+        <set>
+            <if test="null != score">score = #{score},</if>
+            <if test="null != isSubmitted">is_submitted = #{isSubmitted},</if>
+            <if test="null != isCanceled ">is_canceled = #{isCanceled},</if>
+            <if test="null != extend">extend = #{extend},</if>
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        </set>
+        WHERE
+            invitation_id = #{invitationId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="batchUpdateReviewInvitations"
+            parameterType="map">
+        <foreach collection="list" item="item" index="index" separator=";">
+            UPDATE
+                review_invitation
+            <set>
+                <if test="null != item.score">score = #{item.score},</if>
+                <if test="null != item.isSubmitted">is_submitted = #{item.isSubmitted},</if>
+                <if test="null != item.isCanceled ">is_canceled = #{item.isCanceled},</if>
+                <if test="null != item.extend">extend = #{item.extend},</if>
+                last_modified_user_id = #{item.lastModifiedUserId},
+                last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+            </set>
+            WHERE
+            invitation_id = #{item.invitationId}
+            AND org_id = #{item.orgId}
+            AND is_deleted = 0
+        </foreach>
+    </update>
+
+    <update id="updateReviewInvitationBackupStatus"
+            parameterType="map">
+        UPDATE
+            review_invitation
+        SET
+            is_backuped = #{isBackuped}
+        WHERE
+            invitation_id = #{invitationId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <update id="deleteReviewInvitation"
+            parameterType="map">
+        UPDATE
+            review_invitation
+        SET
+            is_deleted = 1,
+            last_modified_user_id = #{lastModifiedUserId},
+            last_modified_time = ROUND(UNIX_TIMESTAMP(CURTIME(4)) * 1000)
+        WHERE
+            invitation_id = #{invitationId}
+            AND org_id = #{orgId}
+            AND is_deleted = 0
+    </update>
+
+    <select id="countReviewInvitationOfTemplate"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            count(1)
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_canceled = 0
+            AND is_deleted = 0
+    </select>
+
+    <select id="countFinishedReviewInvitationOfTemplate"
+            parameterType="map"
+            resultType="long">
+        SELECT
+            count(1)
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_submitted = 1
+            AND is_canceled = 0
+            AND is_deleted = 0
+    </select>
+
+    <select id="listReviewerIdOfTemplate"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            distinct reviewee_id, reviewer_id
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_manager = #{isManager}
+            AND is_canceled = 0
+            AND is_deleted = 0
+    </select>
+
+    <select id="listSubmittedReviewerIdOfTemplate"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            distinct reviewee_id, reviewer_id
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_manager = #{isManager}
+            AND is_submitted = 1
+            AND is_canceled = 0
+            AND is_deleted = 0
+    </select>
+
+    <select id="countReviewInvitationScore"
+            parameterType="map"
+            resultType="map">
+        SELECT
+            score, count(1) as amount
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_manager = 1
+            AND is_submitted = 1
+            AND is_canceled = 0
+            AND is_deleted = 0
+        GROUP BY score
+    </select>
+
+    <select id="listAllReviewInvitationOfTemplate"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND template_id = #{templateId}
+            AND is_deleted = 0
+    </select>
+
+    <select id="listAllReviewInvitationOfReviewer"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND reviewer_id = #{reviewerId}
+            AND is_deleted = 0
+    </select>
+
+
+    <select id="listAllReviewInvitationsByTemplatesAndReviewer"
+            parameterType="map"
+            resultType="ReviewInvitation">
+        SELECT
+            *
+        FROM
+            review_invitation
+        WHERE
+            org_id = #{orgId}
+            AND reviewer_id = #{reviewerId}
+            AND is_canceled = 0
+            AND is_deleted = 0
+            AND is_submitted = 0
+            AND template_id in
+            <foreach item="item" index="index" collection="templatesList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </select>
+</mapper>
